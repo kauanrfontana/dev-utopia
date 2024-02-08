@@ -1,0 +1,35 @@
+.screen {
+  background-color: #15142b;
+  background-image: linear-gradient(180deg, #372991, #15142b);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+
+  width: 100vw;
+  width: 100dvw;
+  height: 100vh;
+  height: 100dvh;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  background-color: white;
+  width: 30rem;
+  height: 18rem;
+
+  border-radius: 10%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form {
+  display: grid;
+}

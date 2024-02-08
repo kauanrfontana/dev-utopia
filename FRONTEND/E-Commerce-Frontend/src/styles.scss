@@ -1,0 +1,26 @@
+/* You can add global styles to this file, and also import other style files */
+@charset "UTF-8";
+
+* {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.form-group {
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  label {
+    margin-right: 10px;
+  }
+
+  input[type="text"] {
+  }
+}
