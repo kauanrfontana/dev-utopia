@@ -1,8 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 @charset "UTF-8";
+@import "~bootstrap/dist/css/bootstrap.css";
 
 * {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: Tahoma, Arial, sans-serif;
   box-sizing: border-box;
 }
 
@@ -19,8 +20,5 @@ body {
 
   label {
     margin-right: 10px;
-  }
-
-  input[type="text"] {
   }
 }

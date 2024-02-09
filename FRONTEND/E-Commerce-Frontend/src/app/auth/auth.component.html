@@ -1,14 +1,50 @@
 <div class="screen">
   <div class="container">
-    <div class="login-form">
-      <div class="form-group">
-        <label>Usuário:</label>
-        <input type="text" />
+    <div [class]="welcomeClass + ' container-welcome'">
+      <img
+        draggable="false"
+        class="logo"
+        src="../../assets/imgs/logoLojaAmplied.png"
+        alt="Logo da loja"
+      />
+      <ng-container *ngIf="welcomeClass == ''">
+        <p>
+          ╭━━━╮╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╭╮╱╱╱╱╱╭╮╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╭╮╱╱╱╱╱╱╱╭╮╱╱╱╱╱
+          ┃╭━╮┃╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱┃┃╱╱╱╱╱┃┃╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱┃┃╱╱╱╱╱╱╱┃┃╱╱╱╱╱
+          ┃┃╱┃┃╭━━┳━━┳━┳━━┳┳━━┳━━╮╭━╯┣━━╮╭━╯┣━━┳━━┳━━┳━╮╭╮╭┳━━┫┣╮╭┳━━┳━╯┣━━┳━╮
+          ┃┃╱┃┃┃╭╮┃╭╮┃╭┫╭╮┣┫━━┫╭╮┃┃╭╮┃╭╮┃┃╭╮┃┃━┫━━┫┃━┫╭╮┫╰╯┃╭╮┃┃╰╯┃┃━┫╭╮┃╭╮┃╭╯
+          ┃╰━╯┃┃╰╯┃╭╮┃┃┃╭╮┃┣━━┃╰╯┃┃╰╯┃╰╯┃┃╰╯┃┃━╋━━┃┃━┫┃┃┣╮╭┫╰╯┃╰╮╭┫┃━┫╰╯┃╰╯┃┣╮
+          ╰━━━╯┃╭━┻╯╰┻╯╰╯╰┻┻━━┻━━╯╰━━┻━━╯╰━━┻━━┻━━┻━━┻╯╰╯╰╯╰━━┻━┻╯╰━━┻━━┻━━┻┻╯
+          ╱╱╱╱╱┃┃ ╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱
+        </p>
+      </ng-container>
+    </div>
+    <div class="parts">
+      <div
+        [class]="registerClass + ' container-register'"
+        (mouseleave)="onPreviewRegister()"
+        (mouseenter)="onPreviewRegister()"
+      >
+        <button class="btn btn-outline-light btn-register">Registre-se</button>
       </div>
-      <div class="form-group">
-        <label>Senha:</label>
-        <input type="password" />
+      <div
+        [class]="loginClass + ' container-login'"
+        (mouseleave)="onPreviewLogin()"
+        (mouseenter)="onPreviewLogin()"
+      >
+        <button class="btn btn-outline-light btn-login">Login</button>
       </div>
     </div>
   </div>
 </div>
+
+<!-- <div class="login-form">
+  <div class="form-group">
+    <label>Usuário:</label>
+    <input type="text" />
+  </div>
+  <div class="form-group">
+    <label>Senha:</label>
+    <input type="password" />
+  </div>
+</div> -->
