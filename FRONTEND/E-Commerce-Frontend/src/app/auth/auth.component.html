@@ -1,17 +1,178 @@
 <div class="screen">
   <div class="container">
+    <button
+      class="btn btn-link btn-go-back"
+      [hidden]="
+        registerClass !== registerClasses.selected &&
+        loginClass !== loginClasses.selected
+      "
+      (click)="restart()"
+    >
+      ↩
+    </button>
     <div class="container-welcome" *ngIf="!inRegister && !inLogin">
-      <img draggable="false" width="250px" [class]="logoClass + ' logo'" src="../../assets/imgs/logoLojaAmplied.png"
-        alt="Logo da loja" />
-        <p [ngStyle]="{'opacity': logoClass !== '' ? 0 : 1 }">O Paraíso do Desenvovedor!</p>
+      <img
+        draggable="false"
+        width="250px"
+        [class]="logoClass + ' logo'"
+        src="../../assets/imgs/logoLojaAmplied.png"
+        alt="Logo da loja"
+      />
+      <p [ngStyle]="{ opacity: logoClass !== '' ? 0 : 1 }">
+        O Paraíso do Desenvovedor!
+      </p>
     </div>
-    <div [class]="registerClass + ' container-register'" [ngClass]="{'selected-register': inRegister}"
-      (mouseleave)="onPreviewRegister()" (mouseenter)="onPreviewRegister()">
-      <button class="btn btn-outline-light btn-register" (click)="onRegister()">Registre-se</button>
+    <div
+      [class]="registerClass + ' container-register'"
+      (mouseleave)="onPreviewRegister()"
+      (mouseenter)="onPreviewRegister()"
+    >
+      <button
+        class="btn btn-outline-light btn-register"
+        (click)="onRegister()"
+        *ngIf="registerClass !== registerClasses.selected"
+      >
+        Registre-se
+      </button>
+
+      <ng-container *ngIf="registerClass === registerClasses.selected">
+        <form
+          class="register-form"
+          [formGroup]="registerForm"
+          (ngSubmit)="onRegisterUser()"
+        >
+          <!--  <section
+            class="errors"
+            *ngIf="!registerForm.valid && registerFormSubmited"
+          >
+            <p *ngIf="!registerForm.get('name')?.valid">
+              É necessário informar um nome para realizar o cadastro!
+            </p>
+            <p *ngIf="!registerForm.get('email')?.valid">
+              É necessário informar um email válido para realizar o cadastro!
+            </p>
+            <p *ngIf="!registerForm.get('password')?.valid">
+              É necessário que a senha tenho no mínimo 6 caracteres para
+              realizar o cadastro!
+            </p>
+            <p *ngIf="!registerForm.get('passwordConfirm')?.valid">
+              A senha e a confirmação de senha devem ser iguais!
+            </p>
+          </section> -->
+          <section class="fields">
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="name"
+                placeholder=""
+              />
+              <label requiredInput>Nome</label>
+              <p
+                *ngIf="!registerForm.get('name')?.valid && registerFormSubmited"
+              >
+                É necessário informar um nome para realizar o cadastro!
+              </p>
+            </div>
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="email"
+                placeholder=""
+              />
+              <label requiredInput>Email</label>
+              <p
+                *ngIf="
+                  !registerForm.get('email')?.valid && registerFormSubmited
+                "
+              >
+                É necessário informar um email válido para realizar o cadastro!
+              </p>
+            </div>
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="password"
+                placeholder=""
+              />
+              <label requiredInput>Senha</label>
+              <p
+                *ngIf="
+                  !registerForm.get('password')?.valid && registerFormSubmited
+                "
+              >
+                É necessário que a senha tenho no mínimo 6 caracteres para
+                realizar o cadastro!
+              </p>
+            </div>
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="passwordConfirm"
+                placeholder=""
+              />
+              <label requiredInput>Confirmação de senha</label>
+              <p
+                *ngIf="
+                  !registerForm.get('passwordConfirm')?.valid &&
+                  registerFormSubmited
+                "
+              >
+                A senha e a confirmação de senha devem ser iguais!
+              </p>
+            </div>
+          </section>
+
+          <section class="actions">
+            <button class="btn btn-outline-light" type="submit">
+              Cadastrar
+            </button>
+          </section>
+        </form>
+      </ng-container>
     </div>
-    <div [class]="loginClass + ' container-login'" [ngStyle]="{'width': inRegister && '0'}"
-      (mouseleave)="onPreviewLogin()" (mouseenter)="onPreviewLogin()">
-      <button class="btn btn-outline-light btn-login" (click)="onLogin()">Login</button>
+    <div
+      [class]="loginClass + ' container-login'"
+      (mouseleave)="onPreviewLogin()"
+      (mouseenter)="onPreviewLogin()"
+    >
+      <button
+        class="btn btn-outline-light btn-login"
+        (click)="onLogin()"
+        *ngIf="loginClass !== loginClasses.selected"
+      >
+        Login
+      </button>
+      <ng-container *ngIf="loginClass === loginClasses.selected">
+        <form class="login-form" [formGroup]="loginForm">
+          <section class="fields">
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control"
+                formControlName="user"
+                placeholder=""
+              />
+              <label requiredInput>Usuário</label>
+            </div>
+            <div class="form-group">
+              <input
+                type="password"
+                class="form-control"
+                formControlName="password"
+                placeholder=""
+              />
+              <label requiredInput>Senha</label>
+            </div>
+          </section>
+          <section class="actions">
+            <button class="btn btn-primary">Cadastrar</button>
+          </section>
+        </form>
+      </ng-container>
     </div>
   </div>
 </div>
