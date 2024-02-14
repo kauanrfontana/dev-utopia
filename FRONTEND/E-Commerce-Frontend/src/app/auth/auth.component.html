@@ -1,39 +1,17 @@
 <div class="screen">
   <div class="container">
-    <div [class]="welcomeClass + ' container-welcome'">
-      <img
-        draggable="false"
-        class="logo"
-        src="../../assets/imgs/logoLojaAmplied.png"
-        alt="Logo da loja"
-      />
-      <ng-container *ngIf="welcomeClass == ''">
-        <p>
-          ╭━━━╮╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╭╮╱╱╱╱╱╭╮╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╭╮╱╱╱╱╱╱╱╭╮╱╱╱╱╱
-          ┃╭━╮┃╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱┃┃╱╱╱╱╱┃┃╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱┃┃╱╱╱╱╱╱╱┃┃╱╱╱╱╱
-          ┃┃╱┃┃╭━━┳━━┳━┳━━┳┳━━┳━━╮╭━╯┣━━╮╭━╯┣━━┳━━┳━━┳━╮╭╮╭┳━━┫┣╮╭┳━━┳━╯┣━━┳━╮
-          ┃┃╱┃┃┃╭╮┃╭╮┃╭┫╭╮┣┫━━┫╭╮┃┃╭╮┃╭╮┃┃╭╮┃┃━┫━━┫┃━┫╭╮┫╰╯┃╭╮┃┃╰╯┃┃━┫╭╮┃╭╮┃╭╯
-          ┃╰━╯┃┃╰╯┃╭╮┃┃┃╭╮┃┣━━┃╰╯┃┃╰╯┃╰╯┃┃╰╯┃┃━╋━━┃┃━┫┃┃┣╮╭┫╰╯┃╰╮╭┫┃━┫╰╯┃╰╯┃┣╮
-          ╰━━━╯┃╭━┻╯╰┻╯╰╯╰┻┻━━┻━━╯╰━━┻━━╯╰━━┻━━┻━━┻━━┻╯╰╯╰╯╰━━┻━┻╯╰━━┻━━┻━━┻┻╯
-          ╱╱╱╱╱┃┃ ╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱╱
-        </p>
-      </ng-container>
+    <div class="container-welcome" *ngIf="!inRegister && !inLogin">
+      <img draggable="false" width="250px" [class]="logoClass + ' logo'" src="../../assets/imgs/logoLojaAmplied.png"
+        alt="Logo da loja" />
+        <p [ngStyle]="{'opacity': logoClass !== '' ? 0 : 1 }">O Paraíso do Desenvovedor!</p>
     </div>
-    <div class="parts">
-      <div
-        [class]="registerClass + ' container-register'"
-        (mouseleave)="onPreviewRegister()"
-        (mouseenter)="onPreviewRegister()"
-      >
-        <button class="btn btn-outline-light btn-register">Registre-se</button>
-      </div>
-      <div
-        [class]="loginClass + ' container-login'"
-        (mouseleave)="onPreviewLogin()"
-        (mouseenter)="onPreviewLogin()"
-      >
-        <button class="btn btn-outline-light btn-login">Login</button>
-      </div>
+    <div [class]="registerClass + ' container-register'" [ngClass]="{'selected-register': inRegister}"
+      (mouseleave)="onPreviewRegister()" (mouseenter)="onPreviewRegister()">
+      <button class="btn btn-outline-light btn-register" (click)="onRegister()">Registre-se</button>
+    </div>
+    <div [class]="loginClass + ' container-login'" [ngStyle]="{'width': inRegister && '0'}"
+      (mouseleave)="onPreviewLogin()" (mouseenter)="onPreviewLogin()">
+      <button class="btn btn-outline-light btn-login" (click)="onLogin()">Login</button>
     </div>
   </div>
 </div>

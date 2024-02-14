@@ -19,19 +19,23 @@ export class AuthComponent {
     selected: "",
   };
   loginClass: string = "";
-  welcomeClasses = {
-    left: "container-welcome-left",
-    right: "container-welcome-right",
+  logoClasses = {
+    right: "logo-right",
   };
-  welcomeClass: string = "";
+  logoClass: string = "";
 
-  constructor() {}
+  constructor() { }
 
   onPreviewRegister() {
     this.registerClass =
       this.registerClass == this.registerClasses.preview
         ? ""
         : this.registerClasses.preview;
+
+    this.logoClass =
+      this.logoClass == this.logoClasses.right
+        ? ""
+        : this.logoClasses.right;
   }
 
   onPreviewLogin() {
@@ -39,5 +43,16 @@ export class AuthComponent {
       this.loginClass == this.loginClasses.preview
         ? ""
         : this.loginClasses.preview;
+
   }
+
+  onRegister(){
+    this.registerClass = this.registerClasses.selected;
+  }
+
+  onLogin(){
+    this.loginClass = this.loginClasses.selected;
+
+  }
+
 }
