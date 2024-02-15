@@ -79,11 +79,20 @@ export class AuthComponent {
     }
   }
 
+  onLoginUser() {
+    this.loginFormSubmited = true;
+
+    if (this.loginForm.invalid) {
+      Swal.fire("Erro", "Preencha todos os campos corretamente", "error");
+      return;
+    }
+  }
+
   onLogin() {
     this.loginClass = this.loginClasses.selected;
 
     this.loginForm = new FormGroup({
-      user: new FormControl(null, Validators.required),
+      email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, [
         Validators.required,
         Validators.minLength(6),

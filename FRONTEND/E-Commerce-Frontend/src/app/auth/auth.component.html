@@ -147,7 +147,11 @@
         Login
       </button>
       <ng-container *ngIf="loginClass === loginClasses.selected">
-        <form class="login-form" [formGroup]="loginForm">
+        <form
+          class="login-form"
+          [formGroup]="loginForm"
+          (ngSubmit)="onLoginUser()"
+        >
           <section class="fields">
             <div class="form-group">
               <input
@@ -156,7 +160,10 @@
                 formControlName="user"
                 placeholder=""
               />
-              <label requiredInput>Usuário</label>
+              <label requiredInput>Email</label>
+              <p *ngIf="!loginForm.get('email')?.valid && loginFormSubmited">
+                É necessário informar um email válido para realizar o login!
+              </p>
             </div>
             <div class="form-group">
               <input
@@ -166,10 +173,13 @@
                 placeholder=""
               />
               <label requiredInput>Senha</label>
+              <p *ngIf="!loginForm.get('password')?.valid && loginFormSubmited">
+                É necessário informar uma senha válida para realizar o login!
+              </p>
             </div>
           </section>
           <section class="actions">
-            <button class="btn btn-primary">Cadastrar</button>
+            <button class="btn btn-outline-light" type="submit">Login</button>
           </section>
         </form>
       </ng-container>
