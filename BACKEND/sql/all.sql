@@ -16,38 +16,18 @@ FOREIGN KEY ([country_id]) REFERENCES [countries]([id])
 
 CREATE TABLE [cities](
 [id] int IDENTITY(1,1) PRIMARY KEY,
-[country_id] int NOT NULL,
 [state_id] int NOT NULL,
 [name] varchar(50) NOT NULL
-FOREIGN KEY ([country_id]) REFERENCES [countries]([id]),
 FOREIGN KEY ([state_id]) REFERENCES [states]([id])
 );
 
 CREATE TABLE [address](
 [id] int IDENTITY(1,1) PRIMARY KEY,
-[country_id] int NOT NULL,
-[state_id] int NOT NULL,
 [city_id] int NOT NULL,
+[neighborhood] varchar(200) NOT NULL,
 [street_avenue] varchar(200) NOT NULL,
-[house_number] varchar(20) NOT NULL,
-[complement] varchar(200),
-[zip_code] varchar(20) NOT NULL,
 [created_at] datetime NOT NULL,
-FOREIGN KEY ([country_id]) REFERENCES [countries]([id]),
-FOREIGN KEY ([state_id]) REFERENCES [states]([id]),
 FOREIGN KEY ([city_id]) REFERENCES [cities]([id])
-);
-
-CREATE TABLE [location](
-[id] int IDENTITY(1,1) PRIMARY KEY,
-[country_id] int NOT NULL,
-[state_id] int NOT NULL,
-[city_id] int NOT NULL,
-[address_id] int NOT NULL,
-FOREIGN KEY ([country_id]) REFERENCES [countries]([id]),
-FOREIGN KEY ([state_id]) REFERENCES [states]([id]),
-FOREIGN KEY ([city_id]) REFERENCES [cities]([id]),
-FOREIGN KEY ([address_id]) REFERENCES [address]([id])
 );
 
 CREATE TABLE [roles](
@@ -62,8 +42,11 @@ CREATE TABLE [users](
 [email] varchar(200) UNIQUE NOT NULL,
 [password] varchar(200) NOT NULL,
 [created_at] datetime NOT NULL,
-[location_id] int NOT NULL,
-FOREIGN KEY ([location_id]) REFERENCES [location]([id])
+[address_id] int NOT NULL,
+[house_number] varchar(20) NOT NULL,
+[complement] varchar(200),
+[zip_code] varchar(20) NOT NULL,
+FOREIGN KEY ([address_id]) REFERENCES [address]([id])
 );
 
 CREATE TABLE [user_roles](
