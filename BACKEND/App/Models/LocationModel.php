@@ -5,13 +5,16 @@ namespace App\Models;
 final class LocationModel
 {
     private int $id;
-    private string $country;
-    private string $state;
-    private string $city;
-    private string $streetAvenue;
+    private int $country;
+    private int $state;
+    private int $city;
+    private int $neighborhood;
+    private int $streetAvenue;
     private string $houseNumber;
     private string $complement;
     private string $zipCode;
+
+
 
     /**
      * Get the value of id
@@ -39,9 +42,9 @@ final class LocationModel
     /**
      * Get the value of country
      *
-     * @return string
+     * @return int
      */
-    public function getCountry(): string
+    public function getCountry(): int
     {
         return $this->country;
     }
@@ -49,11 +52,11 @@ final class LocationModel
     /**
      * Set the value of country
      *
-     * @param string $country
+     * @param int $country
      *
      * @return self
      */
-    public function setCountry(string $country): self
+    public function setCountry(int $country): self
     {
         $this->country = $country;
         return $this;
@@ -62,9 +65,9 @@ final class LocationModel
     /**
      * Get the value of state
      *
-     * @return string
+     * @return int
      */
-    public function getState(): string
+    public function getState(): int
     {
         return $this->state;
     }
@@ -72,11 +75,11 @@ final class LocationModel
     /**
      * Set the value of state
      *
-     * @param string $state
+     * @param int $state
      *
      * @return self
      */
-    public function setState(string $state): self
+    public function setState(int $state): self
     {
         $this->state = $state;
         return $this;
@@ -85,9 +88,9 @@ final class LocationModel
     /**
      * Get the value of city
      *
-     * @return string
+     * @return int
      */
-    public function getCity(): string
+    public function getCity(): int
     {
         return $this->city;
     }
@@ -95,23 +98,45 @@ final class LocationModel
     /**
      * Set the value of city
      *
-     * @param string $city
+     * @param int $city
      *
      * @return self
      */
-    public function setCity(string $city): self
+    public function setCity(int $city): self
     {
         $this->city = $city;
         return $this;
     }
 
+    /**
+     * Get the value of neighborhood
+     *
+     * @return int
+     */
+    public function getNeighborhood(): int
+    {
+        return $this->neighborhood;
+    }
+
+    /**
+     * Set the value of neighborhood
+     *
+     * @param int $neighborhood
+     *
+     * @return self
+     */
+    public function setNeighborhood(int $neighborhood): self
+    {
+        $this->neighborhood = $neighborhood;
+        return $this;
+    }
 
     /**
      * Get the value of streetAvenue
      *
-     * @return string
+     * @return int
      */
-    public function getStreetAvenue(): string
+    public function getStreetAvenue(): int
     {
         return $this->streetAvenue;
     }
@@ -119,11 +144,11 @@ final class LocationModel
     /**
      * Set the value of streetAvenue
      *
-     * @param string $streetAvenue
+     * @param int $streetAvenue
      *
      * @return self
      */
-    public function setStreetAvenue(string $streetAvenue): self
+    public function setStreetAvenue(int $streetAvenue): self
     {
         $this->streetAvenue = $streetAvenue;
         return $this;

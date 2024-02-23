@@ -25,7 +25,7 @@ final class LocationController
 
     public function insertLocation(Request $request, Response $response, array $args): Response
     {
-        $mandatoryFields = ['country' => 'país', 'state' => 'estado', 'city' => 'cidade', 'streetAvenue' => 'logradouro', 'houseNumber' => 'numero da casa', 'complement' => 'complemento', 'zipCode' => 'cep'];
+        $mandatoryFields = ['country' => 'país', 'state' => 'estado', 'city' => 'cidade', 'neighborhood' => 'bairro', 'streetAvenue' => 'logradouro', 'houseNumber' => 'numero da casa', 'complement' => 'complemento', 'zipCode' => 'cep'];
         $data = $request->getParsedBody();
         $location = new LocationModel();
 
