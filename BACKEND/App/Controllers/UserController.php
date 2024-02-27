@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\DAO\UserDAO;
-use App\Models\LocationModel;
 use App\Models\UserModel;
 use Slim\Container;
 use Slim\Http\Request;
@@ -29,7 +28,6 @@ final class UserController
             $response = $response->withJson([
                 'error' => $e->getMessage()
             ]);
-
         }
 
         return $response;
@@ -37,27 +35,29 @@ final class UserController
 
     public function insertUser(Request $request, Response $response, array $args): Response
     {
-        $mandatoryUserFields = ['name' => 'nome', 'email' => 'email', 'password' => 'senha'];
-        $mandatoryLocationFields = ['country' => 'país', 'state' => 'estado', 'city' => 'cidade', 'streetAvenue' => 'logradouro', 'houseNumber' => 'numero da casa', 'complement' => 'complemento', 'zipCode' => 'cep'];
+        $mandatoryUserFields = ['name' => 'nome', 'email' => 'email', 'password' => 'senha', 'houseNumber' => 'numero da casa', 'complement' => 'complemento', 'zipCode' => 'cep'];
+        $mandatoryAddressFields = ['countryId' => 'país', 'stateId' => 'estado', 'cityId' => 'cidade', 'neighborhoodId' => 'bairro', 'streetAvenueId' => 'logradouro'];
 
         $data = $request->getParsedBody();
         $user = new UserModel();
-        $location = new LocationModel();
 
         try {
+
             foreach ($mandatoryUserFields as $field => $description) {
                 if (empty($data[$field])) {
                     throw new \Exception("O campo {$description} é obrigatório.");
                 }
                 $user->{'set' . ucfirst($field)}($data[$field]);
             }
-            foreach ($mandatoryLocationFields as $field => $description) {
+
+            foreach ($mandatoryAddressFields as $field => $description) {
                 if (empty($data[$field])) {
                     throw new \Exception("O campo {$description} é obrigatório.");
                 }
-                $location->{'set' . ucfirst($field)}($data[$field]);
+                // $address->{'set' . ucfirst($field)}($data[$field]);
             }
-            $response = $response->withStatus(201)->withJson($this->userDAO->insertUser($user, $location));
+
+            $response = $response->withStatus(201)->withJson($this->userDAO->insertUser($user, 1));
 
         } catch (\Throwable $e) {
             $response = $response->withJson([

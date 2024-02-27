@@ -9,8 +9,10 @@ final class UserModel
     private string $email;
     private string $password;
     private \DateTime $created_at;
-
-    private int $location_id;
+    private int $addressId;
+    private string $houseNumber;
+    private string $complement;
+    private string $zipCode;
 
 
     /**
@@ -129,25 +131,94 @@ final class UserModel
     }
 
     /**
-     * Get the value of location_id
+     * Get the value of addressId
      *
      * @return int
      */
-    public function getLocationId(): int
+    public function getAddressId(): int
     {
-        return $this->location_id;
+        return $this->addressId;
     }
 
     /**
-     * Set the value of location_id
+     * Set the value of addressId
      *
-     * @param int $location_id
+     * @param int $addressId
      *
      * @return self
      */
-    public function setLocationId(int $location_id): self
+    public function setAddressId(int $addressId): self
     {
-        $this->location_id = $location_id;
+        $this->addressId = $addressId;
+        return $this;
+    }
+
+    /**
+     * Get the value of houseNumber
+     *
+     * @return string
+     */
+    public function getHouseNumber(): string
+    {
+        return $this->houseNumber;
+    }
+
+    /**
+     * Set the value of houseNumber
+     *
+     * @param string $houseNumber
+     *
+     * @return self
+     */
+    public function setHouseNumber(string $houseNumber): self
+    {
+        $this->houseNumber = $houseNumber;
+        return $this;
+    }
+
+    /**
+     * Get the value of complement
+     *
+     * @return string
+     */
+    public function getComplement(): string
+    {
+        return $this->complement;
+    }
+
+    /**
+     * Set the value of complement
+     *
+     * @param string $complement
+     *
+     * @return self
+     */
+    public function setComplement(string $complement): self
+    {
+        $this->complement = $complement;
+        return $this;
+    }
+
+    /**
+     * Get the value of zipCode
+     *
+     * @return string
+     */
+    public function getZipCode(): string
+    {
+        return $this->zipCode;
+    }
+
+    /**
+     * Set the value of zipCode
+     *
+     * @param string $zipCode
+     *
+     * @return self
+     */
+    public function setZipCode(string $zipCode): self
+    {
+        $this->zipCode = $zipCode;
         return $this;
     }
 }

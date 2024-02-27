@@ -21,19 +21,18 @@ CREATE TABLE [cities](
 FOREIGN KEY ([state_id]) REFERENCES [states]([id])
 );
 
-CREATE TABLE [address](
+CREATE TABLE [neighborhoods](
 [id] int IDENTITY(1,1) PRIMARY KEY,
 [city_id] int NOT NULL,
-[neighborhood] varchar(200) NOT NULL,
-[street_avenue] varchar(200) NOT NULL,
-[created_at] datetime NOT NULL,
+[name] varchar(50) NOT NULL,
 FOREIGN KEY ([city_id]) REFERENCES [cities]([id])
 );
 
-CREATE TABLE [roles](
+CREATE TABLE [streets_avenues](
 [id] int IDENTITY(1,1) PRIMARY KEY,
+[neighborhood_id] int NOT NULL,
 [name] varchar(50) NOT NULL,
-[created_at] datetime NOT NULL
+FOREIGN KEY ([neighborhood_id]) REFERENCES [neighborhoods]([id])
 );
 
 CREATE TABLE [users](
@@ -42,11 +41,17 @@ CREATE TABLE [users](
 [email] varchar(200) UNIQUE NOT NULL,
 [password] varchar(200) NOT NULL,
 [created_at] datetime NOT NULL,
-[address_id] int NOT NULL,
+[street_avenue_id] int NOT NULL,
 [house_number] varchar(20) NOT NULL,
 [complement] varchar(200),
-[zip_code] varchar(20) NOT NULL,
-FOREIGN KEY ([address_id]) REFERENCES [address]([id])
+[zip_code] varchar(8) NOT NULL,
+FOREIGN KEY ([street_avenue_id]) REFERENCES [streets_avenues]([id])
+);
+
+CREATE TABLE [roles](
+[id] int IDENTITY(1,1) PRIMARY KEY,
+[name] varchar(50) NOT NULL,
+[created_at] datetime NOT NULL
 );
 
 CREATE TABLE [user_roles](
@@ -63,8 +68,11 @@ CREATE TABLE [products](
 [description] varchar(400),
 [created_at] datetime NOT NULL,
 [price] money NOT NULL,
-[location_id] int NOT NULL
-FOREIGN KEY ([location_id]) REFERENCES [location]([id])
+[street_avenue_id] int NOT NULL,
+[house_number] varchar(5) NOT NULL,
+[complement] varchar(200) NOT NULL,
+[zip_code] varchar(8)
+FOREIGN KEY ([street_avenue_id]) REFERENCES [streets_avenues]([id])
 );
 
 CREATE TABLE [shopping_carts](

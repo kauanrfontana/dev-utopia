@@ -1,7 +1,6 @@
 <?php
 namespace App\DAO;
 
-use App\Models\LocationModel;
 use App\Models\UserModel;
 
 final class UserDAO extends Connection
@@ -27,11 +26,9 @@ final class UserDAO extends Connection
         }
     }
 
-    public function insertUser(UserModel $user, LocationModel $location): array
+    public function insertUser(UserModel $user, int $addressId): array
     {
-        $locationDAO = new LocationDAO();
         try {
-            $locationId = $locationDAO->insertLocationReturnId($location);
 
             $sql = 'INSERT INTO users (
                 [name], 
