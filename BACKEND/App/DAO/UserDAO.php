@@ -29,6 +29,8 @@ final class UserDAO extends Connection
     public function insertUser(UserModel $user, int $addressId): array
     {
         try {
+            $result = [];
+            $result['success'] = true;
 
             $sql = 'INSERT INTO users (
                 [name], 
@@ -36,10 +38,10 @@ final class UserDAO extends Connection
                 [password], 
                 [location_id]
                 ) VALUES (
-                    [:name], 
-                    [:email], 
-                    [:password], 
-                    [:location_id]
+                    :name, 
+                    :email, 
+                    :password, 
+                    :location_id
                     )';
             $statement = $this->pdo->prepare($sql);
 
@@ -53,7 +55,6 @@ final class UserDAO extends Connection
             }
 
             return [
-                'success' => true,
                 'message' => 'Usuário inserido com sucesso.'
             ];
 

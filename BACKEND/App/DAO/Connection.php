@@ -8,10 +8,10 @@ abstract class Connection
 
     public function __construct()
     {
-        $host = getenv('GERENCIADOR_DE_LOJAS_SQLSERVER_HOST');
-        $dbname = getenv('GERENCIADOR_DE_LOJAS_SQLSERVER_DBNAME');
-        $user = getenv('GERENCIADOR_DE_LOJAS_SQLSERVER_USER');
-        $password = getenv('GERENCIADOR_DE_LOJAS_SQLSERVER_PASSWORD');
+        $host = getenv('DEVUTOPIA_SQLSERVER_HOST');
+        $dbname = getenv('DEVUTOPIA_SQLSERVER_DBNAME');
+        $user = getenv('DEVUTOPIA_SQLSERVER_USER');
+        $password = getenv('DEVUTOPIA_SQLSERVER_PASSWORD');
 
         $dsn = "sqlsrv:Server={$host};Database={$dbname}";
 
