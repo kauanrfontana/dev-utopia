@@ -5,8 +5,10 @@ namespace App\Controllers;
 use App\DAO\UserDAO;
 use App\Models\UserModel;
 use Slim\Container;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Slim\Http\{
+    Request,
+    Response
+};
 
 final class UserController
 {
@@ -18,15 +20,16 @@ final class UserController
         $this->container = $container;
         $this->userDAO = $container->offsetGet(UserDAO::class);
     }
-    public function getUsers(Request $request, Response $response, array $args): Response
+    public function getAllUsers(Request $request, Response $response, array $args): Response
     {
         try {
             $users = $this->userDAO->getAllUsers();
             $response = $response->withJson($users);
         } catch (\Throwable $e) {
-            $response = $response->withStatus(500, 'Erro interno do servidor');
+            $response = $response->withStatus(500, "Erro interno do servidor");
             $response = $response->withJson([
-                'error' => $e->getMessage()
+                "success" => false,
+                "message" => $e->getMessage()
             ]);
         }
 
@@ -35,33 +38,30 @@ final class UserController
 
     public function insertUser(Request $request, Response $response, array $args): Response
     {
-        $mandatoryUserFields = ['name' => 'nome', 'email' => 'email', 'password' => 'senha', 'houseNumber' => 'numero da casa', 'complement' => 'complemento', 'zipCode' => 'cep'];
-        $mandatoryAddressFields = ['countryId' => 'país', 'stateId' => 'estado', 'cityId' => 'cidade', 'neighborhoodId' => 'bairro', 'streetAvenueId' => 'logradouro'];
+        $mandatoryFields = ["name" => "nome", "email" => "email", "password" => "senha", "houseNumber" => "numero da casa", "zipCode" => "cep", "streetAvenueId" => "logradouro"];
 
         $data = $request->getParsedBody();
         $user = new UserModel();
 
         try {
 
-            foreach ($mandatoryUserFields as $field => $description) {
+            foreach ($mandatoryFields as $field => $description) {
                 if (empty($data[$field])) {
                     throw new \Exception("O campo {$description} é obrigatório.");
                 }
-                $user->{'set' . ucfirst($field)}($data[$field]);
+                $user->{"set" . ucfirst($field)}($data[$field]);
             }
 
-            foreach ($mandatoryAddressFields as $field => $description) {
-                if (empty($data[$field])) {
-                    throw new \Exception("O campo {$description} é obrigatório.");
-                }
-                // $address->{'set' . ucfirst($field)}($data[$field]);
+            if ($user->getPassword() < 6) {
+                throw new \Exception("O campo senha deve conter no mínimo 6 caracteres!");
             }
 
-            $response = $response->withStatus(201)->withJson($this->userDAO->insertUser($user, 1));
+
+            $response = $response->withStatus(201)->withJson($this->userDAO->insertUser($user));
 
         } catch (\Throwable $e) {
             $response = $response->withJson([
-                'error' => $e->getMessage()
+                "error" => $e->getMessage()
             ]);
         }
         return $response;

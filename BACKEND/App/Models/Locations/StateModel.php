@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Locations;
 
-final class NeighborhoodModel
+final class StateModel
 {
     private int $id;
-    private int $cityId;
+    private int $countryId;
     private string $name;
 
 
@@ -35,25 +35,25 @@ final class NeighborhoodModel
 
 
     /**
-     * Get the value of cityId
+     * Get the value of countryId
      *
      * @return int
      */
-    public function getCityId(): int
+    public function getCountryId(): int
     {
-        return $this->cityId;
+        return $this->countryId;
     }
 
     /**
-     * Set the value of cityId
+     * Set the value of countryId
      *
-     * @param int $cityId
+     * @param int $countryId
      *
      * @return self
      */
-    public function setCityId(int $cityId): self
+    public function setCountryId(int $countryId): self
     {
-        $this->cityId = $cityId;
+        $this->countryId = $countryId;
         return $this;
     }
 

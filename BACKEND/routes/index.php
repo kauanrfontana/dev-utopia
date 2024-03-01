@@ -2,6 +2,7 @@
 use App\Controllers\AuthController;
 use App\Controllers\LocationController;
 use App\Controllers\UserController;
+use function src\jwtAuth;
 use function src\slimConfiguration;
 
 $app = new \Slim\App(slimConfiguration());
@@ -11,18 +12,28 @@ $app = new \Slim\App(slimConfiguration());
 // ROUTES 
 // ================================
 
-$app->get('/teste', AuthController::class . ':login');
-$app->get('/users', UserController::class . ':getUsers');
+$app->get("/teste", AuthController::class . ":login");
 
-$app->get('/countries', LocationController::class . ':getCountries');
-$app->post('/countries', LocationController::class . ':insertCountries');
+$app->group('', function () use ($app) {
+    // LOCATION ROUTES [
+    $app->get("/locations", LocationController::class . ":getAllLocationsByType");
 
-$app->get('/states', LocationController::class . ':getStates');
-$app->post('/states', LocationController::class . ':insertState');
+    $app->post("/countries", LocationController::class . ":insertCountries");
 
-$app->get('/cities', LocationController::class . ':getCities');
-$app->post('/cities', LocationController::class . ':insertCity');
+    $app->post("/states", LocationController::class . ":insertState");
 
+    $app->post("/cities", LocationController::class . ":insertCity");
+
+    $app->post("/neighborhoods", LocationController::class . ":insertNeighborhood");
+
+    $app->post("/streetsAvenues", LocationController::class . ":insertStreetAvenue");
+    // ]
+
+    $app->get("/users", UserController::class . ":getAllUsers");
+})->add(jwtAuth());
+
+
+$app->post("/users", UserController::class . ":insertUser");
 
 // ================================
 

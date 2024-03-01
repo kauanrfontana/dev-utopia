@@ -9,9 +9,9 @@ final class UserModel
     private string $email;
     private string $password;
     private \DateTime $created_at;
-    private int $addressId;
+    private int $streetAvenueId;
     private string $houseNumber;
-    private string $complement;
+    private string $complement = "";
     private string $zipCode;
 
 
@@ -131,25 +131,25 @@ final class UserModel
     }
 
     /**
-     * Get the value of addressId
+     * Get the value of streetAvenueId
      *
      * @return int
      */
-    public function getAddressId(): int
+    public function getStreetAvenueId(): int
     {
-        return $this->addressId;
+        return $this->streetAvenueId;
     }
 
     /**
-     * Set the value of addressId
+     * Set the value of streetAvenueId
      *
-     * @param int $addressId
+     * @param int $streetAvenueId
      *
      * @return self
      */
-    public function setAddressId(int $addressId): self
+    public function setStreetAvenueId(int $streetAvenueId): self
     {
-        $this->addressId = $addressId;
+        $this->streetAvenueId = $streetAvenueId;
         return $this;
     }
 
