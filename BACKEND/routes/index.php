@@ -2,17 +2,23 @@
 use App\Controllers\AuthController;
 use App\Controllers\LocationController;
 use App\Controllers\UserController;
-use function src\jwtAuth;
-use function src\slimConfiguration;
+use function src\{slimConfiguration, jwtAuth};
 
 $app = new \Slim\App(slimConfiguration());
 
+$app->add(function ($request, $response, $next) {
+    $response = $response->withHeader('Access-Control-Allow-Origin', '*');
+    $response = $response->withHeader('Access-Control-Allow-Methods', $request->getHeaderLine('Access-Control-Request-Method'));
+    $response = $response->withHeader('Access-Control-Allow-Headers', $request->getHeaderLine('Access-Control-Request-Headers'));
 
+    return $next($request, $response);
+});
 
 // ROUTES 
 // ================================
 
-$app->get("/teste", AuthController::class . ":login");
+$app->get("/login", AuthController::class . ":login");
+$app->post("/users", UserController::class . ":insertUser");
 
 $app->group('', function () use ($app) {
     // LOCATION ROUTES [
@@ -33,7 +39,6 @@ $app->group('', function () use ($app) {
 })->add(jwtAuth());
 
 
-$app->post("/users", UserController::class . ":insertUser");
 
 // ================================
 

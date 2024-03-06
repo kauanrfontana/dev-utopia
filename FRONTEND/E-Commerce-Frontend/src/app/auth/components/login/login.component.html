@@ -41,24 +41,6 @@
           [formGroup]="registerForm"
           (ngSubmit)="onRegisterUser()"
         >
-          <!--  <section
-            class="errors"
-            *ngIf="!registerForm.valid && registerFormSubmited"
-          >
-            <p *ngIf="!registerForm.get('name')?.valid">
-              É necessário informar um nome para realizar o cadastro!
-            </p>
-            <p *ngIf="!registerForm.get('email')?.valid">
-              É necessário informar um email válido para realizar o cadastro!
-            </p>
-            <p *ngIf="!registerForm.get('password')?.valid">
-              É necessário que a senha tenho no mínimo 6 caracteres para
-              realizar o cadastro!
-            </p>
-            <p *ngIf="!registerForm.get('passwordConfirm')?.valid">
-              A senha e a confirmação de senha devem ser iguais!
-            </p>
-          </section> -->
           <section class="fields">
             <div class="form-group">
               <input
@@ -68,11 +50,6 @@
                 placeholder=""
               />
               <label requiredInput>Nome</label>
-              <p
-                *ngIf="!registerForm.get('name')?.valid && registerFormSubmited"
-              >
-                É necessário informar um nome para realizar o cadastro!
-              </p>
             </div>
             <div class="form-group">
               <input
@@ -82,13 +59,6 @@
                 placeholder=""
               />
               <label requiredInput>Email</label>
-              <p
-                *ngIf="
-                  !registerForm.get('email')?.valid && registerFormSubmited
-                "
-              >
-                É necessário informar um email válido para realizar o cadastro!
-              </p>
             </div>
             <div class="form-group">
               <input
@@ -98,14 +68,6 @@
                 placeholder=""
               />
               <label requiredInput>Senha</label>
-              <p
-                *ngIf="
-                  !registerForm.get('password')?.valid && registerFormSubmited
-                "
-              >
-                É necessário que a senha tenho no mínimo 6 caracteres para
-                realizar o cadastro!
-              </p>
             </div>
             <div class="form-group">
               <input
@@ -115,14 +77,6 @@
                 placeholder=""
               />
               <label requiredInput>Confirmação de senha</label>
-              <p
-                *ngIf="
-                  !registerForm.get('passwordConfirm')?.valid &&
-                  registerFormSubmited
-                "
-              >
-                A senha e a confirmação de senha devem ser iguais!
-              </p>
             </div>
           </section>
 
@@ -157,13 +111,10 @@
               <input
                 type="text"
                 class="form-control"
-                formControlName="user"
+                formControlName="email"
                 placeholder=""
               />
               <label requiredInput>Email</label>
-              <p *ngIf="!loginForm.get('email')?.valid && loginFormSubmited">
-                É necessário informar um email válido para realizar o login!
-              </p>
             </div>
             <div class="form-group">
               <input
@@ -173,9 +124,6 @@
                 placeholder=""
               />
               <label requiredInput>Senha</label>
-              <p *ngIf="!loginForm.get('password')?.valid && loginFormSubmited">
-                É necessário informar uma senha válida para realizar o login!
-              </p>
             </div>
           </section>
           <section class="actions">

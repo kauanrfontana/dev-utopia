@@ -2,9 +2,12 @@
 
 namespace src;
 
-use App\DAO\LocationDAO;
-use App\DAO\UserDAO;
-use TokenDAO;
+use App\DAO\{
+    LocationDAO,
+    UserDAO,
+    TokenDAO,
+    RoleDAO
+};
 
 
 function slimConfiguration(): \Slim\Container
@@ -16,11 +19,14 @@ function slimConfiguration(): \Slim\Container
     ];
     $container = new \Slim\Container($configuration);
 
+
+
     //dependences
 
     $container->offsetSet(UserDAO::class, new UserDAO());
     $container->offsetSet(TokenDAO::class, new TokenDAO());
     $container->offsetSet(LocationDAO::class, new LocationDAO());
+    $container->offsetSet(RoleDAO::class, new RoleDAO());
 
 
     return $container;

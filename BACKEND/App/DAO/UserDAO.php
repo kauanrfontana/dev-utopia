@@ -12,7 +12,6 @@ final class UserDAO extends Connection
     public function getAllUsers(): array
     {
         $result = [];
-        $result["success"] = true;
 
         try {
             $sql = "SELECT * FROM users";
@@ -61,49 +60,75 @@ final class UserDAO extends Connection
     public function insertUser(UserModel $user): array
     {
         $result = [];
-        $result["success"] = true;
         try {
+            $this->pdo->beginTransaction();
 
-            $sql = "INSERT INTO users (
+            $sqlValidateEmail = "SELECT * FROM users WHERE email = :email";
+            $statement = $this->pdo->prepare($sqlValidateEmail);
+
+            $statement->bindValue(":email", $user->getEmail(), \PDO::PARAM_STR);
+            if (!$statement->execute()) {
+                throw new \Exception("Não foi possível validar o e-mail no momento. Por favor, tente mais tarde.");
+            }
+            $userRegistered = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+            if (count($userRegistered) !== 0) {
+                throw new \InvalidArgumentException("O e-mail informado já está cadastrado no sistema.");
+            }
+
+
+            $sqlUserRegister = "INSERT INTO users (
                 [name], 
                 [email], 
                 [password], 
-                [street_avenue_id],
-                [house_number],
-                [complement],
-                [zip_code],
                 [created_at]
                 ) VALUES (
                     :name, 
                     :email, 
                     :password, 
-                    :streetAvenueId,
-                    :houseNumber,
-                    :complement,
-                    :zipCode,
                     :createdAt
                     )";
-            $statement = $this->pdo->prepare($sql);
+            $statement = $this->pdo->prepare($sqlUserRegister);
 
             $currentDateTime = (new \DateTime())->format("Y-m-d H:i:s");
 
             $statement->bindValue(":name", $user->getName(), \PDO::PARAM_STR);
             $statement->bindValue(":email", $user->getEmail(), \PDO::PARAM_STR);
             $statement->bindValue(":password", $user->getPassword(), \PDO::PARAM_STR);
-            $statement->bindValue(":streetAvenueId", $user->getStreetAvenueId(), \PDO::PARAM_INT);
-            $statement->bindValue(":houseNumber", $user->getHouseNumber(), \PDO::PARAM_STR);
-            $statement->bindValue(":complement", $user->getComplement(), \PDO::PARAM_STR);
-            $statement->bindValue(":zipCode", $user->getZipCode(), \PDO::PARAM_STR);
             $statement->bindValue(":createdAt", $currentDateTime, \PDO::PARAM_STR);
 
             if (!$statement->execute()) {
                 throw new \Exception("Não foi possível inserir o usuário no momento. Por favor, tente mais tarde.");
             }
 
+            $userId = (int) $this->pdo->lastInsertId();
+
+            $roleDAO = new RoleDAO();
+            $roleCustomerId = $roleDAO->getRoleIdByCategory(1);
+
+            $sqlSetUserAsCustomer = "INSERT INTO [user_roles](
+                [user_id], 
+                [role_id]
+                ) VALUES (
+                    :userId, 
+                    :roleId
+                    )";
+            $statement = $this->pdo->prepare($sqlSetUserAsCustomer);
+
+            $statement->bindParam(":userId", $userId, \PDO::PARAM_INT);
+            $statement->bindParam(":roleId", $roleCustomerId, \PDO::PARAM_INT);
+
+            if (!$statement->execute()) {
+                throw new \Exception("Não foi possível inserir o usuário no momento. Por favor, tente mais tarde.");
+            }
+
             $result["message"] = "Usuário inserido com sucesso.";
+
+            $this->pdo->commit();
             return $result;
 
         } catch (\Throwable $e) {
+            $this->pdo->rollBack();
             throw $e;
         }
     }

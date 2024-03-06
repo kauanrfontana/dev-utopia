@@ -22,7 +22,6 @@ final class LocationDAO extends Connection
     public function getCountries(): array
     {
         $result = [];
-        $result["success"] = true;
         try {
             $sql = "SELECT [id], [name] FROM [countries]";
 
@@ -68,7 +67,6 @@ final class LocationDAO extends Connection
     public function getStates(): array
     {
         $result = [];
-        $result["success"] = true;
         try {
             $sql = "SELECT [id], [name], [country_id] FROM [states]";
 
@@ -119,7 +117,6 @@ final class LocationDAO extends Connection
     public function getCities(): array
     {
         $result = [];
-        $result["success"] = true;
         try {
             $sql = "SELECT [id], [name], [state_id] FROM [cities]";
 
@@ -170,7 +167,6 @@ final class LocationDAO extends Connection
     public function getNeighborhoods(): array
     {
         $result = [];
-        $result["success"] = true;
         try {
             $sql = "SELECT [id], [name], [city_id] FROM [neighborhoods]";
 
@@ -221,7 +217,6 @@ final class LocationDAO extends Connection
     public function getStreetsAvenues(): array
     {
         $result = [];
-        $result["success"] = true;
         try {
             $sql = "SELECT [id], [name], [neighborhood_id] FROM [streets_avenues]";
 

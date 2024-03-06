@@ -37,14 +37,18 @@ final class LocationController
             $type = $request->getParam("type");
 
             if (!method_exists($this->locationDAO, "get" . ucfirst($type))) {
-                throw new \Exception("Não encontrado retorno para o tipo de localização {$type}!");
+                throw new \InvalidArgumentException("Não encontrado retorno para o tipo de localização {$type}! \n Tipos permitidos: countries, states, cities, neighborhoods, streetsAvenues");
             }
-            $response = $response->withStatus(200)->withJson($this->locationDAO->{"get" . ucfirst($type)}());
+            $response = $response->withJson($this->locationDAO->{"get" . ucfirst($type)}());
+        } catch (\InvalidArgumentException $e) {
+            $response = $response->withStatus(400)->withJson([
+                "status" => 400,
+                "message" => $e->getMessage(),
+            ]);
         } catch (\Throwable $e) {
             $response = $response->withStatus(500)->withJson([
-                "success" => false,
+                "status" => 500,
                 "message" => $e->getMessage(),
-                "typesAllowed" => "countries, states, cities, neighborhoods, stretsAvenues"
             ]);
         }
         return $response;
@@ -65,15 +69,15 @@ final class LocationController
                 $country->{"set" . ucfirst($field)}($data[$field]);
             }
 
-            $response = $response->withStatus(200)->withJson($this->locationDAO->insertCountry($country));
+            $response = $response->withJson($this->locationDAO->insertCountry($country));
         } catch (\InvalidArgumentException $e) {
             $response = $response->withStatus(400)->withJson([
-                "success" => false,
+
                 "message" => $e->getMessage()
             ]);
         } catch (\Throwable $e) {
             $response = $response->withStatus(500)->withJson([
-                "success" => false,
+
                 "message" => $e->getMessage()
             ]);
         }
@@ -95,15 +99,15 @@ final class LocationController
                 $state->{"set" . ucfirst($field)}($data[$field]);
             }
 
-            $response = $response->withStatus(200)->withJson($this->locationDAO->insertState($state));
+            $response = $response->withJson($this->locationDAO->insertState($state));
         } catch (\InvalidArgumentException $e) {
             $response = $response->withStatus(400)->withJson([
-                "success" => false,
+
                 "message" => $e->getMessage()
             ]);
         } catch (\Throwable $e) {
             $response = $response->withStatus(500)->withJson([
-                "success" => false,
+
                 "message" => $e->getMessage()
             ]);
         }
@@ -125,15 +129,15 @@ final class LocationController
                 $city->{"set" . ucfirst($field)}($data[$field]);
             }
 
-            $response = $response->withStatus(200)->withJson($this->locationDAO->insertCity($city));
+            $response = $response->withJson($this->locationDAO->insertCity($city));
         } catch (\InvalidArgumentException $e) {
             $response = $response->withStatus(400)->withJson([
-                "success" => false,
+
                 "message" => $e->getMessage()
             ]);
         } catch (\Throwable $e) {
             $response = $response->withStatus(500)->withJson([
-                "success" => false,
+
                 "message" => $e->getMessage()
             ]);
         }
@@ -156,15 +160,15 @@ final class LocationController
                 $neighborhood->{"set" . ucfirst($field)}($data[$field]);
             }
 
-            $response = $response->withStatus(200)->withJson($this->locationDAO->insertNeighborhood($neighborhood));
+            $response = $response->withJson($this->locationDAO->insertNeighborhood($neighborhood));
         } catch (\InvalidArgumentException $e) {
             $response = $response->withStatus(400)->withJson([
-                "success" => false,
+
                 "message" => $e->getMessage()
             ]);
         } catch (\Throwable $e) {
             $response = $response->withStatus(500)->withJson([
-                "success" => false,
+
                 "message" => $e->getMessage()
             ]);
         }
@@ -185,15 +189,15 @@ final class LocationController
                 $streetAvenue->{"set" . ucfirst($field)}($data[$field]);
             }
 
-            $response = $response->withStatus(200)->withJson($this->locationDAO->insertStreetAvenue($streetAvenue));
+            $response = $response->withJson($this->locationDAO->insertStreetAvenue($streetAvenue));
         } catch (\InvalidArgumentException $e) {
             $response = $response->withStatus(400)->withJson([
-                "success" => false,
+
                 "message" => $e->getMessage()
             ]);
         } catch (\Throwable $e) {
             $response = $response->withStatus(500)->withJson([
-                "success" => false,
+
                 "message" => $e->getMessage()
             ]);
         }

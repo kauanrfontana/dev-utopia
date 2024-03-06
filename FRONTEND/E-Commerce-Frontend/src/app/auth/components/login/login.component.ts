@@ -1,13 +1,15 @@
 import { Component } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import Swal from "sweetalert2";
+import { AuthService } from "../../auth.service";
+import { IResponse } from "../../../shared/interfaces/IResponse.interface";
 
 @Component({
-  selector: "app-auth",
-  templateUrl: "./auth.component.html",
-  styleUrls: ["./auth.component.scss"],
+  selector: "app-login",
+  templateUrl: "./login.component.html",
+  styleUrls: ["./login.component.scss"],
 })
-export class AuthComponent {
+export class LoginComponent {
   inLogin: boolean = false;
   inRegister: boolean = false;
 
@@ -32,7 +34,7 @@ export class AuthComponent {
   registerFormSubmited: boolean = false;
   loginFormSubmited: boolean = false;
 
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
   onPreviewRegister() {
     if (this.registerClass === this.registerClasses.selected) return;
@@ -72,11 +74,52 @@ export class AuthComponent {
 
   onRegisterUser() {
     this.registerFormSubmited = true;
-
-    if (this.registerForm.invalid) {
-      Swal.fire("Erro", "Preencha todos os campos corretamente", "error");
+    console.log(this.registerForm);
+    if (this.registerForm.get("name")?.invalid) {
+      Swal.fire(
+        "Erro ao Cadastrar",
+        "Nome inválido, preencha o campo corretamente para efetuar o cadastro!",
+        "error"
+      );
       return;
     }
+    if (this.registerForm.get("email")?.invalid) {
+      Swal.fire(
+        "Erro ao Cadastrar",
+        "Email inválido, preencha o campo corretamente para efetuar o cadastro!",
+        "error"
+      );
+      return;
+    }
+    if (this.registerForm.get("password")?.invalid) {
+      let passwordErrorMsg: string = !!this.registerForm.get("password")
+        ?.errors?.["minlength"]
+        ? "A senha deve ter no mínimo 6 caracteres"
+        : "Senha inválida, preencha o campo corretamente para efetuar o cadastro!";
+      Swal.fire("Erro ao Cadastrar", passwordErrorMsg, "error");
+      return;
+    }
+    if (this.registerForm.get("passwordConfirm")?.invalid) {
+      Swal.fire(
+        "Erro ao Cadastrar",
+        "A senha e a confirmação não correspondem!",
+        "error"
+      );
+      return;
+    }
+
+    let { name, email, password } = this.registerForm.value;
+    let credentials = { name, email, password };
+    this.authService.register(credentials).subscribe({
+      next: (res: IResponse) => {
+        Swal.fire("Sucesso", res.message, "success").then(() => {
+          this.restart();
+        });
+      },
+      error: (err: Error) => {
+        Swal.fire("Erro ao Cadastrar", err.message, "error");
+      },
+    });
   }
 
   onLoginUser() {

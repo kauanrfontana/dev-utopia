@@ -26,9 +26,7 @@ final class UserController
             $users = $this->userDAO->getAllUsers();
             $response = $response->withJson($users);
         } catch (\Throwable $e) {
-            $response = $response->withStatus(500, "Erro interno do servidor");
-            $response = $response->withJson([
-                "success" => false,
+            $response = $response->withStatus(500)->withJson([
                 "message" => $e->getMessage()
             ]);
         }
@@ -38,7 +36,7 @@ final class UserController
 
     public function insertUser(Request $request, Response $response, array $args): Response
     {
-        $mandatoryFields = ["name" => "nome", "email" => "email", "password" => "senha", "houseNumber" => "numero da casa", "zipCode" => "cep", "streetAvenueId" => "logradouro"];
+        $mandatoryFields = ["name" => "nome", "email" => "email", "password" => "senha"];
 
         $data = $request->getParsedBody();
         $user = new UserModel();
@@ -47,21 +45,25 @@ final class UserController
 
             foreach ($mandatoryFields as $field => $description) {
                 if (empty($data[$field])) {
-                    throw new \Exception("O campo {$description} é obrigatório.");
+                    throw new \InvalidArgumentException("O campo {$description} é obrigatório.");
                 }
                 $user->{"set" . ucfirst($field)}($data[$field]);
             }
 
             if ($user->getPassword() < 6) {
-                throw new \Exception("O campo senha deve conter no mínimo 6 caracteres!");
+                throw new \InvalidArgumentException("O campo senha deve conter no mínimo 6 caracteres!");
             }
 
 
             $response = $response->withStatus(201)->withJson($this->userDAO->insertUser($user));
 
+        } catch (\InvalidArgumentException $e) {
+            $response = $response->withStatus(400)->withJson([
+                "message" => $e->getMessage()
+            ]);
         } catch (\Throwable $e) {
-            $response = $response->withJson([
-                "error" => $e->getMessage()
+            $response = $response->withStatus(500)->withJson([
+                "message" => $e->getMessage()
             ]);
         }
         return $response;

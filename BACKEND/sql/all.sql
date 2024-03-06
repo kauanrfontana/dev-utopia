@@ -41,10 +41,10 @@ CREATE TABLE [users](
 [email] varchar(200) UNIQUE NOT NULL,
 [password] varchar(200) NOT NULL,
 [created_at] datetime NOT NULL,
-[street_avenue_id] int NOT NULL,
-[house_number] varchar(20) NOT NULL,
+[street_avenue_id] int,
+[house_number] varchar(20),
 [complement] varchar(200),
-[zip_code] varchar(8) NOT NULL,
+[zip_code] varchar(8),
 FOREIGN KEY ([street_avenue_id]) REFERENCES [streets_avenues]([id])
 );
 
