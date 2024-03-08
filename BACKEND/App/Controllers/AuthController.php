@@ -32,11 +32,15 @@ final class AuthController
         $user = $this->userDAO->getUserByEmail($email);
 
         if (is_null($user)) {
-            return $response->withStatus(401);
+            return $response->withStatus(401)->withJson([
+                "message" => "Nenhum usuário encontrado com o email e senha informados!"
+            ]);
         }
 
         if (!password_verify($password, $user->getPassword())) {
-            return $response->withStatus(401);
+            return $response->withStatus(401)->withJson([
+                "message" => "Nenhum usuário encontrado com o email e senha informados!"
+            ]);
         }
 
         $response = $response->withJson(AuthService::setTokens($user));

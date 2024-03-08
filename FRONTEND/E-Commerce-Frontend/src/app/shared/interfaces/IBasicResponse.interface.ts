@@ -1,4 +1,4 @@
-export interface IResponse {
+export interface IBasicResponse {
   data?: any;
   message?: string;
 }

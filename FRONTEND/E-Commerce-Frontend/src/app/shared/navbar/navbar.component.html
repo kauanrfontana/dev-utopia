@@ -1,0 +1,26 @@
+<div
+  class="navbar-container"
+  [ngClass]="{ 'first-view': firstView }"
+  #navContainer
+>
+  <ul class="nav-list" [hidden]="!showingNavbar">
+    <ng-container *ngFor="let item of navItems">
+      <li class="nav-item" routerLinkActive="active">
+        <a [routerLink]="[item.route]">
+          <mat-icon>{{ item.icon }}</mat-icon>
+          <div class="label-icon">
+            <label>{{ item.label }}</label>
+          </div>
+        </a>
+      </li>
+    </ng-container>
+    <li class="nav-item btn-logout">
+      <a (click)="onLogout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <div class="label-icon">
+          <label>Logout</label>
+        </div>
+      </a>
+    </li>
+  </ul>
+</div>

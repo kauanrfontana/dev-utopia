@@ -102,9 +102,6 @@
   width: calc(100% - 10px);
 }
 
-.register-form {
-}
-
 .container-login {
   background-color: #a58e44;
 
@@ -166,6 +163,7 @@ p {
   text-decoration: none;
   color: white;
   font-size: 50px;
+  animation: fadeIn 1s ease-in;
   &:hover {
     opacity: 0.8;
   }
@@ -176,6 +174,7 @@ p {
   justify-content: center;
   position: relative;
   top: 10px;
+  animation: fadeIn 1s ease-in;
 
   button {
     font-size: 1.5rem;
@@ -191,6 +190,7 @@ p {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  animation: fadeIn 1s ease-in;
 }
 
 .errors {
@@ -202,4 +202,16 @@ p {
   flex-direction: column;
   align-items: center;
   position: relative;
+}
+
+a.view-password {
+  position: absolute;
+  top: 0.6rem;
+  left: 23rem;
+  color: black;
+  opacity: 0.6;
+  &:hover {
+    opacity: 1;
+    cursor: pointer;
+  }
 }

@@ -23,7 +23,6 @@ export class InterceptService implements HttpInterceptor {
     const saveToken =
       request.url.split("/")[0] != "login" ||
       (request.url.split("/")[0] != "users" && request.method != "post");
-    console.log(saveToken);
 
     request = request.clone({
       url: environment.serverUrl + `${request.url}`,

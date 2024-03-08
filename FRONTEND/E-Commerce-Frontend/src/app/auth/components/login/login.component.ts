@@ -2,7 +2,10 @@ import { Component } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import Swal from "sweetalert2";
 import { AuthService } from "../../auth.service";
-import { IResponse } from "../../../shared/interfaces/IResponse.interface";
+import { IBasicResponse } from "src/app/shared/interfaces/IBasicResponse.interface";
+import { take } from "rxjs";
+import { Router } from "@angular/router";
+import { AppService } from "src/app/app.service";
 
 @Component({
   selector: "app-login",
@@ -34,7 +37,13 @@ export class LoginComponent {
   registerFormSubmited: boolean = false;
   loginFormSubmited: boolean = false;
 
-  constructor(private authService: AuthService) {}
+  passwordsVisible = false;
+
+  constructor(
+    private authService: AuthService,
+    private appService: AppService,
+    private router: Router
+  ) {}
 
   onPreviewRegister() {
     if (this.registerClass === this.registerClasses.selected) return;
@@ -74,7 +83,7 @@ export class LoginComponent {
 
   onRegisterUser() {
     this.registerFormSubmited = true;
-    console.log(this.registerForm);
+
     if (this.registerForm.get("name")?.invalid) {
       Swal.fire(
         "Erro ao Cadastrar",
@@ -92,10 +101,10 @@ export class LoginComponent {
       return;
     }
     if (this.registerForm.get("password")?.invalid) {
-      let passwordErrorMsg: string = !!this.registerForm.get("password")
-        ?.errors?.["minlength"]
-        ? "A senha deve ter no mínimo 6 caracteres"
-        : "Senha inválida, preencha o campo corretamente para efetuar o cadastro!";
+      let passwordErrorMsg: string = this.getPasswordMsgByForm(
+        this.registerForm
+      );
+
       Swal.fire("Erro ao Cadastrar", passwordErrorMsg, "error");
       return;
     }
@@ -109,26 +118,53 @@ export class LoginComponent {
     }
 
     let { name, email, password } = this.registerForm.value;
-    let credentials = { name, email, password };
-    this.authService.register(credentials).subscribe({
-      next: (res: IResponse) => {
-        Swal.fire("Sucesso", res.message, "success").then(() => {
-          this.restart();
-        });
-      },
-      error: (err: Error) => {
-        Swal.fire("Erro ao Cadastrar", err.message, "error");
-      },
-    });
+    let user = { name, email, password };
+    this.authService
+      .register(user)
+      .pipe(take(1))
+      .subscribe({
+        next: (res: IBasicResponse) => {
+          Swal.fire("Sucesso", res.message, "success").then(() => {
+            this.restart();
+          });
+        },
+        error: (err: Error) => {
+          Swal.fire("Erro ao Cadastrar", err.message, "error");
+        },
+      });
   }
 
   onLoginUser() {
     this.loginFormSubmited = true;
 
-    if (this.loginForm.invalid) {
-      Swal.fire("Erro", "Preencha todos os campos corretamente", "error");
+    if (this.loginForm.get("email")?.invalid) {
+      Swal.fire(
+        "Erro ao fazer login",
+        "Email inválido, preencha o campo corretamente para efetuar o login!",
+        "error"
+      );
       return;
     }
+
+    if (this.loginForm.get("password")?.invalid) {
+      let passwordErrorMsg: string = this.getPasswordMsgByForm(this.loginForm);
+
+      Swal.fire("Erro ao fazer Login", passwordErrorMsg, "error");
+      return;
+    }
+
+    let { email, password } = this.loginForm.value;
+    let credentials = { email, password };
+
+    this.authService.login(credentials).subscribe({
+      next: () => {
+        this.router.navigate(["./home"]);
+        this.appService.verifyMenuSubject.next(true);
+      },
+      error: (err: Error) => {
+        Swal.fire("Erro ao fazer Login", err.message, "error");
+      },
+    });
   }
 
   onLogin() {
@@ -150,12 +186,20 @@ export class LoginComponent {
     return {};
   }
 
+  getPasswordMsgByForm(form: FormGroup): string {
+    let passwordErrorMsg: string = !!form.get("password")?.errors?.["minlength"]
+      ? "A senha deve ter no mínimo 6 caracteres"
+      : "Senha inválida, preencha o campo corretamente para efetuar o cadastro!";
+    return passwordErrorMsg;
+  }
+
   restart() {
     this.loginClass = "";
     this.registerClass = "";
     this.logoClass = "";
     this.registerFormSubmited = false;
     this.loginFormSubmited = false;
+    this.passwordsVisible = false;
 
     this.registerForm.reset();
   }

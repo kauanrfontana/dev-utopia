@@ -1,0 +1,86 @@
+.navbar-container {
+  background-color: #15142b;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+  width: 80vw;
+  width: 80dvw;
+  height: 0.8rem;
+  position: fixed;
+  left: 10vw;
+  left: 10dvw;
+  top: 0.5rem;
+  border-radius: 10px;
+  transition: 0.5s ease-in-out;
+  display: flex;
+  justify-content: center;
+  &.first-view {
+    height: 3rem;
+  }
+
+  &:hover {
+    height: 3rem;
+  }
+
+  ul.nav-list {
+    animation: fadeIn 0.5s ease-in;
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    li.nav-item {
+      position: relative;
+      width: fit-content;
+      margin: 10px;
+
+      &.btn-logout {
+        position: absolute;
+        left: calc(80dvw - 50px);
+      }
+
+      mat-icon {
+        color: rgba(255, 255, 255, 0.438);
+      }
+      &.active {
+        mat-icon {
+          color: white;
+        }
+      }
+
+      .label-icon {
+        position: absolute;
+        z-index: 2;
+        top: -2px;
+        left: 18px;
+        color: white;
+        font-size: 11px;
+        opacity: 0;
+        transition: 0.5s ease-in-out;
+        background-color: gray;
+        padding: 1px;
+        border-radius: 5px;
+
+        &::after {
+          content: "";
+          position: absolute;
+          top: 27%;
+          rotate: 83deg;
+          left: -11%;
+          margin-left: -8px;
+          border-width: 7px;
+          border-style: solid;
+          border-color: gray transparent transparent transparent;
+        }
+      }
+
+      &:hover {
+        cursor: pointer;
+
+        .label-icon {
+          width: auto;
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+}

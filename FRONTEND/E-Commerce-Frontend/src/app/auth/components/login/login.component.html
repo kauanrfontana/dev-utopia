@@ -62,21 +62,35 @@
             </div>
             <div class="form-group">
               <input
-                type="text"
+                [type]="!passwordsVisible ? 'password' : 'text'"
                 class="form-control"
                 formControlName="password"
                 placeholder=""
               />
               <label requiredInput>Senha</label>
+              <a
+                class="view-password"
+                (click)="passwordsVisible = !passwordsVisible"
+                ><mat-icon>{{
+                  !passwordsVisible ? "visibility" : "visibility_off"
+                }}</mat-icon></a
+              >
             </div>
             <div class="form-group">
               <input
-                type="text"
+                [type]="!passwordsVisible ? 'password' : 'text'"
                 class="form-control"
                 formControlName="passwordConfirm"
                 placeholder=""
               />
               <label requiredInput>Confirmação de senha</label>
+              <a
+                class="view-password"
+                (click)="passwordsVisible = !passwordsVisible"
+                ><mat-icon>{{
+                  !passwordsVisible ? "visibility" : "visibility_off"
+                }}</mat-icon></a
+              >
             </div>
           </section>
 
@@ -118,12 +132,19 @@
             </div>
             <div class="form-group">
               <input
-                type="password"
+                [type]="!passwordsVisible ? 'password' : 'text'"
                 class="form-control"
                 formControlName="password"
                 placeholder=""
               />
               <label requiredInput>Senha</label>
+              <a
+                class="view-password"
+                (click)="passwordsVisible = !passwordsVisible"
+                ><mat-icon>{{
+                  !passwordsVisible ? "visibility" : "visibility_off"
+                }}</mat-icon></a
+              >
             </div>
           </section>
           <section class="actions">

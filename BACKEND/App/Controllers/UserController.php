@@ -43,6 +43,12 @@ final class UserController
 
         try {
 
+            if (strlen($data["password"]) < 6) {
+                throw new \InvalidArgumentException("O campo senha deve conter no mínimo 6 caracteres!");
+            }
+
+            $data["password"] = password_hash($data["password"], PASSWORD_DEFAULT);
+
             foreach ($mandatoryFields as $field => $description) {
                 if (empty($data[$field])) {
                     throw new \InvalidArgumentException("O campo {$description} é obrigatório.");
@@ -50,9 +56,6 @@ final class UserController
                 $user->{"set" . ucfirst($field)}($data[$field]);
             }
 
-            if ($user->getPassword() < 6) {
-                throw new \InvalidArgumentException("O campo senha deve conter no mínimo 6 caracteres!");
-            }
 
 
             $response = $response->withStatus(201)->withJson($this->userDAO->insertUser($user));

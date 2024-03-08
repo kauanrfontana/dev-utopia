@@ -17,7 +17,7 @@ $app->add(function ($request, $response, $next) {
 // ROUTES 
 // ================================
 
-$app->get("/login", AuthController::class . ":login");
+$app->post("/login", AuthController::class . ":login");
 $app->post("/users", UserController::class . ":insertUser");
 
 $app->group('', function () use ($app) {
