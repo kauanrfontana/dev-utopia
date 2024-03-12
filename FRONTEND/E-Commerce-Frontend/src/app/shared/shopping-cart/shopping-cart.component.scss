@@ -1,0 +1,79 @@
+.shopping-cart-container {
+    z-index: 100;
+    background-color: #15142b;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+    height: 3rem;
+    width: 3vw;
+    width: 3dvw;
+
+    position: fixed;
+    left: 94vw;
+    left: 94dvw;
+    top: 0.5rem;
+
+    border-radius: 10px;
+    transition: 0.5s ease-in-out;
+    display: flex;
+    justify-content: center;
+
+    .icon-section {
+        position: relative;
+        margin: 10px;
+
+        .label-icon {
+            position: absolute;
+            z-index: 2;
+            top: -2px;
+            left: 18px;
+            color: white;
+            font-size: 11px;
+            opacity: 0;
+            transition: 0.5s ease-in-out;
+            background-color: gray;
+            padding: 1px;
+            border-radius: 5px;
+
+            
+
+            &::after {
+                content: "";
+                position: absolute;
+                top: 27%;
+                rotate: 83deg;
+                left: -11%;
+                margin-left: -8px;
+                border-width: 7px;
+                border-style: solid;
+                border-color: gray transparent transparent transparent;
+            }
+
+        }
+        
+        mat-icon {
+            color: rgba(255, 255, 255, 0.438);
+        }
+        &:hover {
+            cursor: pointer;
+            animation: shake .5s ease-in-out;
+
+            .mat-icon {
+                color: white;
+                cursor: pointer;
+            }
+
+            .label-icon {
+                width: auto;
+                opacity: 0.8;
+            }
+        }
+    }
+
+    p {
+        font-size: 10px;
+        color: white;
+        margin: 0;
+    }
+}

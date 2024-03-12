@@ -36,18 +36,12 @@ final class UserController
 
     public function insertUser(Request $request, Response $response, array $args): Response
     {
-        $mandatoryFields = ["name" => "nome", "email" => "email", "password" => "senha"];
+        $mandatoryFields = ["name" => "nome", "email" => "email"];
 
         $data = $request->getParsedBody();
         $user = new UserModel();
 
         try {
-
-            if (strlen($data["password"]) < 6) {
-                throw new \InvalidArgumentException("O campo senha deve conter no mínimo 6 caracteres!");
-            }
-
-            $data["password"] = password_hash($data["password"], PASSWORD_DEFAULT);
 
             foreach ($mandatoryFields as $field => $description) {
                 if (empty($data[$field])) {
@@ -55,6 +49,13 @@ final class UserController
                 }
                 $user->{"set" . ucfirst($field)}($data[$field]);
             }
+
+            if (empty($data["password"]) || strlen($data["password"]) < 6) {
+                throw new \InvalidArgumentException("O campo senha deve conter no mínimo 6 caracteres!");
+            }
+
+            $data["password"] = password_hash($data["password"], PASSWORD_DEFAULT);
+            $user->setPassword($data["password"]);
 
 
 

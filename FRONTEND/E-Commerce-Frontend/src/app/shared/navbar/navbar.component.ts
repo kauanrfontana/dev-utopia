@@ -1,4 +1,5 @@
 import { Component, ElementRef, HostListener, ViewChild } from "@angular/core";
+import { AppService } from "src/app/app.service";
 import { AuthService } from "src/app/auth/auth.service";
 
 interface INavItem {
@@ -31,7 +32,7 @@ export class NavbarComponent {
   @ViewChild("navContainer") navContainer?: ElementRef;
   firstView: boolean = true;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private appService: AppService) {}
 
   @HostListener("mouseenter") mouseover(eventData: Event) {
     this.showingNavbar = true;
@@ -42,6 +43,8 @@ export class NavbarComponent {
   }
 
   onLogout() {
+    this.showingNavbar = false;
+    this.appService.verifyMenuSubject.next(false);
     this.authService.logout();
   }
 }

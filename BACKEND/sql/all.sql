@@ -50,6 +50,7 @@ FOREIGN KEY ([street_avenue_id]) REFERENCES [streets_avenues]([id])
 
 CREATE TABLE [roles](
 [id] int IDENTITY(1,1) PRIMARY KEY,
+[category] int NOT NULL,
 [name] varchar(50) NOT NULL,
 [created_at] datetime NOT NULL
 );
