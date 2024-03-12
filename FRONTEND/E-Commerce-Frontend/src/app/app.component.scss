@@ -1,10 +1,12 @@
-
 .container-content {
-    width: 100vw;
-    width: 100dvw;
-    height: 90vh;
-    height: 90dvh;
-
-   
-
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  min-height: 90vh;
+  min-height: 90dvh;
+  width: 80vw;
+  width: 80dvw;
+  border-radius: 10px;
+  background-color: white;
+  padding: 10px;
 }

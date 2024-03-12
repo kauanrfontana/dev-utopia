@@ -1,7 +1,7 @@
 <div class="screen">
   <div class="container">
     <button
-      class="btn btn-link btn-go-back"
+      class="btn btn-link btn-go-back animate fadeIn animate--ease-in"
       [hidden]="
         registerClass !== registerClasses.selected &&
         loginClass !== loginClasses.selected
@@ -41,7 +41,7 @@
           [formGroup]="registerForm"
           (ngSubmit)="onRegisterUser()"
         >
-          <section class="fields">
+          <section class="fields animate fadeIn animate--ease-in">
             <div class="form-group">
               <input
                 type="text"
@@ -94,7 +94,7 @@
             </div>
           </section>
 
-          <section class="actions">
+          <section class="actions animate fadeIn animate--ease-in">
             <button class="btn btn-outline-light" type="submit">
               Cadastrar
             </button>
@@ -120,7 +120,7 @@
           [formGroup]="loginForm"
           (ngSubmit)="onLoginUser()"
         >
-          <section class="fields">
+          <section class="fields animate fadeIn animate--ease-in">
             <div class="form-group">
               <input
                 type="text"
@@ -147,7 +147,7 @@
               >
             </div>
           </section>
-          <section class="actions">
+          <section class="actions animate fadeIn animate--ease-in">
             <button class="btn btn-outline-light" type="submit">Login</button>
           </section>
         </form>

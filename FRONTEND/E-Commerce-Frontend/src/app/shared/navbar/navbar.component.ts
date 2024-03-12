@@ -29,22 +29,46 @@ export class NavbarComponent {
     },
   ];
 
+  validateShowingNavbar = true;
+
   @ViewChild("navContainer") navContainer?: ElementRef;
   firstView: boolean = true;
 
-  constructor(private authService: AuthService, private appService: AppService) {}
+  iconOpened: string = "keyboard_arrow_down";
 
-  @HostListener("mouseenter") mouseover(eventData: Event) {
-    this.showingNavbar = true;
+  constructor(
+    private authService: AuthService,
+    private appService: AppService
+  ) {}
+
+  @HostListener("mouseenter") mouseover() {
+    if (this.validateShowingNavbar) {
+      this.showingNavbar = true;
+    }
     this.firstView = false;
   }
-  @HostListener("mouseleave") mouseleave(eventData: Event) {
-    this.showingNavbar = false;
+  @HostListener("mouseleave") mouseleave() {
+    if (this.validateShowingNavbar) {
+      this.showingNavbar = false;
+    }
   }
 
   onLogout() {
     this.showingNavbar = false;
     this.appService.verifyMenuSubject.next(false);
     this.authService.logout();
+  }
+
+  navbarOpened() {
+    if (this.navContainer?.nativeElement.classList.contains("opened")) {
+      this.navContainer?.nativeElement.classList.remove("opened");
+      this.iconOpened = "keyboard_arrow_down";
+      this.validateShowingNavbar = true;
+      return;
+    }
+    this.navContainer?.nativeElement.classList.add("opened");
+    this.iconOpened = "keyboard_arrow_up";
+
+    this.validateShowingNavbar = false;
   }
 }
