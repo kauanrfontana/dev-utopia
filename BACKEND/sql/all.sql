@@ -93,12 +93,12 @@ FOREIGN KEY ([shopping_cart_id]) REFERENCES [shopping_carts]([id]),
 FOREIGN KEY ([product_id]) REFERENCES [products]([id])
 );
 
-CREATE TABLE tokens (
+CREATE TABLE [tokens] (
 [id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
 [user_id] INT NOT NULL,
 [token] VARCHAR(1000) NOT NULL,
 [refresh_token] VARCHAR(1000) NOT NULL,
-[expired_at] DATETIME NOT NULL,
+[expired_at] datetime NOT NULL,
 [active] TINYINT NOT NULL DEFAULT 1,
 FOREIGN KEY ([user_id]) REFERENCES [users]([id])
 );

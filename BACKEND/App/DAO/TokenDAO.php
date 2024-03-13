@@ -22,7 +22,7 @@ class TokenDAO extends Connection
                     :user_id,
                     :token,
                     :refresh_token,
-                    :expired_at
+                    CONVERT(datetime, :expired_at, 120)
                 )';
         $statement = $this->pdo->prepare($sql);
 

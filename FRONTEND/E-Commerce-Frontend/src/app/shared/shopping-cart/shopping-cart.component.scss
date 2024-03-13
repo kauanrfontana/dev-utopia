@@ -6,8 +6,8 @@
   background-size: cover;
   background-attachment: fixed;
   height: 3rem;
-  width: 3vw;
-  width: 3dvw;
+  width: 4vw;
+  width: 4dvw;
 
   position: fixed;
   left: 94vw;
@@ -52,6 +52,7 @@
 
     mat-icon {
       color: rgba(255, 255, 255, 0.438);
+      position: relative;
     }
     &:hover {
       cursor: pointer;

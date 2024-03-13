@@ -11,7 +11,7 @@ final class UserModel
     private \DateTime $created_at;
     private int $streetAvenueId;
     private string $houseNumber;
-    private string $complement = "";
+    private string $complement;
     private string $zipCode;
 
 

@@ -86,7 +86,7 @@ final class UserDAO extends Connection
                     :name, 
                     :email, 
                     :password, 
-                    :createdAt
+                    CONVERT(datetime, :createdAt, 120)
                     )";
             $statement = $this->pdo->prepare($sqlUserRegister);
 
