@@ -30,7 +30,7 @@ final class UserDAO extends Connection
         }
     }
 
-    public function getUserByEmail(string $email): ?UserMOdel
+    public function getUserByEmail(string $email): ?UserModel
     {
         $sql = "SELECT * FROM users WHERE email = :email";
 
@@ -55,6 +55,51 @@ final class UserDAO extends Connection
         }
         return null;
 
+    }
+
+    public function getUser(int $userId): array
+    {
+        $result = [];
+
+        try {
+            $sql = "SELECT 
+            u.[name], 
+            u.[email], 
+            u.[house_number], 
+            u.[complement], 
+            u.[zip_code], 
+            sa.[name] AS street_avenue, 
+            n.[name] AS neighborhood,
+            ct.[name] AS city,
+            s.[name] AS state,
+            c.[name] AS country
+            FROM users u
+            LEFT JOIN streets_avenues sa
+            ON u.street_avenue_id = sa.id
+            LEFT JOIN neighborhoods n
+            ON sa.neighborhood_id = n.id
+            LEFT JOIN cities ct
+            ON n.city_id = ct.id
+            LEFT JOIN states s
+            ON ct.state_id = s.id
+            LEFT JOIN countries c
+            ON s.country_id = c.id
+            WHERE u.id = :userId
+            ";
+
+            $statement = $this->pdo->prepare($sql);
+
+            $statement->bindParam(":userId", $userId, \PDO::PARAM_INT);
+
+            if (!$statement->execute()) {
+                throw new \Exception("Não foi possível consultar o usuário, confira os dados, e tente novamente mais tarde!");
+            }
+            $user = $statement->fetchAll(\PDO::FETCH_ASSOC);
+            $result["user"] = $user;
+            return $result;
+        } catch (\Throwable $e) {
+            throw $e;
+        }
     }
 
     public function insertUser(UserModel $user): array

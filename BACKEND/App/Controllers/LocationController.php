@@ -42,12 +42,10 @@ final class LocationController
             $response = $response->withJson($this->locationDAO->{"get" . ucfirst($type)}());
         } catch (\InvalidArgumentException $e) {
             $response = $response->withStatus(400)->withJson([
-                "status" => 400,
                 "message" => $e->getMessage(),
             ]);
         } catch (\Throwable $e) {
             $response = $response->withStatus(500)->withJson([
-                "status" => 500,
                 "message" => $e->getMessage(),
             ]);
         }

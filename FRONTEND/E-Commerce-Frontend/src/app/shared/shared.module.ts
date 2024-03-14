@@ -9,6 +9,7 @@ import { CommonModule } from "@angular/common";
 import { NavbarComponent } from "./navbar/navbar.component";
 import { RouterModule } from "@angular/router";
 import { ShoppingCartComponent } from "./shopping-cart/shopping-cart.component";
+import { LoaderDots } from "./components/loaderDots/loaderDots.component";
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { ShoppingCartComponent } from "./shopping-cart/shopping-cart.component";
     RequiredDirective,
     NavbarComponent,
     ShoppingCartComponent,
+    LoaderDots,
   ],
   imports: [
     FormsModule,
@@ -40,6 +42,7 @@ import { ShoppingCartComponent } from "./shopping-cart/shopping-cart.component";
     CommonModule,
     NavbarComponent,
     ShoppingCartComponent,
+    LoaderDots,
   ],
 })
 export class SharedModule {}

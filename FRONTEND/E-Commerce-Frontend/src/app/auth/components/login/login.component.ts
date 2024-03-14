@@ -13,6 +13,7 @@ import { AppService } from "src/app/app.service";
   styleUrls: ["./login.component.scss"],
 })
 export class LoginComponent {
+  pageLoading: boolean = false;
   inLogin: boolean = false;
   inRegister: boolean = false;
 
@@ -119,16 +120,19 @@ export class LoginComponent {
 
     let { name, email, password } = this.registerForm.value;
     let user = { name, email, password };
+    this.pageLoading = true;
     this.authService
       .register(user)
       .pipe(take(1))
       .subscribe({
         next: (res: IBasicResponse) => {
+          this.pageLoading = false;
           Swal.fire("Sucesso", res.message, "success").then(() => {
             this.restart();
           });
         },
         error: (err: Error) => {
+          this.pageLoading = false;
           Swal.fire("Erro ao Cadastrar", err.message, "error");
         },
       });
@@ -155,13 +159,15 @@ export class LoginComponent {
 
     let { email, password } = this.loginForm.value;
     let credentials = { email, password };
-
+    this.pageLoading = true;
     this.authService.login(credentials).subscribe({
       next: () => {
+        this.pageLoading = false;
         this.router.navigate(["./home"]);
         this.appService.verifyMenuSubject.next(true);
       },
       error: (err: Error) => {
+        this.pageLoading = false;
         Swal.fire("Erro ao fazer Login", err.message, "error");
       },
     });

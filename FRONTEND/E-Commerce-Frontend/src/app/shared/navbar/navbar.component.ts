@@ -18,6 +18,11 @@ export class NavbarComponent {
 
   navItems: INavItem[] = [
     {
+      icon: "person",
+      route: "/profile",
+      label: "Perfil",
+    },
+    {
       icon: "home",
       route: "/home",
       label: "Home",

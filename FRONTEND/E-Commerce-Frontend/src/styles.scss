@@ -11,25 +11,93 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$E-Commerce-Frontend-primary: mat.define-palette(mat.$indigo-palette);
-$E-Commerce-Frontend-accent: mat.define-palette(
-  mat.$pink-palette,
-  A200,
-  A100,
-  A400
+
+$personal-primary: (
+  50: #e2f1f0,
+  100: #b7ded8,
+  200: #8ac9c0,
+  300: #60b3a7,
+  400: #47a295,
+  500: #3a9283,
+  600: #368576,
+  700: #307567,
+  800: #2c6559,
+  900: #24493e,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  ),
+);
+$personal-warn: (
+  50: #f2ebcf,
+  100: #d9caab,
+  200: #b9a784,
+  300: #97865d,
+  400: #7e6c3f,
+  500: #665421,
+  600: #5c4b1b,
+  700: #4f3e13,
+  800: #44310a,
+  900: #372300,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  ),
+);
+$personal-accent: (
+  50: #faf4ff,
+  100: #f2ecff,
+  200: #e7e2ff,
+  300: #d6d1f1,
+  400: #b1accc,
+  500: #918cab,
+  600: #686581,
+  700: #55516d,
+  800: #36334d,
+  900: #15142b,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  ),
 );
 
-// The warn palette is optional (defaults to red).
-$E-Commerce-Frontend-warn: mat.define-palette(mat.$red-palette);
+$my-primary: mat.define-palette($personal-primary, 800, 500, 900);
+$my-warn: mat.define-palette($personal-warn, 800, 500, 900);
+$my-accent: mat.define-palette($personal-accent, 800, 900, 500);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
+
 $E-Commerce-Frontend-theme: mat.define-light-theme(
   (
     color: (
-      primary: $E-Commerce-Frontend-primary,
-      accent: $E-Commerce-Frontend-accent,
-      warn: $E-Commerce-Frontend-warn,
+      primary: $my-primary,
+      accent: $my-accent,
+      warn: $my-warn,
     ),
   )
 );
@@ -45,13 +113,18 @@ $E-Commerce-Frontend-theme: mat.define-light-theme(
 :root {
   --primary-color: #2c6559;
   --secondary-color: #a58e44;
-  --brown-gradient: linear-gradient(#453c25, #4f3e13);
+  --ternary-color: #4f3e13;
   --dark-color: #15142b;
 }
 
 * {
-  font-family: Tahoma, Arial, sans-serif;
+  font-family: Roboto, Arial, sans-serif;
   box-sizing: border-box;
+}
+
+.mdc-tab__text-label {
+  font-size: 1.5rem;
+  font-weight: 500;
 }
 
 body {
@@ -106,10 +179,7 @@ body {
 }
 
 /* Utility classes */
-.row {
-  display: flex;
-  flex-direction: row;
-}
+
 .container-columns {
   display: flex;
   flex-direction: column;
@@ -130,8 +200,16 @@ body {
     animation-delay: 1s;
   }
 
+  &.animate--delay-500ms {
+    animation-delay: 0.5s;
+  }
+
   &.animate--fast {
     animation-duration: 0.6s;
+  }
+
+  &.animate--faster {
+    animation-duration: 0.4s;
   }
 
   &.animate--slow {
@@ -175,15 +253,17 @@ body {
   animation-name: shake;
 }
 
-@keyframes rotateVertical {
-  0% {
-    rotate: 0deg;
+@keyframes upToDown {
+  25% {
+    transform: translateY(-1rem);
   }
+  0%,
+  50%,
   100% {
-    rotate: 180deg;
+    transform: translateY(0);
   }
 }
 
-.rotateVertical {
-  animation-name: rotateVertical;
+.upToDown {
+  animation-name: upToDown;
 }

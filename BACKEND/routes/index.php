@@ -36,6 +36,7 @@ $app->group('', function () use ($app) {
     // ]
 
     $app->get("/users", UserController::class . ":getAllUsers");
+    $app->get("/user[/{id}]", UserController::class . ":getUser");
 })->add(jwtAuth());
 
 

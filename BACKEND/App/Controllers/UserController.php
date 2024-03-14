@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\DAO\UserDAO;
 use App\Models\UserModel;
+use App\services\AuthService;
 use Slim\Container;
 use Slim\Http\{
     Request,
@@ -31,6 +32,33 @@ final class UserController
             ]);
         }
 
+        return $response;
+    }
+
+    public function getUser(Request $request, Response $response, array $args): Response
+    {
+        $userId = 0;
+        $token = "";
+        try {
+            if (isset($args['id'])) {
+                $userId = (int) $args['id'];
+            } else {
+                $token = $request->getHeader("X-Auth-Token")[0];
+                $userData = AuthService::decodeToken($token);
+                $userId = $userData->sub;
+            }
+            $response = $response->withStatus(200)->withJson([
+                "data" => $this->userDAO->getUser($userId)
+            ]);
+        } catch (\InvalidArgumentException $e) {
+            $response->withStatus(400)->withJson([
+                "message" => $e->getMessage()
+            ]);
+        } catch (\Throwable $e) {
+            $response->withStatus(500)->withJson([
+                "message" => $e->getMessage()
+            ]);
+        }
         return $response;
     }
 

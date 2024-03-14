@@ -1,0 +1,46 @@
+<div class="container-profile">
+  <div class="photo-container">
+    <label>CLIENTE</label>
+    <img src="../../assets/imgs/PersonIcon.png" alt="Person icon" />
+  </div>
+  <div class="card user-data">
+    <div class="container-columns">
+      <h3>Dados do Usuário</h3>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h5>Nome: {{ user.name }}</h5>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <h5>Email: {{ user.email }}</h5>
+        </div>
+      </div>
+      <h4>Localização</h4>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h5>País: {{ user.country }}</h5>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <h5>Estado: {{ user.state }}</h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h5>Cidade: {{ user.city }}</h5>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <h5>Bairro: {{ user.neighborhood }}</h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h5>Logradouro: {{ user.streetAvenue }}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <mat-tab-group>
+  <mat-tab label="Cliente"> Cliente </mat-tab>
+  <mat-tab label="Vendedor" *ngIf="isSeller"> Vendedor </mat-tab>
+</mat-tab-group>
+ -->
