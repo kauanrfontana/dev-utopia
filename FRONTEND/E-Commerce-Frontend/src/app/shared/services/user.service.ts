@@ -6,6 +6,8 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getUserData(userId?: number) {
-    return this.http.get("user" + (userId && "/" + userId));
+    let paramUserId = "";
+    if (userId) paramUserId = `/${userId}`;
+    return this.http.get("user" + paramUserId);
   }
 }

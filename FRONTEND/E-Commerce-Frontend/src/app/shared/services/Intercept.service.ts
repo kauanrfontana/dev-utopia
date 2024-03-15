@@ -1,26 +1,26 @@
+import { AppService } from "./../../app.service";
 import { Injectable } from "@angular/core";
 import {
   HttpEvent,
   HttpInterceptor,
   HttpHandler,
   HttpRequest,
-  HttpResponse,
 } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
-import { catchError, tap } from "rxjs/operators";
+import { catchError } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { environment } from "src/environments/environment";
 import Swal from "sweetalert2";
 
 @Injectable({ providedIn: "root" })
 export class InterceptService implements HttpInterceptor {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private appService: AppService) {}
 
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const saveToken =
+    const hasToken =
       request.url.split("/")[0] != "login" ||
       (request.url.split("/")[0] != "users" && request.method != "post");
 
@@ -28,7 +28,7 @@ export class InterceptService implements HttpInterceptor {
       url: environment.serverUrl + `${request.url}`,
     });
 
-    if (saveToken) {
+    if (hasToken) {
       request = request.clone({
         setHeaders: {
           "Content-Type": "application/json",
@@ -38,24 +38,19 @@ export class InterceptService implements HttpInterceptor {
     }
 
     return next.handle(request).pipe(
-      tap((res) => {
-        if (res.type === 0) return;
-
-        if (res instanceof HttpResponse && saveToken) {
-          localStorage.setItem("token", res.headers.get("X-Auth-Token") || "");
-        }
-      }),
       catchError((err) => {
-        if (err.status === 401) {
-          localStorage.clear();
-
-          Swal.fire(
-            "Sessão Expirada!",
-            "Por favor, faça login novamente no sistema.",
-            "error"
-          ).then(() => {
-            this.router.navigate([""]);
-          });
+        if (err.status === 401 && hasToken) {
+          setTimeout(() => {
+            Swal.fire({
+              title: "Sessão Expirada!",
+              text: "Por favor, faça login novamente no sistema.",
+              icon: "error",
+            }).then(() => {
+              localStorage.clear();
+              this.appService.verifyMenuSubject.next(false);
+              this.router.navigate([""]);
+            });
+          }, 1);
         }
 
         const error = err.error || err.statusText;

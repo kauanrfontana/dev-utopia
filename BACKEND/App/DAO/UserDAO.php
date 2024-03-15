@@ -94,7 +94,29 @@ final class UserDAO extends Connection
             if (!$statement->execute()) {
                 throw new \Exception("Não foi possível consultar o usuário, confira os dados, e tente novamente mais tarde!");
             }
-            $user = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+            $user = $statement->fetch(\PDO::FETCH_ASSOC);
+
+            $sqlRoles = "SELECT r.[name]
+                    FROM users u
+                    INNER JOIN user_roles ur
+                    ON u.id = ur.user_id
+                    INNER JOIN roles r
+                    ON ur.role_id = r.id
+                    WHERE u.id = :userId";
+
+            $statement = $this->pdo->prepare($sqlRoles);
+
+            $statement->bindParam(":userId", $userId, \PDO::PARAM_INT);
+
+            if (!$statement->execute()) {
+                throw new \Exception("Não foi possível consultar o usuário, confira os dados, e tente novamente mais tarde!");
+            }
+
+            $userRoles = $statement->fetchAll(\PDO::FETCH_COLUMN);
+
+            $user["roles"] = $userRoles;
+
             $result["user"] = $user;
             return $result;
         } catch (\Throwable $e) {

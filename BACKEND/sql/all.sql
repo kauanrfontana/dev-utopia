@@ -102,3 +102,8 @@ CREATE TABLE [tokens] (
 [active] TINYINT NOT NULL DEFAULT 1,
 FOREIGN KEY ([user_id]) REFERENCES [users]([id])
 );
+
+
+INSERT INTO roles ([name],[category], [created_at]) VALUES ('customer', 1, getDate());
+INSERT INTO roles ([name],[category], [created_at]) VALUES ('seller', 2, getDate());
+INSERT INTO roles ([name],[category], [created_at]) VALUES ('admin', 3, getDate());

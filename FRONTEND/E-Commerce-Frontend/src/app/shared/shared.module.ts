@@ -10,7 +10,9 @@ import { NavbarComponent } from "./navbar/navbar.component";
 import { RouterModule } from "@angular/router";
 import { ShoppingCartComponent } from "./shopping-cart/shopping-cart.component";
 import { LoaderDots } from "./components/loaderDots/loaderDots.component";
-
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatSelectModule } from "@angular/material/select";
+import { SearchSelectComponent } from "./components/search-select/search-select.component";
 @NgModule({
   declarations: [
     SharedComponent,
@@ -18,6 +20,7 @@ import { LoaderDots } from "./components/loaderDots/loaderDots.component";
     NavbarComponent,
     ShoppingCartComponent,
     LoaderDots,
+    SearchSelectComponent,
   ],
   imports: [
     FormsModule,
@@ -26,6 +29,8 @@ import { LoaderDots } from "./components/loaderDots/loaderDots.component";
     HttpClientModule,
     CommonModule,
     RouterModule,
+    MatFormFieldModule,
+    MatSelectModule,
   ],
   providers: [
     {
@@ -43,6 +48,9 @@ import { LoaderDots } from "./components/loaderDots/loaderDots.component";
     NavbarComponent,
     ShoppingCartComponent,
     LoaderDots,
+    SearchSelectComponent,
+    MatFormFieldModule,
+    MatSelectModule,
   ],
 })
 export class SharedModule {}

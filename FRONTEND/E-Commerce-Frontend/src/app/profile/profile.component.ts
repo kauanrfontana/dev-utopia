@@ -1,5 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { IUser } from "../shared/interfaces/IUser.interface";
+import { UserService } from "../shared/services/user.service";
+import { IBasicResponse } from "../shared/interfaces/IBasicResponse.interface";
+import Swal from "sweetalert2";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-profile",
@@ -8,6 +12,8 @@ import { IUser } from "../shared/interfaces/IUser.interface";
 })
 export class ProfileComponent implements OnInit {
   isSeller: boolean = false;
+  isEditing: boolean = false;
+
   user: IUser = {
     name: "",
     email: "",
@@ -19,9 +25,49 @@ export class ProfileComponent implements OnInit {
     houseNumber: "",
     complement: "",
     zipCode: "",
+    roles: [],
   };
 
-  constructor() {}
+  loadingUserData: boolean = false;
 
-  ngOnInit(): void {}
+  userForm: FormGroup = new FormGroup({
+    name: new FormControl(""),
+    email: new FormControl(""),
+    country: new FormControl(""),
+  });
+
+  constructor(private userService: UserService) {
+    this.initUserForm();
+  }
+
+  ngOnInit(): void {
+    this.loadingUserData = true;
+    this.userService.getUserData().subscribe({
+      next: (res: IBasicResponse) => {
+        this.user = res.data.user;
+        this.loadingUserData = false;
+        this.userForm?.setValue({
+          name: this.user.name,
+          email: this.user.email,
+          country: this.user.country ?? "",
+        });
+      },
+      error: (err: Error) => {
+        Swal.fire("Erro ao consultar usuário!", err.message, "error");
+        this.loadingUserData = false;
+      },
+    });
+  }
+
+  initUserForm() {
+    this.userForm = new FormGroup({
+      name: new FormControl(null, Validators.required),
+      email: new FormControl(null, [Validators.email, Validators.required]),
+      country: new FormControl(null, Validators.required),
+    });
+  }
+
+  changeEditState() {
+    this.isEditing = !this.isEditing;
+  }
 }

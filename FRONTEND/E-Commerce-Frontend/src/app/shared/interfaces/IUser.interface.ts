@@ -9,4 +9,5 @@ export interface IUser {
   houseNumber: string;
   complement: string;
   zipCode: string;
+  roles: Array<string>;
 }

@@ -41,6 +41,9 @@ final class UserController
         $token = "";
         try {
             if (isset($args['id'])) {
+                if (!filter_var($args['id'], FILTER_VALIDATE_INT)) {
+                    throw new \InvalidArgumentException("Não foi possível consultar o usuário, parâmetro informado é inválido!");
+                }
                 $userId = (int) $args['id'];
             } else {
                 $token = $request->getHeader("X-Auth-Token")[0];
@@ -51,11 +54,11 @@ final class UserController
                 "data" => $this->userDAO->getUser($userId)
             ]);
         } catch (\InvalidArgumentException $e) {
-            $response->withStatus(400)->withJson([
+            $response = $response->withStatus(400)->withJson([
                 "message" => $e->getMessage()
             ]);
         } catch (\Throwable $e) {
-            $response->withStatus(500)->withJson([
+            $response = $response->withStatus(500)->withJson([
                 "message" => $e->getMessage()
             ]);
         }

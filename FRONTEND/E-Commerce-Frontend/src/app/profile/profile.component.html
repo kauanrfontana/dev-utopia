@@ -1,46 +1,115 @@
 <div class="container-profile">
-  <div class="photo-container">
+  <div class="photo-container no-select">
     <label>CLIENTE</label>
     <img src="../../assets/imgs/PersonIcon.png" alt="Person icon" />
   </div>
   <div class="card user-data">
-    <div class="container-columns">
-      <h3>Dados do Usuário</h3>
-      <div class="row">
-        <div class="col-md-6 col-sm-12">
-          <h5>Nome: {{ user.name }}</h5>
+    <form [formGroup]="userForm">
+      <div class="container">
+        <div class="header-data">
+          <h3>Dados do Usuário</h3>
+          <div class="actions">
+            <button
+              class="btn"
+              [ngClass]="{
+                'btn-warning': !isEditing,
+                'btn-danger': isEditing
+              }"
+              (click)="changeEditState()"
+            >
+              <mat-icon>{{ !isEditing ? "edit" : "close" }}</mat-icon>
+            </button>
+            <button
+              class="btn btn-success"
+              (click)="changeEditState()"
+              *ngIf="isEditing"
+            >
+              <mat-icon>check</mat-icon>
+            </button>
+          </div>
         </div>
-        <div class="col-md-6 col-sm-12">
-          <h5>Email: {{ user.email }}</h5>
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <h5 *ngIf="!isEditing">
+              Nome:
+              <span class="text-primary">{{ user.name || "---" }}</span>
+            </h5>
+            <div class="form-group" *ngIf="isEditing">
+              <input type="text" class="form-control" formControlName="name" />
+              <label>Nome</label>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <h5 *ngIf="!isEditing">
+              Email:
+              <span class="text-primary">{{ user.email || "---" }}</span>
+            </h5>
+            <div class="form-group" *ngIf="isEditing">
+              <input type="text" class="form-control" formControlName="email" />
+              <label>Email</label>
+            </div>
+          </div>
+        </div>
+        <h4>Localização</h4>
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <h5 *ngIf="!isEditing">
+              País:
+              <span class="text-primary">{{ user.country || "---" }}</span>
+            </h5>
+            <div class="form-group" *ngIf="isEditing">
+              <select class="form-control" formControlName="country">
+                <option value="a">select</option>
+              </select>
+              <label>País</label>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <h5>
+              Estado:
+              <span class="text-primary" *ngIf="!isEditing">{{
+                user.state || "---"
+              }}</span>
+            </h5>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <h5>
+              Cidade:
+              <span class="text-primary" *ngIf="!isEditing">{{
+                user.city || "---"
+              }}</span>
+            </h5>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <h5>
+              Bairro:
+              <span class="text-primary" *ngIf="!isEditing">{{
+                user.neighborhood || "---"
+              }}</span>
+            </h5>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <h5>
+              Logradouro:
+              <span class="text-primary" *ngIf="!isEditing">{{
+                user.streetAvenue || "---"
+              }}</span>
+            </h5>
+          </div>
         </div>
       </div>
-      <h4>Localização</h4>
-      <div class="row">
-        <div class="col-md-6 col-sm-12">
-          <h5>País: {{ user.country }}</h5>
-        </div>
-        <div class="col-md-6 col-sm-12">
-          <h5>Estado: {{ user.state }}</h5>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6 col-sm-12">
-          <h5>Cidade: {{ user.city }}</h5>
-        </div>
-        <div class="col-md-6 col-sm-12">
-          <h5>Bairro: {{ user.neighborhood }}</h5>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6 col-sm-12">
-          <h5>Logradouro: {{ user.streetAvenue }}</h5>
-        </div>
-      </div>
-    </div>
+    </form>
   </div>
 </div>
 <!-- <mat-tab-group>
   <mat-tab label="Cliente"> Cliente </mat-tab>
   <mat-tab label="Vendedor" *ngIf="isSeller"> Vendedor </mat-tab>
 </mat-tab-group>
- -->
+-->
+<div class="container-loading" *ngIf="loadingUserData">
+  <app-loader-dots></app-loader-dots>
+</div>

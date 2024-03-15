@@ -96,7 +96,7 @@ export class LoginComponent {
     if (this.registerForm.get("email")?.invalid) {
       Swal.fire(
         "Erro ao Cadastrar",
-        "Email inválido, preencha o campo corretamente para efetuar o cadastro!",
+        "E-mail inválido, preencha o campo corretamente para efetuar o cadastro!",
         "error"
       );
       return;
@@ -144,7 +144,7 @@ export class LoginComponent {
     if (this.loginForm.get("email")?.invalid) {
       Swal.fire(
         "Erro ao fazer login",
-        "Email inválido, preencha o campo corretamente para efetuar o login!",
+        "E-mail inválido, preencha o campo corretamente para efetuar o login!",
         "error"
       );
       return;

@@ -11,6 +11,7 @@ $app->add(function ($request, $response, $next) {
     $response = $response->withHeader('Access-Control-Allow-Methods', $request->getHeaderLine('Access-Control-Request-Method'));
     $response = $response->withHeader('Access-Control-Allow-Headers', $request->getHeaderLine('Access-Control-Request-Headers'));
 
+
     return $next($request, $response);
 });
 
