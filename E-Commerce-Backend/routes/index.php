@@ -7,18 +7,21 @@ use function src\{slimConfiguration, jwtAuth};
 
 $app = new \Slim\App(slimConfiguration());
 
-$app->add(function ($request, $response, $next) {
-    $response = $response->withHeader('Access-Control-Allow-Origin', '*');
-    $response = $response->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    $response = $response->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Auth-Token, X-Refresh-Token');
-    $response = $response->withHeader('Access-Control-Expose-Headers', 'Content-Type, Authorization, X-Auth-Token, X-Refresh-Token');
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+    return $response;
+});
 
-    if ($request->getMethod() === 'OPTIONS') {
-        return $response->withStatus(200);
-    }
+$app->add(function ($request, $response, $next) {
+    $response = $response->withHeader("Access-Control-Allow-Origin", "*")
+        ->withHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+        ->withHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Auth-Token, X-Refresh-Token")
+        ->withHeader("Access-Control-Expose-Headers", "Content-Type, Authorization, X-Auth-Token, X-Refresh-Token");
+
+
 
     return $next($request, $response);
 });
+
 
 
 // ROUTES 
@@ -27,11 +30,11 @@ $app->add(function ($request, $response, $next) {
 $app->post("/login", AuthController::class . ":login");
 $app->post("/users", UserController::class . ":insertUser");
 
-$app->group('', function () use ($app) {
+$app->group("", function () use ($app) {
     // LOCATION ROUTES [
     $app->get("/locations", LocationController::class . ":getAllLocationsByType");
 
-    $app->post("/countries", LocationController::class . ":insertCountries");
+    $app->post("/countries", LocationController::class . ":insertCountry");
 
     $app->post("/states", LocationController::class . ":insertState");
 

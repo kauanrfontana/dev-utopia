@@ -4,6 +4,8 @@ import { UserService } from "../shared/services/user.service";
 import { IBasicResponse } from "../shared/interfaces/IBasicResponse.interface";
 import Swal from "sweetalert2";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { LocationSevice } from "../shared/services/location.service";
+import { IListItem } from "../shared/components/search-select/IListItem.interface";
 
 @Component({
   selector: "app-profile",
@@ -28,11 +30,7 @@ export class ProfileComponent implements OnInit {
     roles: [],
   };
 
-  countries: any = [
-    {id: 1, label: "Brasil"},
-    {id: 3, label: "Afeganistao"},
-    {id: 2, label: "Irlanda"}
-  ]
+  countries: IListItem[] = [];
 
   loadingUserData: boolean = false;
 
@@ -41,7 +39,10 @@ export class ProfileComponent implements OnInit {
     email: new FormControl(""),
   });
 
-  constructor(private userService: UserService) {
+  constructor(
+    private userService: UserService,
+    private locationService: LocationSevice
+  ) {
     this.initUserForm();
   }
 
@@ -59,6 +60,17 @@ export class ProfileComponent implements OnInit {
       error: (err: Error) => {
         Swal.fire("Erro ao consultar usuário!", err.message, "error");
         this.loadingUserData = false;
+      },
+    });
+    this.locationService.getCountries().subscribe({
+      next: (res: IBasicResponse) => {
+        this.countries = res.data.map((c: { id: number; name: string }) => ({
+          id: c.id,
+          label: c.name,
+        }));
+      },
+      error: (err: Error) => {
+        Swal.fire("Erro ao consultar países!", err.message, "error");
       },
     });
   }

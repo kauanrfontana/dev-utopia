@@ -5,6 +5,7 @@ import {
   Output,
   EventEmitter,
 } from "@angular/core";
+import { IListItem } from "./IListItem.interface";
 
 @Component({
   selector: "app-search-select",
@@ -14,7 +15,7 @@ import {
 export class SearchSelectComponent implements OnChanges {
   arrFiltered: any = [];
   @Input() multiple: boolean = false;
-  @Input() arrToFilter = [];
+  @Input() arrToFilter: IListItem[] = [];
   @Input() value: string = "";
   @Input() placeholder: string = "Selecione";
   @Input() ngValue: string = "";

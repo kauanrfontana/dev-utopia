@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { AppService } from "./app.service";
 import { Subscription } from "rxjs";
+import { NavigationEnd, Router } from "@angular/router";
 
 @Component({
   selector: "app-root",
@@ -8,15 +9,20 @@ import { Subscription } from "rxjs";
   styleUrls: ["./app.component.scss"],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  subscriptionVerifyMenuSubject?: Subscription;
+  verifyMenuSubjectSubscription?: Subscription;
   showMenus: boolean = false;
+  loading: boolean = true;
+  routerEventsSubscription?: Subscription;
 
-  constructor(private appService: AppService) {
-    this.showMenus = window.location.pathname !== "/auth";
-  }
+  constructor(private appService: AppService, private router: Router) {}
 
   ngOnInit(): void {
-    this.subscriptionVerifyMenuSubject =
+    this.routerEventsSubscription = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.showMenus = window.location.pathname !== "/auth";
+      }
+    });
+    this.verifyMenuSubjectSubscription =
       this.appService.verifyMenuSubject.subscribe({
         next: (showMenu: boolean) => {
           this.showMenus = showMenu;
@@ -25,6 +31,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptionVerifyMenuSubject?.unsubscribe();
+    this.verifyMenuSubjectSubscription?.unsubscribe();
+    this.routerEventsSubscription?.unsubscribe();
   }
 }
