@@ -1,8 +1,9 @@
 <?php
 
-namespace App\services;
+namespace App\Services;
 
 use App\DAO\TokenDAO;
+use App\DAO\UserDAO;
 use App\Models\TokenModel;
 use App\Models\UserModel;
 use Firebase\JWT\JWT;
@@ -67,4 +68,30 @@ class AuthService
             "refresh_token" => $refreshToken
         ];
     }
+
+    public static function refreshToken(string $refreshToken): array
+    {
+
+        $refreshTokenDecoded = AuthService::decodeToken($refreshToken);
+
+        $tokenDAO = new tokenDAO();
+
+        $refreshTokenExists = $tokenDAO->verifyRefreshToken($refreshToken);
+
+        if (!$refreshTokenExists)
+            return [];
+
+        $userDAO = new userDAO();
+        $usuario = $userDAO->getUserByEmail($refreshTokenDecoded->email);
+        if (is_null($usuario))
+            return [];
+
+
+        $result = AuthService::setTokens($usuario);
+        $tokenDAO->deactiveToken($refreshToken);
+
+        return $result;
+    }
+
+
 }

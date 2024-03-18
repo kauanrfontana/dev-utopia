@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\DAO\TokenDAO;
 use App\DAO\UserDAO;
-use App\services\AuthService;
+use App\Services\AuthService;
 use Slim\Container;
 use Slim\Http\{
     Request,
@@ -47,34 +47,4 @@ final class AuthController
         return $response;
 
     }
-
-    public function refreshToken(Request $request, Response $response, array $args): Response
-    {
-        $data = $request->getParsedBody();
-        $refresh_token = $data['refresh_token'];
-
-        $refreshTokenDecoded = AuthService::decodeToken($refresh_token);
-
-
-        $refreshTokenExists = $this->tokenDAO->verifyRefreshToken($refresh_token);
-
-        if (!$refreshTokenExists)
-            return $response->withStatus(401);
-
-
-        $usuario = $this->userDAO->getUserByEmail($refreshTokenDecoded->email);
-        if (is_null($usuario))
-            return $response->withStatus(401);
-
-
-        $response = $response->withJson(AuthService::setTokens($usuario));
-        $this->tokenDAO->deactiveToken($refresh_token);
-
-        return $response;
-    }
-
-
-
-
-
 }

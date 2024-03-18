@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\DAO\UserDAO;
 use App\Models\UserModel;
-use App\services\AuthService;
+use App\Services\AuthService;
 use Slim\Container;
 use Slim\Http\{
     Request,

@@ -5,9 +5,10 @@ import {
   HttpInterceptor,
   HttpHandler,
   HttpRequest,
+  HttpResponse,
 } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
-import { catchError } from "rxjs/operators";
+import { catchError, tap } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { environment } from "src/environments/environment";
 import Swal from "sweetalert2";
@@ -22,21 +23,33 @@ export class InterceptService implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     const hasToken =
       request.url.split("/")[0] != "login" &&
-      (request.url.split("/")[0] != "users" && request.method != "post");
+      request.url.split("/")[0] != "users" &&
+      request.method != "post";
     request = request.clone({
       url: environment.serverUrl + `${request.url}`,
     });
-    
+
     if (hasToken) {
       request = request.clone({
         setHeaders: {
           "Content-Type": "application/json",
           "X-Auth-Token": localStorage.getItem("token") || "",
+          "X-Refresh-Token": localStorage.getItem("refresh_token") || "",
         },
       });
     }
 
     return next.handle(request).pipe(
+      tap((response) => {
+        if (response instanceof HttpResponse && hasToken) {
+          const authToken = response.headers.get("X-Auth-Token");
+          const refreshToken = response.headers.get("X-Refresh-Token");
+          if (authToken !== null && refreshToken !== null) {
+            localStorage.setItem("token", authToken);
+            localStorage.setItem("refresh_token", refreshToken);
+          }
+        }
+      }),
       catchError((err) => {
         if (err.status === 401 && hasToken) {
           setTimeout(() => {
