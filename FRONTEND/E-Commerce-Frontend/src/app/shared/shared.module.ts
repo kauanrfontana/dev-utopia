@@ -13,6 +13,7 @@ import { LoaderDots } from "./components/loaderDots/loaderDots.component";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatSelectModule } from "@angular/material/select";
 import { SearchSelectComponent } from "./components/search-select/search-select.component";
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 @NgModule({
   declarations: [
     SharedComponent,
@@ -31,6 +32,7 @@ import { SearchSelectComponent } from "./components/search-select/search-select.
     RouterModule,
     MatFormFieldModule,
     MatSelectModule,
+    NgxMatSelectSearchModule,
   ],
   providers: [
     {

@@ -4,26 +4,18 @@
     <img src="../../assets/imgs/PersonIcon.png" alt="Person icon" />
   </div>
   <div class="card user-data">
-    <form [formGroup]="userForm">
-      <div class="container">
+    <div class="container">
+      <form [formGroup]="userForm">
         <div class="header-data">
           <h3>Dados do Usuário</h3>
           <div class="actions">
-            <button
-              class="btn"
-              [ngClass]="{
+            <button class="btn" [ngClass]="{
                 'btn-warning': !isEditing,
                 'btn-danger': isEditing
-              }"
-              (click)="changeEditState()"
-            >
+              }" (click)="changeEditState()">
               <mat-icon>{{ !isEditing ? "edit" : "close" }}</mat-icon>
             </button>
-            <button
-              class="btn btn-success"
-              (click)="changeEditState()"
-              *ngIf="isEditing"
-            >
+            <button class="btn btn-success" (click)="changeEditState()" *ngIf="isEditing">
               <mat-icon>check</mat-icon>
             </button>
           </div>
@@ -50,59 +42,61 @@
             </div>
           </div>
         </div>
-        <h4>Localização</h4>
-        <div class="row">
-          <div class="col-md-6 col-sm-12">
-            <h5 *ngIf="!isEditing">
-              País:
-              <span class="text-primary">{{ user.country || "---" }}</span>
-            </h5>
-            <div class="form-group" *ngIf="isEditing">
-              <select class="form-control" formControlName="country">
+      </form>
+
+      <h4>Localização</h4>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h5 *ngIf="!isEditing">
+            País:
+            <span class="text-primary">{{ user.country || "---" }}</span>
+          </h5>
+          <div class="form-group" *ngIf="isEditing">
+            <app-search-select value="id" [arrToFilter]="countries" [(ngValue)]="user.country"></app-search-select>
+            <!-- <select class="form-control" formControlName="country">
                 <option value="a">select</option>
               </select>
-              <label>País</label>
-            </div>
-          </div>
-          <div class="col-md-6 col-sm-12">
-            <h5>
-              Estado:
-              <span class="text-primary" *ngIf="!isEditing">{{
-                user.state || "---"
-              }}</span>
-            </h5>
+              <label>País</label> -->
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-6 col-sm-12">
-            <h5>
-              Cidade:
-              <span class="text-primary" *ngIf="!isEditing">{{
-                user.city || "---"
+        <div class="col-md-6 col-sm-12">
+          <h5>
+            Estado:
+            <span class="text-primary" *ngIf="!isEditing">{{
+              user.state || "---"
               }}</span>
-            </h5>
-          </div>
-          <div class="col-md-6 col-sm-12">
-            <h5>
-              Bairro:
-              <span class="text-primary" *ngIf="!isEditing">{{
-                user.neighborhood || "---"
-              }}</span>
-            </h5>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 col-sm-12">
-            <h5>
-              Logradouro:
-              <span class="text-primary" *ngIf="!isEditing">{{
-                user.streetAvenue || "---"
-              }}</span>
-            </h5>
-          </div>
+          </h5>
         </div>
       </div>
-    </form>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h5>
+            Cidade:
+            <span class="text-primary" *ngIf="!isEditing">{{
+              user.city || "---"
+              }}</span>
+          </h5>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <h5>
+            Bairro:
+            <span class="text-primary" *ngIf="!isEditing">{{
+              user.neighborhood || "---"
+              }}</span>
+          </h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h5>
+            Logradouro:
+            <span class="text-primary" *ngIf="!isEditing">{{
+              user.streetAvenue || "---"
+              }}</span>
+          </h5>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <!-- <mat-tab-group>

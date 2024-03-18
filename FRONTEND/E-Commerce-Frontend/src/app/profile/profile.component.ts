@@ -28,12 +28,17 @@ export class ProfileComponent implements OnInit {
     roles: [],
   };
 
+  countries: any = [
+    {id: 1, label: "Brasil"},
+    {id: 3, label: "Afeganistao"},
+    {id: 2, label: "Irlanda"}
+  ]
+
   loadingUserData: boolean = false;
 
   userForm: FormGroup = new FormGroup({
     name: new FormControl(""),
     email: new FormControl(""),
-    country: new FormControl(""),
   });
 
   constructor(private userService: UserService) {
@@ -49,7 +54,6 @@ export class ProfileComponent implements OnInit {
         this.userForm?.setValue({
           name: this.user.name,
           email: this.user.email,
-          country: this.user.country ?? "",
         });
       },
       error: (err: Error) => {
@@ -63,7 +67,6 @@ export class ProfileComponent implements OnInit {
     this.userForm = new FormGroup({
       name: new FormControl(null, Validators.required),
       email: new FormControl(null, [Validators.email, Validators.required]),
-      country: new FormControl(null, Validators.required),
     });
   }
 
