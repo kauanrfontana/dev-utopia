@@ -21,13 +21,12 @@ export class InterceptService implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const hasToken =
-      request.url.split("/")[0] != "login" ||
+      request.url.split("/")[0] != "login" &&
       (request.url.split("/")[0] != "users" && request.method != "post");
-
     request = request.clone({
       url: environment.serverUrl + `${request.url}`,
     });
-
+    
     if (hasToken) {
       request = request.clone({
         setHeaders: {

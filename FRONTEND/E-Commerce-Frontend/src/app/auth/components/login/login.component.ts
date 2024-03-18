@@ -35,8 +35,6 @@ export class LoginComponent {
   registerForm: FormGroup = new FormGroup({});
   loginForm: FormGroup = new FormGroup({});
 
-  registerFormSubmited: boolean = false;
-  loginFormSubmited: boolean = false;
 
   passwordsVisible = false;
 
@@ -75,15 +73,11 @@ export class LoginComponent {
         Validators.required,
         Validators.minLength(6),
       ]),
-      passwordConfirm: new FormControl(null, [
-        Validators.required,
-        this.passwordMatch.bind(this),
-      ]),
+      passwordConfirm: new FormControl(null, Validators.required),
     });
   }
 
   onRegisterUser() {
-    this.registerFormSubmited = true;
 
     if (this.registerForm.get("name")?.invalid) {
       Swal.fire(
@@ -101,6 +95,7 @@ export class LoginComponent {
       );
       return;
     }
+    
     if (this.registerForm.get("password")?.invalid) {
       let passwordErrorMsg: string = this.getPasswordMsgByForm(
         this.registerForm
@@ -109,7 +104,7 @@ export class LoginComponent {
       Swal.fire("Erro ao Cadastrar", passwordErrorMsg, "error");
       return;
     }
-    if (this.registerForm.get("passwordConfirm")?.invalid) {
+    if(this.passwordDoesntMatch(this.registerForm.get("passwordConfirm") as FormControl<string>)){
       Swal.fire(
         "Erro ao Cadastrar",
         "A senha e a confirmação não correspondem!",
@@ -139,7 +134,6 @@ export class LoginComponent {
   }
 
   onLoginUser() {
-    this.loginFormSubmited = true;
 
     if (this.loginForm.get("email")?.invalid) {
       Swal.fire(
@@ -185,11 +179,11 @@ export class LoginComponent {
     });
   }
 
-  passwordMatch(control: FormControl): { [s: string]: boolean } {
+  passwordDoesntMatch(control: FormControl): boolean {
     if (control.value !== this.registerForm.get("password")?.value) {
-      return { passwordDoesntMatch: true };
+      return true;
     }
-    return {};
+    return false;
   }
 
   getPasswordMsgByForm(form: FormGroup): string {
@@ -203,10 +197,6 @@ export class LoginComponent {
     this.loginClass = "";
     this.registerClass = "";
     this.logoClass = "";
-    this.registerFormSubmited = false;
-    this.loginFormSubmited = false;
     this.passwordsVisible = false;
-
-    this.registerForm.reset();
   }
 }
