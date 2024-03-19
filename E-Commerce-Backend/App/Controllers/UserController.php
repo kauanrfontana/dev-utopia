@@ -40,19 +40,24 @@ final class UserController
         $userId = 0;
         $token = "";
         try {
-            if (isset($args['id'])) {
-                if (!filter_var($args['id'], FILTER_VALIDATE_INT)) {
+            if (isset ($args["id"])) {
+                if (!filter_var($args["id"], FILTER_VALIDATE_INT)) {
                     throw new \InvalidArgumentException("Não foi possível consultar o usuário, parâmetro informado é inválido!");
                 }
-                $userId = (int) $args['id'];
+                $userId = (int) $args["id"];
             } else {
-                $token = $request->getHeader("X-Auth-Token")[0];
+                $token = $request->getHeaderLine("X-Auth-Token");
                 $userData = AuthService::decodeToken($token);
                 $userId = $userData->sub;
             }
+            $user = $this->userDAO->getUser($userId);
+
             $response = $response->withStatus(200)->withJson([
-                "data" => $this->userDAO->getUser($userId)
+                "data" => $user
             ]);
+
+
+
         } catch (\InvalidArgumentException $e) {
             $response = $response->withStatus(400)->withJson([
                 "message" => $e->getMessage()
@@ -75,13 +80,13 @@ final class UserController
         try {
 
             foreach ($mandatoryFields as $field => $description) {
-                if (empty($data[$field])) {
+                if (empty ($data[$field])) {
                     throw new \InvalidArgumentException("O campo {$description} é obrigatório.");
                 }
                 $user->{"set" . ucfirst($field)}($data[$field]);
             }
 
-            if (empty($data["password"]) || strlen($data["password"]) < 6) {
+            if (empty ($data["password"]) || strlen($data["password"]) < 6) {
                 throw new \InvalidArgumentException("O campo senha deve conter no mínimo 6 caracteres!");
             }
 

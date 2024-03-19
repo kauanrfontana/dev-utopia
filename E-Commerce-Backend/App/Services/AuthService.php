@@ -13,7 +13,8 @@ class AuthService
     public static function encodeToken($token): string
     {
         try {
-            return JWT::encode($token, getenv('JWT_SECRET_KEY'));
+            $KEY = JWT_SECRET_KEY;
+            return JWT::encode($token, $KEY);
 
         } catch (\Exception $e) {
             throw $e;
@@ -23,10 +24,11 @@ class AuthService
     public static function decodeToken(string $token): object
     {
         try {
+            $KEY = JWT_SECRET_KEY;
             return JWT::decode(
                 $token,
-                getenv('JWT_SECRET_KEY'),
-                ['HS256']
+                $KEY,
+                ["HS256"]
             );
 
         } catch (\Exception $e) {
@@ -36,20 +38,20 @@ class AuthService
 
     public static function setTokens(UserModel $usuario): array
     {
-        $expiredAt = (new \DateTime())->modify('+1 hour')->format('Y-m-d H:i:s');
+        $expiredAt = (new \DateTime())->modify("+1 hour")->format("Y-m-d H:i:s");
 
         $tokenPayload = [
-            'sub' => $usuario->getId(),
-            'nome' => $usuario->getName(),
-            'email' => $usuario->getEmail(),
-            'exp' => (new \DateTime($expiredAt))->getTimestamp()
+            "sub" => $usuario->getId(),
+            "nome" => $usuario->getName(),
+            "email" => $usuario->getEmail(),
+            "exp" => (new \DateTime($expiredAt))->getTimestamp()
         ];
 
         $token = self::encodeToken($tokenPayload);
 
         $refreshTokenPayload = [
-            'email' => $usuario->getEmail(),
-            'random' => uniqid()
+            "email" => $usuario->getEmail(),
+            "random" => uniqid()
         ];
 
         $refreshToken = self::encodeToken($refreshTokenPayload);

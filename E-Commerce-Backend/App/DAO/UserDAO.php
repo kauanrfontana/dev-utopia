@@ -48,9 +48,9 @@ final class UserDAO extends Connection
             $user = new UserModel();
 
             $user->setId($users[0]["id"])
-                ->setName($users[0]['name'])
-                ->setEmail($users[0]['email'])
-                ->setPassword($users[0]['password']);
+                ->setName($users[0]["name"])
+                ->setEmail($users[0]["email"])
+                ->setPassword($users[0]["password"]);
             return $user;
         }
         return null;
@@ -63,28 +63,16 @@ final class UserDAO extends Connection
 
         try {
             $sql = "SELECT 
-            u.[name], 
-            u.[email], 
-            u.[house_number], 
-            u.[complement], 
-            u.[zip_code], 
-            sa.[name] AS street_avenue, 
-            n.[name] AS neighborhood,
-            ct.[name] AS city,
-            s.[name] AS state,
-            c.[name] AS country
-            FROM users u
-            LEFT JOIN streets_avenues sa
-            ON u.street_avenue_id = sa.id
-            LEFT JOIN neighborhoods n
-            ON sa.neighborhood_id = n.id
-            LEFT JOIN cities ct
-            ON n.city_id = ct.id
-            LEFT JOIN states s
-            ON ct.state_id = s.id
-            LEFT JOIN countries c
-            ON s.country_id = c.id
-            WHERE u.id = :userId
+                [name], 
+                [email], 
+                [address], 
+                [state_id], 
+                [city_id], 
+                [house_number], 
+                [complement], 
+                [zip_code]
+            FROM users 
+            WHERE id = :userId
             ";
 
             $statement = $this->pdo->prepare($sql);

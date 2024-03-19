@@ -5,4 +5,5 @@ RewriteRule !\.(js|ico|gif|jpg|png|css|htm|html)$ index.php
 php_value date.timezone "America/Sao_Paulo"
 
 
+
 SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1

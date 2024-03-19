@@ -18,8 +18,8 @@ export class SearchSelectComponent implements OnChanges {
   @Input() arrToFilter: IListItem[] = [];
   @Input() value: string = "";
   @Input() placeholder: string = "Selecione";
-  @Input() ngValue: string = "";
-  @Output() ngValueChange = new EventEmitter<string>();
+  @Input() ngValue: any = "";
+  @Output() ngValueChange = new EventEmitter<any>();
   @Input() disabled: boolean = false;
 
   ngOnChanges(): void {

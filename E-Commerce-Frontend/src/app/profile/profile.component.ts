@@ -19,70 +19,92 @@ export class ProfileComponent implements OnInit {
   user: IUser = {
     name: "",
     email: "",
-    country: "",
-    state: "",
-    city: "",
-    neighborhood: "",
-    streetAvenue: "",
+    state_id: "",
+    city_id: "",
+    address: "",
     houseNumber: "",
     complement: "",
     zipCode: "",
     roles: [],
   };
 
-  countries: IListItem[] = [];
+  preUserData: IUser = {
+    name: "",
+    email: "",
+    state_id: "",
+    city_id: "",
+    address: "",
+    houseNumber: "",
+    complement: "",
+    zipCode: "",
+    roles: [],
+  };
+
+  states: IListItem[] = [];
+  cities: IListItem[] = [];
 
   loadingUserData: boolean = false;
-
-  userForm: FormGroup = new FormGroup({
-    name: new FormControl(""),
-    email: new FormControl(""),
-  });
 
   constructor(
     private userService: UserService,
     private locationService: LocationSevice
-  ) {
-    this.initUserForm();
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loadingUserData = true;
-    this.userService.getUserData().subscribe({
+
+    this.locationService.getStates().subscribe({
       next: (res: IBasicResponse) => {
-        this.user = res.data.user;
-        this.loadingUserData = false;
-        this.userForm?.setValue({
-          name: this.user.name,
-          email: this.user.email,
-        });
-      },
-      error: (err: Error) => {
-        Swal.fire("Erro ao consultar usuário!", err.message, "error");
-        this.loadingUserData = false;
-      },
-    });
-    this.locationService.getCountries().subscribe({
-      next: (res: IBasicResponse) => {
-        this.countries = res.data.map((c: { id: number; name: string }) => ({
-          id: c.id,
-          label: c.name,
+        this.states = res.data.map((state: { id: number; name: string }) => ({
+          id: state.id.toString(),
+          label: state.name,
         }));
       },
       error: (err: Error) => {
         Swal.fire("Erro ao consultar países!", err.message, "error");
       },
     });
+
+    this.userService.getUserData().subscribe({
+      next: (res: IBasicResponse) => {
+        this.user = res.data.user;
+        if (this.user.state_id) {
+          this.getCitiesByState(this.user.state_id);
+        }
+        this.loadingUserData = false;
+      },
+      error: (err: Error) => {
+        Swal.fire("Erro ao consultar usuário!", err.message, "error");
+        this.loadingUserData = false;
+      },
+    });
   }
 
-  initUserForm() {
-    this.userForm = new FormGroup({
-      name: new FormControl(null, Validators.required),
-      email: new FormControl(null, [Validators.email, Validators.required]),
+  getCitiesByState(stateId: string) {
+    this.cities = [];
+    this.locationService.getCitiesByState(stateId).subscribe({
+      next: (res: IBasicResponse) => {
+        this.cities = res.data.map((city: { id: number; name: string }) => ({
+          id: city.id.toString(),
+          label: city.name,
+        }));
+      },
+      error: (err: Error) => {
+        Swal.fire("Erro ao consultar cidades!", err.message, "error");
+      },
     });
   }
 
   changeEditState() {
+    this.preUserData = { ...this.user };
     this.isEditing = !this.isEditing;
+  }
+
+  getStateLabelById(id: string): string | undefined {
+    return this.states.find((state) => state?.id == +id)?.label;
+  }
+
+  getCityLabelById(id: string): string | undefined {
+    return this.cities.find((city) => city?.id == +id)?.label;
   }
 }

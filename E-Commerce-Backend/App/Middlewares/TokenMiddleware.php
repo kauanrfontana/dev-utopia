@@ -8,8 +8,8 @@ class TokenMiddleware
 {
     public function __invoke(Request $request, Response $response, $next)
     {
-        $oldRefreshToken = $request->getHeader("X-Refresh-Token")[0];
-        $oldToken = $request->getHeader("X-Auth-Token")[0];
+        $oldRefreshToken = $request->getHeaderLine("X-Refresh-Token");
+        $oldToken = $request->getHeaderLine("X-Auth-Token");
         $newTokens = AuthService::refreshToken($oldRefreshToken);
         if (!empty ($newTokens)) {
             $response = $response->withHeader("X-Refresh-Token", $newTokens["refresh_token"]);

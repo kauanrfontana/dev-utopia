@@ -34,7 +34,7 @@ class RoleDAO extends Connection
     {
 
         try {
-            $sql = "SELECT id FROM roles WHERE category = :category";
+            $sql = "SELECT [id] FROM [roles] WHERE [category] = :category";
 
             $statement = $this->pdo->prepare($sql);
 

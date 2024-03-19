@@ -14,7 +14,7 @@ function slimConfiguration(): \Slim\Container
 {
     $configuration = [
         "settings" => [
-            "displayErrorDetails" => getenv("DISPLAY_ERRORS_DETAILS"),
+            "displayErrorDetails" => DISPLAY_ERRORS_DETAILS,
         ],
     ];
     $container = new \Slim\Container($configuration);
@@ -25,7 +25,6 @@ function slimConfiguration(): \Slim\Container
 
     $container->offsetSet(UserDAO::class, new UserDAO());
     $container->offsetSet(TokenDAO::class, new TokenDAO());
-    $container->offsetSet(LocationDAO::class, new LocationDAO());
     $container->offsetSet(RoleDAO::class, new RoleDAO());
 
 

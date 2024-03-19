@@ -13,7 +13,19 @@ import { LoaderDots } from "./components/loaderDots/loaderDots.component";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatSelectModule } from "@angular/material/select";
 import { SearchSelectComponent } from "./components/search-select/search-select.component";
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
+import {
+  IConfig,
+  NgxMaskDirective,
+  NgxMaskPipe,
+  provideEnvironmentNgxMask,
+} from "ngx-mask";
+
+const maskConfigFunction: () => Partial<IConfig> = () => {
+  return {
+    validation: false,
+  };
+};
 @NgModule({
   declarations: [
     SharedComponent,
@@ -33,6 +45,8 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     MatFormFieldModule,
     MatSelectModule,
     NgxMatSelectSearchModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
   ],
   providers: [
     {
@@ -40,6 +54,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
       useClass: InterceptService,
       multi: true,
     },
+    provideEnvironmentNgxMask(maskConfigFunction),
   ],
   exports: [
     FormsModule,
@@ -53,6 +68,8 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     SearchSelectComponent,
     MatFormFieldModule,
     MatSelectModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
   ],
 })
 export class SharedModule {}

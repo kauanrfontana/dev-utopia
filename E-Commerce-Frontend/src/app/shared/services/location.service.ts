@@ -6,7 +6,12 @@ import { Observable } from "rxjs";
 export class LocationSevice {
   constructor(private http: HttpClient) {}
 
-  getCountries(): Observable<any> {
-    return this.http.get("locations?type=countries");
+  getStates(stateId?: string): Observable<any> {
+    const url = stateId ? `states?stateId=${stateId}` : `states`;
+    return this.http.get(url);
+  }
+
+  getCitiesByState(stateId: string) {
+    return this.http.get("cities", { params: { stateId } });
   }
 }

@@ -9,10 +9,14 @@ final class UserModel
     private string $email;
     private string $password;
     private \DateTime $created_at;
-    private int $streetAvenueId;
+    private int $cityId;
+    private int $stateId;
+    private string $address;
     private string $houseNumber;
     private string $complement;
     private string $zipCode;
+
+
 
 
     /**
@@ -131,25 +135,71 @@ final class UserModel
     }
 
     /**
-     * Get the value of streetAvenueId
+     * Get the value of cityId
      *
      * @return int
      */
-    public function getStreetAvenueId(): int
+    public function getCityId(): int
     {
-        return $this->streetAvenueId;
+        return $this->cityId;
     }
 
     /**
-     * Set the value of streetAvenueId
+     * Set the value of cityId
      *
-     * @param int $streetAvenueId
+     * @param int $cityId
      *
      * @return self
      */
-    public function setStreetAvenueId(int $streetAvenueId): self
+    public function setCityId(int $cityId): self
     {
-        $this->streetAvenueId = $streetAvenueId;
+        $this->cityId = $cityId;
+        return $this;
+    }
+
+    /**
+     * Get the value of stateId
+     *
+     * @return int
+     */
+    public function getStateId(): int
+    {
+        return $this->stateId;
+    }
+
+    /**
+     * Set the value of stateId
+     *
+     * @param int $stateId
+     *
+     * @return self
+     */
+    public function setStateId(int $stateId): self
+    {
+        $this->stateId = $stateId;
+        return $this;
+    }
+
+    /**
+     * Get the value of address
+     *
+     * @return string
+     */
+    public function getAddress(): string
+    {
+        return $this->address;
+    }
+
+    /**
+     * Set the value of address
+     *
+     * @param string $address
+     *
+     * @return self
+     */
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
         return $this;
     }
 
@@ -221,4 +271,6 @@ final class UserModel
         $this->zipCode = $zipCode;
         return $this;
     }
+
+
 }

@@ -16,194 +16,94 @@ use Slim\Http\{
     Request,
     Response
 };
-
+use GuzzleHttp\Client;
 
 final class LocationController
 {
-    private LocationDAO $locationDAO;
 
-    public function __construct(Container $container)
+    public function getStates(Request $request, Response $response, array $args): Response
     {
-        $this->locationDAO = $container->offsetGet(LocationDAO::class);
-    }
-
-    public function getAllLocationsByType(Request $request, Response $response, array $args): Response
-    {
+        $client = new Client();
+        $stateId = $request->getParam("stateId");
+        $apiUrl = LOCATION_PUBLIC_API . "/estados?orderBy=nome";
         try {
-            if (empty($request->getParam("type"))) {
-                throw new \Exception("Parâmetro de tipo de localização não definido!");
+            if (!empty ($stateId)) {
+                $apiUrl = LOCATION_PUBLIC_API . "/estados/{$stateId}";
             }
 
-            $type = $request->getParam("type");
+            $apiResponse = $client->request("GET", $apiUrl);
 
-            if (!method_exists($this->locationDAO, "get" . ucfirst($type))) {
-                throw new \InvalidArgumentException("Não encontrado retorno para o tipo de localização {$type}! \n Tipos permitidos: countries, states, cities, neighborhoods, streetsAvenues");
+            if ($apiResponse->getStatusCode() != "200") {
+                throw new \Exception("Serviço de consulta indisponível no momento, tente novamente mais tarde!");
             }
-            $response = $response->withJson($this->locationDAO->{"get" . ucfirst($type)}());
-        } catch (\InvalidArgumentException $e) {
-            $response = $response->withStatus(400)->withJson([
-                "message" => $e->getMessage(),
+
+            $states = json_decode($apiResponse->getBody()->getContents(), true);
+            if (isset ($states["nome"])) {
+                $states = [
+                    "id" => $states["id"],
+                    "name" => $states["nome"]
+                ];
+            } else {
+                $states = array_map(function ($state) {
+                    return [
+                        "id" => $state["id"],
+                        "name" => $state["nome"]
+                    ];
+                }, $states);
+            }
+
+            $response = $response->withStatus(200)->withJson([
+                "data" => $states
             ]);
-        } catch (\Throwable $e) {
+
+        } catch (\Exception $e) {
             $response = $response->withStatus(500)->withJson([
-                "message" => $e->getMessage(),
-            ]);
-        }
-        return $response;
-    }
-
-    public function insertCountry(Request $request, Response $response, array $args): Response
-    {
-        $mandatoryData = ["name" => "nome"];
-        $data = $request->getParsedBody();
-        $country = new CountryModel();
-
-        try {
-            foreach ($mandatoryData as $field => $description) {
-                if (empty($data[$field])) {
-                    throw new \InvalidArgumentException("O campo {$description} é obrigatório para cadastrar um país.");
-                }
-
-                $country->{"set" . ucfirst($field)}($data[$field]);
-            }
-
-            $response = $response->withJson($this->locationDAO->insertCountry($country));
-        } catch (\InvalidArgumentException $e) {
-            $response = $response->withStatus(400)->withJson([
-
-                "message" => $e->getMessage()
-            ]);
-        } catch (\Throwable $e) {
-            $response = $response->withStatus(500)->withJson([
-
                 "message" => $e->getMessage()
             ]);
         }
-        return $response;
-    }
 
-    public function insertState(Request $request, Response $response, array $args): Response
-    {
-        $mandatoryData = ["name" => "nome", "countryId" => "id do país"];
-        $data = $request->getParsedBody();
-        $state = new StateModel();
-
-        try {
-            foreach ($mandatoryData as $field => $description) {
-                if (empty($data[$field])) {
-                    throw new \InvalidArgumentException("O campo {$description} é obrigatório para cadastrar um estado.");
-                }
-
-                $state->{"set" . ucfirst($field)}($data[$field]);
-            }
-
-            $response = $response->withJson($this->locationDAO->insertState($state));
-        } catch (\InvalidArgumentException $e) {
-            $response = $response->withStatus(400)->withJson([
-
-                "message" => $e->getMessage()
-            ]);
-        } catch (\Throwable $e) {
-            $response = $response->withStatus(500)->withJson([
-
-                "message" => $e->getMessage()
-            ]);
-        }
-        return $response;
-    }
-
-    public function insertCity(Request $request, Response $response, array $args): Response
-    {
-        $mandatoryData = ["name" => "nome", "stateId" => "id do estado"];
-        $data = $request->getParsedBody();
-        $city = new CityModel();
-
-        try {
-            foreach ($mandatoryData as $field => $description) {
-                if (empty($data[$field])) {
-                    throw new \InvalidArgumentException("O campo {$description} é obrigatório para cadastrar uma cidade.");
-                }
-
-                $city->{"set" . ucfirst($field)}($data[$field]);
-            }
-
-            $response = $response->withJson($this->locationDAO->insertCity($city));
-        } catch (\InvalidArgumentException $e) {
-            $response = $response->withStatus(400)->withJson([
-
-                "message" => $e->getMessage()
-            ]);
-        } catch (\Throwable $e) {
-            $response = $response->withStatus(500)->withJson([
-
-                "message" => $e->getMessage()
-            ]);
-        }
         return $response;
     }
 
 
-    public function insertNeighborhood(Request $request, Response $response, array $args): Response
+    public function getCitiesByState(Request $request, Response $response, array $args): Response
     {
-        $mandatoryData = ["name" => "nome", "cityId" => "id da cidade"];
-        $data = $request->getParsedBody();
-        $neighborhood = new NeighborhoodModel();
+        $client = new Client();
 
+        $stateId = $request->getParam("stateId");
         try {
-            foreach ($mandatoryData as $field => $description) {
-                if (empty($data[$field])) {
-                    throw new \InvalidArgumentException("O campo {$description} é obrigatório para cadastrar um bairro.");
-                }
-
-                $neighborhood->{"set" . ucfirst($field)}($data[$field]);
+            if (empty ($stateId)) {
+                throw new \InvalidArgumentException("Parâmetro identificador de estado não informado!");
             }
 
-            $response = $response->withJson($this->locationDAO->insertNeighborhood($neighborhood));
+            $apiResponse = $client->request("GET", LOCATION_PUBLIC_API . "/estados/{$stateId}/municipios?orderBy=nome");
+
+            if ($apiResponse->getStatusCode() == "200") {
+
+                $cities = json_decode($apiResponse->getBody()->getContents(), true);
+
+                $cities = array_map(function ($city) {
+                    return [
+                        "id" => $city["id"],
+                        "name" => $city["nome"]
+                    ];
+                }, $cities);
+
+                $response = $response->withStatus(200)->withJson([
+                    "data" => $cities
+                ]);
+            }
+
         } catch (\InvalidArgumentException $e) {
             $response = $response->withStatus(400)->withJson([
-
                 "message" => $e->getMessage()
             ]);
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             $response = $response->withStatus(500)->withJson([
-
                 "message" => $e->getMessage()
             ]);
         }
+
         return $response;
     }
-    public function insertStreetAvenue(Request $request, Response $response, array $args): Response
-    {
-        $mandatoryData = ["name" => "nome", "neighborhoodId" => "id do bairro"];
-        $data = $request->getParsedBody();
-        $streetAvenue = new StreetAvenueModel();
-
-        try {
-            foreach ($mandatoryData as $field => $description) {
-                if (empty($data[$field])) {
-                    throw new \InvalidArgumentException("O campo {$description} é obrigatório para cadastrar uma rua/avenida.");
-                }
-
-                $streetAvenue->{"set" . ucfirst($field)}($data[$field]);
-            }
-
-            $response = $response->withJson($this->locationDAO->insertStreetAvenue($streetAvenue));
-        } catch (\InvalidArgumentException $e) {
-            $response = $response->withStatus(400)->withJson([
-
-                "message" => $e->getMessage()
-            ]);
-        } catch (\Throwable $e) {
-            $response = $response->withStatus(500)->withJson([
-
-                "message" => $e->getMessage()
-            ]);
-        }
-        return $response;
-    }
-
-
-
-
-
 }

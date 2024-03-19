@@ -8,10 +8,10 @@ abstract class Connection
 
     public function __construct()
     {
-        $host = getenv("DEVUTOPIA_SQLSERVER_HOST");
-        $dbname = getenv("DEVUTOPIA_SQLSERVER_DBNAME");
-        $user = getenv("DEVUTOPIA_SQLSERVER_USER");
-        $password = getenv("DEVUTOPIA_SQLSERVER_PASSWORD");
+        $host = DEVUTOPIA_SQLSERVER_HOST;
+        $dbname = DEVUTOPIA_SQLSERVER_DBNAME;
+        $user = DEVUTOPIA_SQLSERVER_USER;
+        $password = DEVUTOPIA_SQLSERVER_PASSWORD;
 
         $dsn = "sqlsrv:Server={$host};Database={$dbname}";
 
