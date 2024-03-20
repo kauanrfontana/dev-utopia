@@ -6,12 +6,16 @@ import { Observable } from "rxjs";
 export class LocationSevice {
   constructor(private http: HttpClient) {}
 
-  getStates(stateId?: string): Observable<any> {
+  getStates(stateId?: number): Observable<any> {
     const url = stateId ? `states?stateId=${stateId}` : `states`;
     return this.http.get(url);
   }
 
-  getCitiesByState(stateId: string) {
+  getCitiesByState(stateId: number) {
     return this.http.get("cities", { params: { stateId } });
+  }
+
+  getLocationByCep(cep: string) {
+    return this.http.get("cep/" + cep);
   }
 }

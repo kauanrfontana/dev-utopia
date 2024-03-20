@@ -1,8 +1,8 @@
 export interface IUser {
   name: string;
   email: string;
-  state_id: string;
-  city_id: string;
+  stateId: number;
+  cityId: number;
   address: string;
   houseNumber: string;
   complement: string;

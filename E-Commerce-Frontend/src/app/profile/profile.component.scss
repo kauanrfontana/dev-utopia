@@ -44,6 +44,7 @@
     .header-data {
       display: flex;
       justify-content: space-between;
+      margin-block: 1rem;
       .actions {
         display: flex;
         column-gap: 10px;
@@ -75,4 +76,17 @@
 input,
 select {
   margin-block: 1rem;
+}
+
+button:has(mat-icon) {
+  padding-top: 10px;
+}
+
+.row .btn.btn-info {
+  margin-top: 1rem;
+}
+
+.caption {
+  margin-bottom: 1rem;
+  padding-top: 1rem;
 }

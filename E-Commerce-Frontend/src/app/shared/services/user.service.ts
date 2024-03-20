@@ -1,3 +1,4 @@
+import { IUser } from "./../interfaces/IUser.interface";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 
@@ -9,5 +10,9 @@ export class UserService {
     let paramUserId = "";
     if (userId) paramUserId = `/${userId}`;
     return this.http.get("user" + paramUserId);
+  }
+
+  updateUserData(user: IUser) {
+    return this.http.put("user", user);
   }
 }

@@ -9,6 +9,13 @@
         <h3>Dados do Usuário</h3>
         <div class="actions">
           <button
+            class="btn btn-secondary"
+            (click)="onUpdatePassword()"
+            *ngIf="!isEditing"
+          >
+            Alterar Senha
+          </button>
+          <button
             class="btn"
             [ngClass]="{
               'btn-warning': !isEditing,
@@ -20,7 +27,7 @@
           </button>
           <button
             class="btn btn-success"
-            (click)="changeEditState()"
+            (click)="onUpdateUserData()"
             *ngIf="isEditing"
           >
             <mat-icon>check</mat-icon>
@@ -36,6 +43,7 @@
           <div class="form-group" *ngIf="isEditing">
             <input
               type="text"
+              placeholder=""
               class="form-control"
               [(ngModel)]="preUserData.name"
             />
@@ -50,6 +58,7 @@
           <div class="form-group" *ngIf="isEditing">
             <input
               type="text"
+              placeholder=""
               class="form-control"
               [(ngModel)]="preUserData.email"
             />
@@ -58,13 +67,40 @@
         </div>
       </div>
 
-      <h4>Localização</h4>
+      <h4 class="caption">Localização</h4>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h5 *ngIf="!isEditing">
+            CEP:
+            <span class="text-primary">{{ user.zipCode || "---" }}</span>
+          </h5>
+          <div class="form-group" *ngIf="isEditing">
+            <input
+              type="text"
+              placeholder=""
+              class="form-control"
+              mask="00000-000"
+              [(ngModel)]="preUserData.zipCode"
+            />
+            <label>CEP</label>
+          </div>
+        </div>
+        <div class="col-md-6" *ngIf="isEditing">
+          <button
+            class="btn btn-info"
+            [disabled]="loadingCepSearch"
+            (click)="searchLocationByCep(preUserData.zipCode)"
+          >
+            <mat-icon>search</mat-icon>
+          </button>
+        </div>
+      </div>
       <div class="row">
         <div class="col-md-6 col-sm-12">
           <h5 *ngIf="!isEditing">
             Estado:
             <span class="text-primary">{{
-              user.state_id ? getStateLabelById(user.state_id) : "---"
+              user.stateId ? getStateLabelById(user.stateId) : "---"
             }}</span>
           </h5>
           <div class="form-group" *ngIf="isEditing">
@@ -72,8 +108,9 @@
             <app-search-select
               value="id"
               [arrToFilter]="states"
-              [(ngValue)]="preUserData.state_id"
-              (ngValueChange)="getCitiesByState(preUserData.state_id)"
+              [(ngValue)]="preUserData.stateId"
+              (ngValueChange)="getCitiesByState(preUserData.stateId)"
+              [disabled]="loadingCepSearch"
             ></app-search-select>
           </div>
         </div>
@@ -81,7 +118,7 @@
           <h5 *ngIf="!isEditing">
             Cidade:
             <span class="text-primary">{{
-              user.city_id ? getCityLabelById(user.city_id) : "---"
+              user.cityId ? getCityLabelById(user.cityId) : "---"
             }}</span>
           </h5>
           <div class="form-group" *ngIf="isEditing">
@@ -89,8 +126,8 @@
             <app-search-select
               value="id"
               [arrToFilter]="cities"
-              [(ngValue)]="preUserData.city_id"
-              [disabled]="cities.length < 1"
+              [(ngValue)]="preUserData.cityId"
+              [disabled]="cities.length < 1 || loadingCepSearch"
             ></app-search-select>
           </div>
         </div>
@@ -104,8 +141,10 @@
           <div class="form-group" *ngIf="isEditing">
             <input
               type="text"
+              placeholder=""
               class="form-control"
               [(ngModel)]="preUserData.address"
+              [disabled]="loadingCepSearch"
             />
             <label>Endereço</label>
           </div>
@@ -120,6 +159,7 @@
           <div class="form-group" *ngIf="isEditing">
             <input
               type="text"
+              placeholder=""
               class="form-control"
               [(ngModel)]="preUserData.complement"
             />
@@ -136,25 +176,11 @@
           <div class="form-group" *ngIf="isEditing">
             <input
               type="text"
+              placeholder=""
               class="form-control"
               [(ngModel)]="preUserData.houseNumber"
             />
             <label>Número</label>
-          </div>
-        </div>
-        <div class="col-md-6 col-sm-12">
-          <h5 *ngIf="!isEditing">
-            CEP:
-            <span class="text-primary">{{ user.zipCode || "---" }}</span>
-          </h5>
-          <div class="form-group" *ngIf="isEditing">
-            <input
-              type="text"
-              class="form-control"
-              mask="00000-000"
-              [(ngModel)]="preUserData.zipCode"
-            />
-            <label>CEP</label>
           </div>
         </div>
       </div>

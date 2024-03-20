@@ -29,7 +29,7 @@ class RoleController
             $response = $response->withStatus(500)->withJson([
 
                 "message" => $e->getMessage()
-            ]);
+            ], null, JSON_NUMERIC_CHECK);
         }
         return $response;
     }

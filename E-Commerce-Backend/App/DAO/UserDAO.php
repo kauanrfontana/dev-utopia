@@ -63,14 +63,14 @@ final class UserDAO extends Connection
 
         try {
             $sql = "SELECT 
-                [name], 
-                [email], 
-                [address], 
-                [state_id], 
-                [city_id], 
-                [house_number], 
-                [complement], 
-                [zip_code]
+                    COALESCE([name], '') AS [name], 
+                    COALESCE([email], '') AS [email], 
+                    COALESCE([address], '') AS [address], 
+                    COALESCE([state_id], 0) AS [stateId], 
+                    COALESCE([city_id], 0) AS [cityId], 
+                    COALESCE([house_number], '') AS [houseNumber], 
+                    COALESCE([complement], '') AS [complement], 
+                    COALESCE([zip_code], '') AS [zipCode]
             FROM users 
             WHERE id = :userId
             ";
@@ -184,6 +184,47 @@ final class UserDAO extends Connection
 
         } catch (\Throwable $e) {
             $this->pdo->rollBack();
+            throw $e;
+        }
+    }
+
+    public function updateUser(UserModel $user)
+    {
+        $result = [];
+
+        try {
+            $sql = "UPDATE users SET 
+                        [name] = :name,
+                        [email] = :email,
+                        [address] = :address,
+                        [state_id] = :stateId,
+                        [city_id] = :cityId,
+                        [house_number] = :houseNumber,
+                        [complement] = :complement,
+                        [zip_code] = :zipCode
+                    WHERE [id] = :id";
+
+            $statement = $this->pdo->prepare($sql);
+
+            $statement->bindValue(":name", $user->getName(), \PDO::PARAM_STR);
+            $statement->bindValue(":email", $user->getEmail(), \PDO::PARAM_STR);
+            $statement->bindValue(":address", $user->getAddress(), \PDO::PARAM_STR);
+            $statement->bindValue(":stateId", $user->getStateId(), \PDO::PARAM_INT);
+            $statement->bindValue(":cityId", $user->getCityId(), \PDO::PARAM_INT);
+            $statement->bindValue(":houseNumber", $user->getHouseNumber(), \PDO::PARAM_STR);
+            $statement->bindValue(":complement", $user->getComplement(), \PDO::PARAM_STR);
+            $statement->bindValue(":zipCode", $user->getZipCode(), \PDO::PARAM_STR);
+            $statement->bindValue(":id", $user->getId(), \PDO::PARAM_INT);
+
+            if (!$statement->execute()) {
+                throw new \Exception("Não foi possível atualizar os dados do usuário no momento. Por favor, tente mais tarde.");
+            }
+
+            $result["message"] = "Usuário atualizados com sucesso.";
+
+            return $result;
+
+        } catch (\Throwable $e) {
             throw $e;
         }
     }

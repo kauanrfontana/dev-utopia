@@ -28,22 +28,18 @@ $app->add(function ($request, $response, $next) {
 
 $app->post("/login", AuthController::class . ":login");
 
-$app->post("/users", UserController::class . ":insertUser");
+$app->post("/user", UserController::class . ":insertUser");
 
 $app->group("", function () use ($app) {
     $app->get("/locations", LocationController::class . ":getAllLocationsByType");
 
-    $app->get("/countries", LocationController::class . ":getCountries");
-
-    $app->post("/countries", LocationController::class . ":insertCountry");
-
     $app->get("/states", LocationController::class . ":getStates");
-
-    $app->post("/states", LocationController::class . ":insertState");
 
     $app->get("/cities", LocationController::class . ":getCitiesByState");
 
-    $app->post("/cities", LocationController::class . ":insertCity");
+    $app->get("/cep/{cep}", LocationController::class . ":getLocationByCep");
+
+    $app->put("/user", UserController::class . ":updateUser");
 
     $app->get("/users", UserController::class . ":getAllUsers");
 

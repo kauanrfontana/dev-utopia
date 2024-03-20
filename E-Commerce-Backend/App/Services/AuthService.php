@@ -74,7 +74,7 @@ class AuthService
     public static function refreshToken(string $refreshToken): array
     {
 
-        $refreshTokenDecoded = AuthService::decodeToken($refreshToken);
+        $refreshTokenDecoded = self::decodeToken($refreshToken);
 
         $tokenDAO = new tokenDAO();
 
@@ -89,7 +89,7 @@ class AuthService
             return [];
 
 
-        $result = AuthService::setTokens($usuario);
+        $result = self::setTokens($usuario);
         $tokenDAO->deactiveToken($refreshToken);
 
         return $result;

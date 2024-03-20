@@ -35,11 +35,11 @@ export class AuthService {
     password: string;
     name: string;
   }): Observable<IBasicResponse> {
-    return this.http.post<IBasicResponse>("users", user);
+    return this.http.post<IBasicResponse>("user", user);
   }
 
-  logout(){
+  logout() {
     localStorage.clear();
-    this.router.navigate(["./auth"])
+    this.router.navigate(["./auth"]);
   }
 }

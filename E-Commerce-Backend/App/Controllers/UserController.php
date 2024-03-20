@@ -25,7 +25,7 @@ final class UserController
     {
         try {
             $users = $this->userDAO->getAllUsers();
-            $response = $response->withJson($users);
+            $response = $response->withJson($users, null, JSON_NUMERIC_CHECK);
         } catch (\Throwable $e) {
             $response = $response->withStatus(500)->withJson([
                 "message" => $e->getMessage()
@@ -39,6 +39,7 @@ final class UserController
     {
         $userId = 0;
         $token = "";
+
         try {
             if (isset ($args["id"])) {
                 if (!filter_var($args["id"], FILTER_VALIDATE_INT)) {
@@ -54,7 +55,7 @@ final class UserController
 
             $response = $response->withStatus(200)->withJson([
                 "data" => $user
-            ]);
+            ], null, JSON_NUMERIC_CHECK);
 
 
 
@@ -96,6 +97,55 @@ final class UserController
 
 
             $response = $response->withStatus(201)->withJson($this->userDAO->insertUser($user));
+
+        } catch (\InvalidArgumentException $e) {
+            $response = $response->withStatus(400)->withJson([
+                "message" => $e->getMessage()
+            ]);
+        } catch (\Throwable $e) {
+            $response = $response->withStatus(500)->withJson([
+                "message" => $e->getMessage()
+            ]);
+        }
+        return $response;
+    }
+
+    public function updateUser(Request $request, Response $response, array $args): Response
+    {
+        $mandatoryFields = [
+            "name" => "nome",
+            "email" => "email",
+        ];
+        $fields = [
+            "name",
+            "email",
+            "address",
+            "stateId",
+            "cityId",
+            "houseNumber",
+            "complement",
+            "zipCode",
+        ];
+        $tokenData = AuthService::decodeToken($request->getHeaderLine("X-Auth-Token"));
+
+        $data = $request->getParsedBody();
+        $user = new UserModel();
+
+        try {
+
+            foreach ($mandatoryFields as $field => $description) {
+                if (empty ($data[$field])) {
+                    throw new \InvalidArgumentException("O campo {$description} é obrigatório.");
+                }
+            }
+
+            foreach ($fields as $field) {
+                $user->{"set" . ucfirst($field)}($data[$field]);
+            }
+            $user->setId($tokenData->sub);
+
+
+            $response = $response->withStatus(201)->withJson($this->userDAO->updateUser($user));
 
         } catch (\InvalidArgumentException $e) {
             $response = $response->withStatus(400)->withJson([
