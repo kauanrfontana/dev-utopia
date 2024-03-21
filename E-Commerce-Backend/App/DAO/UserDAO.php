@@ -63,14 +63,14 @@ final class UserDAO extends Connection
 
         try {
             $sql = "SELECT 
-                    COALESCE([name], '') AS [name], 
-                    COALESCE([email], '') AS [email], 
-                    COALESCE([address], '') AS [address], 
-                    COALESCE([state_id], 0) AS [stateId], 
-                    COALESCE([city_id], 0) AS [cityId], 
-                    COALESCE([house_number], '') AS [houseNumber], 
-                    COALESCE([complement], '') AS [complement], 
-                    COALESCE([zip_code], '') AS [zipCode]
+                    COALESCE(name, '') AS name, 
+                    COALESCE(email, '') AS email, 
+                    COALESCE(address, '') AS address, 
+                    COALESCE(state_id, 0) AS stateId, 
+                    COALESCE(city_id, 0) AS cityId, 
+                    COALESCE(house_number, '') AS houseNumber, 
+                    COALESCE(complement, '') AS complement, 
+                    COALESCE(zip_code, '') AS zipCode
             FROM users 
             WHERE id = :userId
             ";
@@ -85,7 +85,7 @@ final class UserDAO extends Connection
 
             $user = $statement->fetch(\PDO::FETCH_ASSOC);
 
-            $sqlRoles = "SELECT r.[name]
+            $sqlRoles = "SELECT r.name
                     FROM users u
                     INNER JOIN user_roles ur
                     ON u.id = ur.user_id
@@ -133,10 +133,10 @@ final class UserDAO extends Connection
 
 
             $sqlUserRegister = "INSERT INTO users (
-                [name], 
-                [email], 
-                [password], 
-                [created_at]
+                name, 
+                email, 
+                password, 
+                created_at
                 ) VALUES (
                     :name, 
                     :email, 
@@ -161,9 +161,9 @@ final class UserDAO extends Connection
             $roleDAO = new RoleDAO();
             $roleCustomerId = $roleDAO->getRoleIdByCategory(1);
 
-            $sqlSetUserAsCustomer = "INSERT INTO [user_roles](
-                [user_id], 
-                [role_id]
+            $sqlSetUserAsCustomer = "INSERT INTO user_roles(
+                user_id, 
+                role_id
                 ) VALUES (
                     :userId, 
                     :roleId
@@ -188,21 +188,21 @@ final class UserDAO extends Connection
         }
     }
 
-    public function updateUser(UserModel $user)
+    public function updateUser(UserModel $user): array
     {
         $result = [];
 
         try {
             $sql = "UPDATE users SET 
-                        [name] = :name,
-                        [email] = :email,
-                        [address] = :address,
-                        [state_id] = :stateId,
-                        [city_id] = :cityId,
-                        [house_number] = :houseNumber,
-                        [complement] = :complement,
-                        [zip_code] = :zipCode
-                    WHERE [id] = :id";
+                        name = :name,
+                        email = :email,
+                        address = :address,
+                        state_id = :stateId,
+                        city_id = :cityId,
+                        house_number = :houseNumber,
+                        complement = :complement,
+                        zip_code = :zipCode
+                    WHERE id = :id";
 
             $statement = $this->pdo->prepare($sql);
 
@@ -224,6 +224,30 @@ final class UserDAO extends Connection
 
             return $result;
 
+        } catch (\Throwable $e) {
+            throw $e;
+        }
+    }
+
+    public function updatePassword(UserModel $user): array
+    {
+        $result = [];
+
+        try {
+            $sql = "UPDATE users SET password = :password WHERE id = :id";
+
+            $statement = $this->pdo->prepare($sql);
+
+            $statement->bindValue(":password", $user->getPassword(), \PDO::PARAM_STR);
+            $statement->bindValue(":id", $user->getId(), \PDO::PARAM_INT);
+
+            if (!$statement->execute()) {
+                throw new \Exception("Não foi possível atualizar a senha, tente novamente mais tarde.");
+            }
+
+            $result["message"] = "Senha atualizada com sucesso.";
+
+            return $result;
         } catch (\Throwable $e) {
             throw $e;
         }

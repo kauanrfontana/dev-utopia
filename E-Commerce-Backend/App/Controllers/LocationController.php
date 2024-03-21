@@ -11,6 +11,7 @@ use App\Models\Locations\{
     StreetAvenueModel
 };
 
+use GuzzleHttp\Exception\RequestException;
 use Slim\Container;
 use Slim\Http\{
     Request,
@@ -31,7 +32,12 @@ final class LocationController
                 $apiUrl = LOCATION_PUBLIC_API . "/estados/{$stateId}";
             }
 
-            $apiResponse = $client->request("GET", $apiUrl);
+            try {
+                $apiResponse = $client->request("GET", $apiUrl);
+            } catch (RequestException $e) {
+                throw new \Exception("Serviço de consulta indisponível no momento, tente novamente mais tarde!");
+            }
+
 
             if ($apiResponse->getStatusCode() != "200") {
                 throw new \Exception("Serviço de consulta indisponível no momento, tente novamente mais tarde!");
@@ -76,11 +82,12 @@ final class LocationController
                 throw new \InvalidArgumentException("Parâmetro identificador de estado não informado!");
             }
 
-            $apiResponse = $client->request("GET", LOCATION_PUBLIC_API . "/estados/{$stateId}/municipios?orderBy=nome");
-
-            if ($apiResponse->getStatusCode() != "200") {
+            try {
+                $apiResponse = $client->request("GET", LOCATION_PUBLIC_API . "/estados/{$stateId}/municipios?orderBy=nome");
+            } catch (RequestException $e) {
                 throw new \Exception("Serviço de consulta indisponível no momento, tente novamente mais tarde!");
             }
+
             $cities = json_decode($apiResponse->getBody()->getContents(), true);
 
             $cities = array_map(function ($city) {
@@ -117,11 +124,15 @@ final class LocationController
                 throw new \InvalidArgumentException("Parâmetro cep não informado!");
             }
 
-            $apiResponse = $client->request("GET", CEP_PUBLIC_API . "/{$cep}");
-
-            if ($apiResponse->getStatusCode() != "200") {
+            try {
+                $apiResponse = $client->request("GET", CEP_PUBLIC_API . "/{$cep}");
+            } catch (RequestException $e) {
+                if ($e->getResponse()->getStatusCode() == 404) {
+                    throw new \InvalidArgumentException("Cep informado não foi encontrado, preecha os dados manualmente, ou tente novamente com outro!");
+                }
                 throw new \Exception("Serviço de consulta indisponível no momento, tente novamente mais tarde!");
             }
+
             $location = json_decode($apiResponse->getBody()->getContents(), true)["result"];
 
             $location = [

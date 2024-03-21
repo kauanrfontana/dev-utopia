@@ -20,6 +20,7 @@ import {
   NgxMaskPipe,
   provideEnvironmentNgxMask,
 } from "ngx-mask";
+import { LabelClue } from "./components/label-clue/label-clue.component";
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
   return {
@@ -34,6 +35,7 @@ const maskConfigFunction: () => Partial<IConfig> = () => {
     ShoppingCartComponent,
     LoaderDots,
     SearchSelectComponent,
+    LabelClue,
   ],
   imports: [
     FormsModule,
@@ -70,6 +72,7 @@ const maskConfigFunction: () => Partial<IConfig> = () => {
     MatSelectModule,
     NgxMaskDirective,
     NgxMaskPipe,
+    LabelClue,
   ],
 })
 export class SharedModule {}

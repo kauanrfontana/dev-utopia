@@ -1,7 +1,10 @@
 <div class="container-profile">
-  <div class="photo-container no-select">
-    <label>CLIENTE</label>
-    <img src="../../assets/imgs/PersonIcon.png" alt="Person icon" />
+  <div class="profile-container">
+    <h1>Tipo de Perfil:</h1>
+    <div class="profile-image no-select">
+      <label>CLIENTE</label>
+      <img src="../../assets/imgs/PersonIcon.png" alt="Person icon" />
+    </div>
   </div>
   <div class="card user-data">
     <div class="container">
@@ -69,7 +72,7 @@
 
       <h4 class="caption">Localização</h4>
       <div class="row">
-        <div class="col-md-6 col-sm-12">
+        <div class="col-6">
           <h5 *ngIf="!isEditing">
             CEP:
             <span class="text-primary">{{
@@ -87,14 +90,19 @@
             <label>CEP</label>
           </div>
         </div>
-        <div class="col-md-6" *ngIf="isEditing">
-          <button
-            class="btn btn-info"
-            [disabled]="loadingCepSearch"
-            (click)="searchLocationByCep(preUserData.zipCode)"
-          >
-            <mat-icon>search</mat-icon>
-          </button>
+        <div class="col-6" *ngIf="isEditing">
+          <app-label-clue>
+            <ng-container content
+              ><button
+                class="btn btn-info"
+                [disabled]="loadingCepSearch"
+                (click)="searchLocationByCep(preUserData.zipCode)"
+              >
+                <mat-icon>search</mat-icon>
+              </button></ng-container
+            >
+            <ng-container label>Clique para buscar o endereço</ng-container>
+          </app-label-clue>
         </div>
       </div>
       <div class="row">
@@ -111,7 +119,7 @@
               value="id"
               [arrToFilter]="states"
               [(ngValue)]="preUserData.stateId"
-              (ngValueChange)="getCitiesByState(preUserData.stateId)"
+              (ngValueChange)="onStateChange(preUserData.stateId)"
               [disabled]="loadingCepSearch"
             ></app-search-select>
           </div>

@@ -65,3 +65,17 @@ section.items {
     }
   }
 }
+@media (max-width: 780px) {
+  section.items {
+    .image-collection {
+      grid-template-columns: auto auto;
+    }
+  }
+}
+@media (max-width: 520px) {
+  section.items {
+    .image-collection {
+      grid-template-columns: auto;
+    }
+  }
+}
