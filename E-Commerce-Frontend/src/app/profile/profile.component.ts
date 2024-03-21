@@ -96,7 +96,6 @@ export class ProfileComponent implements OnInit {
   }
 
   getCitiesByState(stateId: number): Observable<IBasicResponse> {
-    this.cities = [];
     return this.locationService.getCitiesByState(stateId).pipe(
       map((response: IBasicResponse) => {
         return {
@@ -126,7 +125,7 @@ export class ProfileComponent implements OnInit {
     Swal.fire({
       title: "Alteração de Senha",
       html: `
-          <div class="form-group" style="margin-block: 1rem;">
+          <div class="form-group" style="margin: 1rem;">
           <input
             type="text"
             class="form-control"
@@ -135,12 +134,12 @@ export class ProfileComponent implements OnInit {
           />
           <label>Senha Atual</label>
           </div>
-          <div class="form-group" style="margin-block: 1rem;">
+          <div class="form-group" style="margin: 1rem;">
           <input
             type="text"
             class="form-control"
             placeholder=""
-            #newPassword
+            id="newPassword"
           />
           <label>Nova Senha</label>
           </div>
@@ -154,6 +153,20 @@ export class ProfileComponent implements OnInit {
       if (result.dismiss) {
         return;
       }
+
+      this.userService
+        .updatePassword({
+          currentPassword: this.currentPassword,
+          newPassword: this.newPassword,
+        })
+        .subscribe({
+          next: (res: IBasicResponse) => {
+            Swal.fire("Sucesso", res.message, "success");
+          },
+          error: (err: Error) => {
+            Swal.fire("Erro ao atualizar senha!", err.message, "error");
+          },
+        });
     });
 
     const $currentPasswordInput = document.getElementById(
@@ -167,6 +180,18 @@ export class ProfileComponent implements OnInit {
     ) as HTMLInputElement;
     $newPasswordInput?.addEventListener("input", () => {
       this.newPassword = $newPasswordInput.value;
+    });
+  }
+
+  onStateChange(stateId: number) {
+    this.cities = [];
+    this.getCitiesByState(stateId).subscribe({
+      next: (res: IBasicResponse) => {
+        this.cities = res.data;
+      },
+      error: (err: Error) => {
+        Swal.fire("Erro ao consultar cidades!", err.message, "error");
+      },
     });
   }
 

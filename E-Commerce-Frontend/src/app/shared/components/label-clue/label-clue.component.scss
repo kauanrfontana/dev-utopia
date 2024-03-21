@@ -1,0 +1,39 @@
+.container-clue {
+  display: block;
+
+  position: relative;
+  width: fit-content;
+  .label-clue {
+    position: absolute;
+    z-index: 2;
+    top: -2px;
+    left: 18px;
+    color: white;
+    font-size: 11px;
+    opacity: 0;
+    transition: 0.5s ease-in-out;
+    background-color: gray;
+    padding: 1px;
+    border-radius: 5px;
+
+    &::after {
+      z-index: 1;
+      content: "";
+      position: absolute;
+      top: 27%;
+      rotate: 83deg;
+      left: -3px;
+      margin-left: -8px;
+      border-width: 7px;
+      border-style: solid;
+      border-color: gray transparent transparent transparent;
+    }
+  }
+
+  &:hover {
+    .label-clue {
+      width: auto;
+      opacity: 0.8;
+    }
+  }
+}

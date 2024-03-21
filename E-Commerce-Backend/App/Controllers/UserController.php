@@ -158,4 +158,49 @@ final class UserController
         }
         return $response;
     }
+
+    public function updatePassword(Request $request, Response $response, array $args): Response
+    {
+        $mandatoryFields = ["currentPassword" => "senha atual", "newPassword" => "nova senha"];
+
+        $data = $request->getParsedBody();
+
+        $tokenData = AuthService::decodeToken($request->getHeaderLine("X-Auth-Token"));
+
+        try {
+            foreach ($mandatoryFields as $field => $description) {
+                if (empty ($data[$field])) {
+                    throw new \InvalidArgumentException("O campo {$description} é obrigatório.");
+                }
+            }
+
+            $user = $this->userDAO->getUserByEmail($tokenData->email);
+
+            $currentPassword = $data["currentPassword"];
+            if (!password_verify($currentPassword, $user->getPassword())) {
+                throw new \InvalidArgumentException("Senha atual informada, não corresponde com a cadastrada em nosso sistema!");
+            }
+
+            $newPassword = password_hash($data["newPassword"], PASSWORD_DEFAULT);
+
+            $user = new UserModel();
+
+            $user->setId($tokenData->sub)
+                ->setPassword($newPassword);
+
+            $response = $response->withStatus(200)->withJson($this->userDAO->updatePassword($user));
+
+        } catch (\InvalidArgumentException $e) {
+            $response = $response->withStatus(404)->withJson([
+                "message" => $e->getMessage()
+            ]);
+        } catch (\Throwable $e) {
+            $response = $response->withStatus(500)->withJson([
+                "message" => $e->getMessage()
+            ]);
+        }
+
+        return $response;
+
+    }
 }

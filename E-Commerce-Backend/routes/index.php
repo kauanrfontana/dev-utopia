@@ -41,6 +41,8 @@ $app->group("", function () use ($app) {
 
     $app->put("/user", UserController::class . ":updateUser");
 
+    $app->put("/password", UserController::class . ":updatePassword");
+
     $app->get("/users", UserController::class . ":getAllUsers");
 
     $app->get("/user[/{id}]", UserController::class . ":getUser");

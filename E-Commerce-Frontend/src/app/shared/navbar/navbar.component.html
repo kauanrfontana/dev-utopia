@@ -9,14 +9,24 @@
       (click)="navbarOpened()"
     >
       <a>
-        <mat-icon>{{ iconOpened }}</mat-icon>
-        <div class="label-icon">
+        <app-label-clue>
+          <ng-container content>
+            <mat-icon>{{ iconOpened }}</mat-icon>
+          </ng-container>
+          <ng-container label>{{
+            iconOpened == "keyboard_arrow_down"
+              ? "Manter aberto"
+              : "Tornar dinâmico"
+          }}</ng-container>
+        </app-label-clue>
+        <!-- <mat-icon>{{ iconOpened }}</mat-icon>
+        <div class="label-clue">
           <label>{{
             iconOpened == "keyboard_arrow_down"
               ? "Manter aberto"
               : "Tornar dinâmico"
           }}</label>
-        </div>
+        </div> -->
       </a>
     </li>
     <ng-container *ngFor="let item of navItems">
@@ -25,19 +35,21 @@
         routerLinkActive="active"
       >
         <a [routerLink]="[item.route]">
-          <mat-icon>{{ item.icon }}</mat-icon>
-          <div class="label-icon">
-            <label>{{ item.label }}</label>
-          </div>
+          <app-label-clue>
+            <ng-container content>
+              <mat-icon>{{ item.icon }}</mat-icon>
+            </ng-container>
+            <ng-container label>{{ item.label }}</ng-container>
+          </app-label-clue>
         </a>
       </li>
     </ng-container>
     <li class="nav-item btn-logout animate fadeIn animate--ease-in">
       <a (click)="onLogout()">
-        <mat-icon>exit_to_app</mat-icon>
-        <div class="label-icon">
-          <label>Logout</label>
-        </div>
+        <app-label-clue>
+          <ng-container content><mat-icon>exit_to_app</mat-icon></ng-container>
+          <ng-container label>Logout</ng-container>
+        </app-label-clue>
       </a>
     </li>
   </ul>
