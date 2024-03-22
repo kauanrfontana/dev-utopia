@@ -1,7 +1,9 @@
+import { UserService } from "./shared/services/user.service";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { AppService } from "./app.service";
 import { Subscription } from "rxjs";
 import { NavigationEnd, Router } from "@angular/router";
+import { IBasicResponse } from "./shared/models/IBasicResponse.interface";
 
 @Component({
   selector: "app-root",

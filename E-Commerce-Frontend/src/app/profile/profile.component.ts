@@ -1,11 +1,12 @@
 import { Component, OnInit } from "@angular/core";
-import { IUser } from "../shared/interfaces/IUser.interface";
+import { User } from "../shared/models/IUser.interface";
 import { UserService } from "../shared/services/user.service";
-import { IBasicResponse } from "../shared/interfaces/IBasicResponse.interface";
+import { IBasicResponse } from "../shared/models/IBasicResponse.interface";
 import Swal from "sweetalert2";
 import { LocationSevice } from "../shared/services/location.service";
 import { IListItem } from "../shared/components/search-select/IListItem.interface";
-import { Observable, map } from "rxjs";
+import { Observable, debounceTime, map } from "rxjs";
+import { FormControl } from "@angular/forms";
 
 @Component({
   selector: "app-profile",
@@ -13,32 +14,13 @@ import { Observable, map } from "rxjs";
   styleUrls: ["./profile.component.scss"],
 })
 export class ProfileComponent implements OnInit {
-  isSeller: boolean = false;
   isEditing: boolean = false;
 
-  user: IUser = {
-    name: "",
-    email: "",
-    stateId: 0,
-    cityId: 0,
-    address: "",
-    houseNumber: "",
-    complement: "",
-    zipCode: "",
-    roles: [],
-  };
+  cepControl: FormControl = new FormControl(null);
 
-  preUserData: IUser = {
-    name: "",
-    email: "",
-    stateId: 0,
-    cityId: 0,
-    address: "",
-    houseNumber: "",
-    complement: "",
-    zipCode: "",
-    roles: [],
-  };
+  user = new User();
+
+  preUserData = new User();
 
   states: IListItem[] = [];
   cities: IListItem[] = [];
@@ -58,6 +40,8 @@ export class ProfileComponent implements OnInit {
     this.loadingUserData = true;
     this.isEditing = false;
 
+    this.cepControlValueChanges();
+
     this.locationService.getStates().subscribe({
       next: (res: IBasicResponse) => {
         this.states = res.data.map((state: { id: number; name: string }) => ({
@@ -73,6 +57,8 @@ export class ProfileComponent implements OnInit {
     this.userService.getUserData().subscribe({
       next: (res: IBasicResponse) => {
         this.user = res.data.user;
+        this.cepControl.setValue(this.user.zipCode);
+        localStorage.setItem("userData", JSON.stringify(this.user));
         if (this.user.stateId) {
           this.getCitiesByState(this.user.stateId).subscribe({
             next: (res: IBasicResponse) => {
@@ -92,6 +78,14 @@ export class ProfileComponent implements OnInit {
         Swal.fire("Erro ao consultar usuário!", err.message, "error");
         this.loadingUserData = false;
       },
+    });
+  }
+
+  cepControlValueChanges() {
+    this.cepControl.valueChanges.pipe(debounceTime(1000)).subscribe((value) => {
+      if (value.length == 8) {
+        this.searchLocationByCep(value);
+      }
     });
   }
 
@@ -220,6 +214,19 @@ export class ProfileComponent implements OnInit {
       error: (err: Error) => {
         Swal.fire("Erro ao consultar cep!", err.message, "error");
         this.loadingCepSearch = false;
+      },
+    });
+  }
+
+  updateRoleToSeller() {
+    this.userService.updateUserRole(2).subscribe({
+      next: (res: IBasicResponse) => {
+        Swal.fire("Sucesso", res.message, "success").then(() => {
+          this.ngOnInit();
+        });
+      },
+      error: (err: Error) => {
+        Swal.fire("Erro ao consultar cep!", err.message, "error");
       },
     });
   }

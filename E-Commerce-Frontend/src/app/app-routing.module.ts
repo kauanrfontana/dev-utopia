@@ -20,7 +20,13 @@ const routes: Routes = [
       import("./profile/profile.module").then((m) => m.ProfileModule),
     canActivate: [AuthGuard],
   },
-  { path: "", pathMatch: "full", redirectTo: "/auth" },
+  {
+    path: "products",
+    loadChildren: () =>
+      import("./products/products.module").then((m) => m.ProductsModule),
+    canActivate: [AuthGuard],
+  },
+  { path: "**", redirectTo: "/auth" },
 ];
 
 @NgModule({

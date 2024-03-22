@@ -1,8 +1,28 @@
-import { Component } from "@angular/core";
+import { IBasicResponse } from "../shared/models/IBasicResponse.interface";
+import { UserService } from "./../shared/services/user.service";
+import { Component, OnInit } from "@angular/core";
 
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"],
 })
-export class HomeComponent {}
+export class HomeComponent implements OnInit {
+  constructor(private userService: UserService) {}
+
+  ngOnInit(): void {
+    this.setUserData();
+  }
+
+  setUserData() {
+    this.userService.getUserData().subscribe({
+      next: (res: IBasicResponse) => {
+        const userData = res.data.user;
+        localStorage.setItem("userData", JSON.stringify(userData));
+      },
+      error: () => {
+        this.setUserData();
+      },
+    });
+  }
+}

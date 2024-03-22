@@ -27,16 +27,16 @@ $personal-primary: (
   ),
 );
 $personal-warn: (
-  50: #f2ebcf,
-  100: #d9caab,
-  200: #b9a784,
-  300: #97865d,
-  400: #7e6c3f,
-  500: #665421,
-  600: #5c4b1b,
-  700: #4f3e13,
-  800: #44310a,
-  900: #372300,
+  50: #fcf8e8,
+  100: #f6eec6,
+  200: #f0e4a2,
+  300: #e9d981,
+  400: #e3d169,
+  500: #deca55,
+  600: #ceb94f,
+  700: #baa449,
+  800: #a58e44,
+  900: #816b3c,
   contrast: (
     50: rgba(black, 0.87),
     100: rgba(black, 0.87),
@@ -89,6 +89,10 @@ $E-Commerce-Frontend-theme: mat.define-light-theme(
   )
 );
 @include mat.all-component-themes($E-Commerce-Frontend-theme);
+/* Material update components */
+.mat-mdc-tab-list {
+  border-bottom: 1px solid #666666;
+}
 
 @import "~bootstrap/dist/css/bootstrap.css";
 
@@ -109,6 +113,13 @@ $E-Commerce-Frontend-theme: mat.define-light-theme(
   font-weight: 500;
 }
 
+.card {
+  padding: 10px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
 html,
 body {
   height: 100%;
@@ -122,6 +133,19 @@ body {
 }
 
 /* Utility classes */
+
+.primary-color {
+  color: var(--primary-color);
+}
+.secondary-color {
+  color: var(--secondary-color);
+}
+.ternary-color {
+  color: var(--ternary-color);
+}
+.dark-color {
+  color: var(--dark-color);
+}
 
 form {
   display: flex;

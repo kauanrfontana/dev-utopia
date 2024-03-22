@@ -203,4 +203,33 @@ final class UserController
         return $response;
 
     }
+
+    public function updateUserRole(Request $request, Response $response, array $args): Response
+    {
+        $data = $request->getParsedBody();
+        $userId = 0;
+        $tokenData = AuthService::decodeToken($request->getHeaderLine("X-Auth_token"));
+        try {
+            $userId = $tokenData->sub;
+            if (isset ($args["id"])) {
+                $userId = (int) $args["id"];
+            }
+
+            if (empty ($data["newRoleCategory"])) {
+                throw new \InvalidArgumentException("Não foi possível atalizar o perfil, categoria do novo perfil não informada!");
+            }
+            $category = $data["newRoleCategory"];
+            $response = $response->withStatus(200)->withJson($this->userDAO->updateUserRole($userId, $category));
+
+        } catch (\InvalidArgumentException $e) {
+            $response = $response->withStatus(400)->withJson([
+                "message" => $e->getMessage()
+            ]);
+        } catch (\Throwable $e) {
+            $response = $response->withStatus(500)->withJson([
+                "message" => $e->getMessage()
+            ]);
+        }
+        return $response;
+    }
 }

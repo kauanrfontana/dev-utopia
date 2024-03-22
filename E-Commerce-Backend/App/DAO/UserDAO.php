@@ -85,7 +85,7 @@ final class UserDAO extends Connection
 
             $user = $statement->fetch(\PDO::FETCH_ASSOC);
 
-            $sqlRoles = "SELECT r.name
+            $sqlRole = "SELECT r.name, r.category
                     FROM users u
                     INNER JOIN user_roles ur
                     ON u.id = ur.user_id
@@ -93,7 +93,7 @@ final class UserDAO extends Connection
                     ON ur.role_id = r.id
                     WHERE u.id = :userId";
 
-            $statement = $this->pdo->prepare($sqlRoles);
+            $statement = $this->pdo->prepare($sqlRole);
 
             $statement->bindParam(":userId", $userId, \PDO::PARAM_INT);
 
@@ -101,9 +101,14 @@ final class UserDAO extends Connection
                 throw new \Exception("Não foi possível consultar o usuário, confira os dados, e tente novamente mais tarde!");
             }
 
-            $userRoles = $statement->fetchAll(\PDO::FETCH_COLUMN);
-
-            $user["roles"] = $userRoles;
+            $roles = [
+                "customer" => "cliente",
+                "seller" => "vendedor",
+                "admin" => "admin",
+            ];
+            $userRole = $statement->fetch(\PDO::FETCH_ASSOC);
+            $user["role"] = $roles[$userRole["name"]];
+            $user["roleCategory"] = $userRole["category"];
 
             $result["user"] = $user;
             return $result;
@@ -251,5 +256,35 @@ final class UserDAO extends Connection
         } catch (\Throwable $e) {
             throw $e;
         }
+    }
+
+    public function updateUserRole(int $userId, int $category): array
+    {
+        $result = [];
+
+        try {
+            $sql = "UPDATE user_roles 
+            SET role_id = 
+            (
+                SELECT id 
+                FROM roles
+                WHERE category = :category
+            )
+            WHERE user_id = :userId";
+
+            $statement = $this->pdo->prepare($sql);
+
+            $statement->bindParam(":userId", $userId, \PDO::PARAM_INT);
+            $statement->bindParam(":category", $category, \PDO::PARAM_INT);
+
+            if (!$statement->execute()) {
+                throw new \Exception("Não foi possível atualizar o perfil do usuário, tente novamente mais tarde.");
+            }
+            $result["message"] = "Perfil do usuário atualizado com sucesso.";
+            return $result;
+        } catch (\Throwable $e) {
+            throw $e;
+        }
+
     }
 }

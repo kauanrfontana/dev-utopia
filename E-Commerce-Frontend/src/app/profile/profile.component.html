@@ -1,8 +1,7 @@
 <div class="container-profile">
   <div class="profile-container">
-    <h1>Tipo de Perfil:</h1>
     <div class="profile-image no-select">
-      <label>CLIENTE</label>
+      <label>{{ user.role | uppercase }}</label>
       <img src="../../assets/imgs/PersonIcon.png" alt="Person icon" />
     </div>
   </div>
@@ -85,7 +84,7 @@
               placeholder=""
               class="form-control"
               mask="00000-000"
-              [(ngModel)]="preUserData.zipCode"
+              [formControl]="cepControl"
             />
             <label>CEP</label>
           </div>
@@ -197,11 +196,17 @@
     </div>
   </div>
 </div>
-<!-- <mat-tab-group>
-  <mat-tab label="Cliente"> Cliente </mat-tab>
-  <mat-tab label="Vendedor" *ngIf="isSeller"> Vendedor </mat-tab>
-</mat-tab-group>
--->
+<div class="container" style="margin-top: 1rem" *ngIf="user.role == 'cliente'">
+  <div class="col-md-12">
+    <h2 class="text-center secondary-color">Deseja vender seus produtos?</h2>
+  </div>
+  <div class="d-flex justify-content-center col-md-12">
+    <button class="btn btn-success" (click)="updateRoleToSeller()">
+      Tornar-se Vendedor
+    </button>
+  </div>
+</div>
+
 <div class="container-loading" *ngIf="loadingUserData">
   <app-loader-dots></app-loader-dots>
 </div>

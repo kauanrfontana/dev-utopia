@@ -8,7 +8,7 @@ const Routes: Routes = [
     pathMatch: "full",
     component: HomeComponent,
   },
-  { path: "*", redirectTo: "" },
+  { path: "**", redirectTo: "" },
 ];
 
 @NgModule({

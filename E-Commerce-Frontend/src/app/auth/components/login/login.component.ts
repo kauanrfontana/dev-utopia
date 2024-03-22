@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import Swal from "sweetalert2";
 import { AuthService } from "../../auth.service";
-import { IBasicResponse } from "src/app/shared/interfaces/IBasicResponse.interface";
+import { IBasicResponse } from "src/app/shared/models/IBasicResponse.interface";
 import { take } from "rxjs";
 import { Router } from "@angular/router";
 import { AppService } from "src/app/app.service";
@@ -34,7 +34,6 @@ export class LoginComponent {
 
   registerForm: FormGroup = new FormGroup({});
   loginForm: FormGroup = new FormGroup({});
-
 
   passwordsVisible = false;
 
@@ -78,7 +77,6 @@ export class LoginComponent {
   }
 
   onRegisterUser() {
-
     if (this.registerForm.get("name")?.invalid) {
       Swal.fire(
         "Erro ao Cadastrar",
@@ -95,7 +93,7 @@ export class LoginComponent {
       );
       return;
     }
-    
+
     if (this.registerForm.get("password")?.invalid) {
       let passwordErrorMsg: string = this.getPasswordMsgByForm(
         this.registerForm
@@ -104,7 +102,11 @@ export class LoginComponent {
       Swal.fire("Erro ao Cadastrar", passwordErrorMsg, "error");
       return;
     }
-    if(this.passwordDoesntMatch(this.registerForm.get("passwordConfirm") as FormControl<string>)){
+    if (
+      this.passwordDoesntMatch(
+        this.registerForm.get("passwordConfirm") as FormControl<string>
+      )
+    ) {
       Swal.fire(
         "Erro ao Cadastrar",
         "A senha e a confirmação não correspondem!",
@@ -134,7 +136,6 @@ export class LoginComponent {
   }
 
   onLoginUser() {
-
     if (this.loginForm.get("email")?.invalid) {
       Swal.fire(
         "Erro ao fazer login",
