@@ -180,7 +180,7 @@
     justify-content: center;
 
     button {
-      font-size: 1.5rem;
+      font-size: 2rem;
     }
   }
 
@@ -226,6 +226,10 @@
         font-size: 25px;
       }
     }
+    actions {
+      display: flex;
+      justify-content: center;
+    }
   }
 
   .container-loading {
@@ -250,6 +254,14 @@
     }
     .container-register {
       button.btn.btn-register {
+        font-size: 1.5rem;
+      }
+    }
+    .actions {
+      display: flex;
+      justify-content: center;
+
+      button {
         font-size: 1.5rem;
       }
     }
