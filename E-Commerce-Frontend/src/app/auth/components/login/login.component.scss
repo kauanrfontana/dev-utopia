@@ -45,18 +45,25 @@
       transition: 1s ease-in-out;
       position: relative;
       border-radius: 50%;
+      width: 50%;
+      height: 100%;
+      object-fit: contain;
     }
 
     p {
-      transition: 1s ease-out;
+      transition: opacity 1s ease-out;
       font-size: 30px;
       align-self: center;
       color: rgb(221, 220, 220);
+      width: 50%;
+      height: 100%;
+      display: flex;
+      align-items: center;
     }
   }
 
   .logo-right {
-    transform: translatex(320px);
+    transform: translatex(100%);
   }
 
   .container-register {
@@ -137,20 +144,22 @@
     top: 5px;
     left: 5px;
     height: calc(100% - 10px);
+    overflow-y: auto;
 
     border-radius: 50px;
     width: calc(100% - 10px);
   }
 
-  .form-group {
-    width: 400px;
-    margin-bottom: 10px;
-  }
-
-  p {
-    text-align: center;
-    font-size: 10px;
-    color: rgb(243 148 0);
+  form {
+    width: 100%;
+    height: auto;
+    .form-group {
+      width: 80%;
+      margin-bottom: 10px;
+      input {
+        height: auto;
+      }
+    }
   }
 
   .btn-go-back {
@@ -169,8 +178,6 @@
   .actions {
     display: flex;
     justify-content: center;
-    position: relative;
-    top: 10px;
 
     button {
       font-size: 1.5rem;
@@ -184,21 +191,10 @@
     justify-content: center;
   }
 
-  .errors {
-    top: 55px;
-    height: 43px;
-    font-size: 15px;
-    display: flex;
-    justify-content: flex-end;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-  }
-
   a.view-password {
     position: absolute;
-    top: 0.6rem;
-    left: 23rem;
+    top: 25%;
+    left: 90%;
     color: black;
     opacity: 0.6;
     &:hover {
@@ -219,4 +215,65 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media only screen and (max-width: 586px) {
+  .container {
+    width: 30rem;
+    height: 25rem;
+    .container-welcome {
+      p {
+        font-size: 25px;
+      }
+    }
+  }
+
+  .container-loading {
+    width: 30rem;
+    height: 20rem;
+  }
+}
+
+@media only screen and (max-width: 488px) {
+  .container {
+    width: 25rem;
+    border-radius: 50px;
+    .container-welcome {
+      p {
+        font-size: 20px;
+      }
+    }
+    .container-login {
+      button.btn.btn-login {
+        font-size: 1.5rem;
+      }
+    }
+    .container-register {
+      button.btn.btn-register {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  .container-loading {
+    width: 25rem;
+    height: 15rem;
+  }
+}
+
+@media only screen and (max-width: 398px) {
+  .container {
+    width: 20rem;
+    border-radius: 50px;
+    .container-welcome {
+      p {
+        font-size: 20px;
+      }
+    }
+  }
+
+  .container-loading {
+    width: 25rem;
+    height: 15rem;
+  }
 }

@@ -1,3 +1,4 @@
+import { AuthService } from "src/app/auth/auth.service";
 import { IBasicResponse } from "../shared/models/IBasicResponse.interface";
 import { UserService } from "./../shared/services/user.service";
 import { Component, OnInit } from "@angular/core";
@@ -8,7 +9,10 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./home.component.scss"],
 })
 export class HomeComponent implements OnInit {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.setUserData();
@@ -21,7 +25,7 @@ export class HomeComponent implements OnInit {
         localStorage.setItem("userData", JSON.stringify(userData));
       },
       error: () => {
-        this.setUserData();
+        this.authService.logout();
       },
     });
   }
