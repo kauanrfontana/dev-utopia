@@ -2,10 +2,10 @@ import { Component } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import Swal from "sweetalert2";
 import { AuthService } from "../../auth.service";
-import { IBasicResponse } from "src/app/shared/models/IBasicResponse.interface";
 import { take } from "rxjs";
 import { Router } from "@angular/router";
 import { AppService } from "src/app/app.service";
+import { IBasicResponseMessage } from "src/app/shared/models/IBasicResponse.interfaces";
 
 @Component({
   selector: "app-login",
@@ -64,7 +64,10 @@ export class LoginComponent {
 
   onRegister() {
     this.registerClass = this.registerClasses.selected;
+    this.initRegisterForm();
+  }
 
+  initRegisterForm() {
     this.registerForm = new FormGroup({
       name: new FormControl(null, Validators.required),
       email: new FormControl(null, [Validators.email, Validators.required]),
@@ -73,6 +76,16 @@ export class LoginComponent {
         Validators.minLength(6),
       ]),
       passwordConfirm: new FormControl(null, Validators.required),
+    });
+  }
+
+  initLoginForm() {
+    this.loginForm = new FormGroup({
+      email: new FormControl(null, [Validators.required, Validators.email]),
+      password: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(6),
+      ]),
     });
   }
 
@@ -122,7 +135,7 @@ export class LoginComponent {
       .register(user)
       .pipe(take(1))
       .subscribe({
-        next: (res: IBasicResponse) => {
+        next: (res: IBasicResponseMessage) => {
           this.pageLoading = false;
           Swal.fire("Sucesso", res.message, "success").then(() => {
             this.restart();
@@ -171,13 +184,7 @@ export class LoginComponent {
   onLogin() {
     this.loginClass = this.loginClasses.selected;
 
-    this.loginForm = new FormGroup({
-      email: new FormControl(null, [Validators.required, Validators.email]),
-      password: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(6),
-      ]),
-    });
+    this.initLoginForm();
   }
 
   passwordDoesntMatch(control: FormControl): boolean {

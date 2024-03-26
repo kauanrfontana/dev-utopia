@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, tap } from "rxjs";
-import { IBasicResponse } from "../shared/models/IBasicResponse.interface";
 import { Router } from "@angular/router";
+import { IBasicResponseMessage } from "../shared/models/IBasicResponse.interfaces";
 
 interface IAuthResponse {
   token: string;
@@ -34,8 +34,8 @@ export class AuthService {
     email: string;
     password: string;
     name: string;
-  }): Observable<IBasicResponse> {
-    return this.http.post<IBasicResponse>("user", user);
+  }): Observable<IBasicResponseMessage> {
+    return this.http.post<IBasicResponseMessage>("user", user);
   }
 
   logout() {

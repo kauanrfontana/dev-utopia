@@ -1,4 +1,4 @@
-<!-- <section class="search-section">
+<section class="search-section">
   <div class="row">
     <div class="col-md-6 col-sm-12">
       <div class="form-group">
@@ -7,7 +7,9 @@
           class="form-control"
           placeholder=""
           [(ngModel)]="searchText"
-          (keydown.enter)="getProductsPaginated(productsParams, paginationData)"
+          (keydown.enter)="
+            dispatchSearchAction(this.productsParams, this.paginationData)
+          "
         />
         <label>Nome do(s) Produto(s)</label>
       </div>
@@ -38,26 +40,16 @@
       </div>
       <button
         class="btn btn-info h-100"
-        (click)="getProductsPaginated(productsParams, paginationData)"
+        (click)="dispatchSearchAction(this.productsParams, this.paginationData)"
       >
         <mat-icon>search</mat-icon>
       </button>
     </div>
   </div>
-</section> -->
-<app-products-filters
-  (dispatchSearch)="
-    this.getProductsPaginated($event.getProductsParams, $event.paginationData)
-  "
-  [(paginationData)]="paginationData"
->
-  <div class="products-list">
-    <div class="products-item" *ngFor="let product of productsList">
-      <app-card-product [product]="product"></app-card-product>
-    </div>
-  </div>
-</app-products-filters>
-
-<div class="loader-container" *ngIf="loadingProducts">
-  <app-loader-dots></app-loader-dots>
-</div>
+</section>
+<ng-content></ng-content>
+<app-paginator
+  [totalItems]="paginationData.totalItems"
+  [itemsPerPage]="paginationData.itemsPerPage"
+  (pageChange)="pageChanged($event)"
+></app-paginator>

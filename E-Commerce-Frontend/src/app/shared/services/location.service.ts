@@ -1,21 +1,42 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { IBasicResponseData } from "../models/IBasicResponse.interfaces";
 
+export interface ILocation {
+  id: number;
+  name: string;
+}
 @Injectable({ providedIn: "root" })
 export class LocationSevice {
   constructor(private http: HttpClient) {}
 
-  getStates(stateId?: number): Observable<any> {
+  getStates(stateId?: number): Observable<IBasicResponseData<ILocation[]>> {
     const url = stateId ? `states?stateId=${stateId}` : `states`;
-    return this.http.get(url);
+    return this.http.get<IBasicResponseData<ILocation[]>>(url);
   }
 
-  getCitiesByState(stateId: number) {
-    return this.http.get("cities", { params: { stateId } });
+  getCitiesByState(
+    stateId: number
+  ): Observable<IBasicResponseData<ILocation[]>> {
+    return this.http.get<IBasicResponseData<ILocation[]>>("cities", {
+      params: { stateId },
+    });
   }
 
-  getLocationByCep(cep: string) {
-    return this.http.get("cep/" + cep);
+  getLocationByCep(cep: string): Observable<
+    IBasicResponseData<{
+      address: string;
+      city: string;
+      state: string;
+    }>
+  > {
+    return this.http.get<
+      IBasicResponseData<{
+        address: string;
+        city: string;
+        state: string;
+      }>
+    >("cep/" + cep);
   }
 }

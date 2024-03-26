@@ -1,7 +1,10 @@
 <?php
-use App\Controllers\AuthController;
-use App\Controllers\LocationController;
-use App\Controllers\UserController;
+use App\Controllers\{
+    AuthController,
+    LocationController,
+    UserController,
+    ProductController
+};
 use App\Middlewares\TokenMiddleware;
 use function src\{slimConfiguration, jwtAuth};
 
@@ -45,7 +48,9 @@ $app->group("", function () use ($app) {
 
     $app->put("/userRole[/{id}]", UserController::class . ":updateUserRole");
 
-    $app->get("/users", UserController::class . ":getAllUsers");
+    $app->get("/users", UserController::class . ":getAllUsers")
+    ;
+    $app->get("/products", ProductController::class . ":getAllProducts");
 
     $app->get("/user[/{id}]", UserController::class . ":getUser");
 })->add(TokenMiddleware::class)->add(jwtAuth());

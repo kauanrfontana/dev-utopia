@@ -21,6 +21,9 @@ import {
   provideEnvironmentNgxMask,
 } from "ngx-mask";
 import { LabelClue } from "./components/label-clue/label-clue.component";
+import { CutLabelPipe } from "./pipes/cutLabel.pipe";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { PaginatorComponent } from "./components/paginator/paginator.component";
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
   return {
@@ -36,6 +39,8 @@ const maskConfigFunction: () => Partial<IConfig> = () => {
     LoaderDots,
     SearchSelectComponent,
     LabelClue,
+    CutLabelPipe,
+    PaginatorComponent,
   ],
   imports: [
     FormsModule,
@@ -49,6 +54,7 @@ const maskConfigFunction: () => Partial<IConfig> = () => {
     NgxMatSelectSearchModule,
     NgxMaskDirective,
     NgxMaskPipe,
+    MatPaginatorModule,
   ],
   providers: [
     {
@@ -57,6 +63,7 @@ const maskConfigFunction: () => Partial<IConfig> = () => {
       multi: true,
     },
     provideEnvironmentNgxMask(maskConfigFunction),
+    CutLabelPipe,
   ],
   exports: [
     FormsModule,
@@ -73,6 +80,9 @@ const maskConfigFunction: () => Partial<IConfig> = () => {
     NgxMaskDirective,
     NgxMaskPipe,
     LabelClue,
+    CutLabelPipe,
+    MatPaginatorModule,
+    PaginatorComponent,
   ],
 })
 export class SharedModule {}

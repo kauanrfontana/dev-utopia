@@ -33,16 +33,19 @@ FOREIGN KEY([role_id]) REFERENCES [roles]([id])
 
 CREATE TABLE [products](
 [id] int IDENTITY(1,1) PRIMARY KEY,
+[user_id] int NOT NULL,
 [name] varchar(200) NOT NULL,
+[url_image] varchar(500),
 [description] varchar(400),
 [created_at] datetime NOT NULL,
 [price] money NOT NULL,
-[state_id] int,
-[city_id] int,
-[address] varchar(200),
+[state_id] int NOT NULL,
+[city_id] int NOT NULL,
+[address] varchar(200) NOT NULL,
 [house_number] varchar(5) NOT NULL,
-[complement] varchar(200) NOT NULL,
-[zip_code] varchar(8)
+[complement] varchar(200),
+[zip_code] varchar(8) NOT NULL,
+FOREIGN KEY ([user_id]) REFERENCES [users]([id])
 );
 
 CREATE TABLE [shopping_carts](

@@ -110,7 +110,7 @@ final class UserDAO extends Connection
             $user["role"] = $roles[$userRole["name"]];
             $user["roleCategory"] = $userRole["category"];
 
-            $result["user"] = $user;
+            $result = $user;
             return $result;
         } catch (\Throwable $e) {
             throw $e;

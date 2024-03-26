@@ -1,9 +1,12 @@
 import { Component, OnInit } from "@angular/core";
-import { User } from "../shared/models/IUser.interface";
+import { User } from "../shared/models/User";
 import { UserService } from "../shared/services/user.service";
-import { IBasicResponse } from "../shared/models/IBasicResponse.interface";
+import {
+  IBasicResponseData,
+  IBasicResponseMessage,
+} from "../shared/models/IBasicResponse.interfaces";
 import Swal from "sweetalert2";
-import { LocationSevice } from "../shared/services/location.service";
+import { LocationSevice, ILocation } from "../shared/services/location.service";
 import { IListItem } from "../shared/components/search-select/IListItem.interface";
 import { Observable, debounceTime, map } from "rxjs";
 import { FormControl } from "@angular/forms";
@@ -42,26 +45,20 @@ export class ProfileComponent implements OnInit {
 
     this.cepControlValueChanges();
 
-    this.locationService.getStates().subscribe({
-      next: (res: IBasicResponse) => {
-        this.states = res.data.map((state: { id: number; name: string }) => ({
-          id: state.id,
-          label: state.name,
-        }));
-      },
-      error: (err: Error) => {
-        Swal.fire("Erro ao consultar países!", err.message, "error");
-      },
-    });
+    this.getStates();
 
+    this.getUserData();
+  }
+
+  getUserData() {
     this.userService.getUserData().subscribe({
-      next: (res: IBasicResponse) => {
-        this.user = res.data.user;
+      next: (res: IBasicResponseData<User>) => {
+        this.user = res.data;
         this.cepControl.setValue(this.user.zipCode);
         localStorage.setItem("userData", JSON.stringify(this.user));
         if (this.user.stateId) {
           this.getCitiesByState(this.user.stateId).subscribe({
-            next: (res: IBasicResponse) => {
+            next: (res: IBasicResponseData<IListItem[]>) => {
               this.cities = res.data;
               this.loadingUserData = false;
             },
@@ -81,6 +78,20 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  getStates() {
+    this.locationService.getStates().subscribe({
+      next: (res: IBasicResponseData<ILocation[]>) => {
+        this.states = res.data.map((state: { id: number; name: string }) => ({
+          id: state.id,
+          label: state.name,
+        }));
+      },
+      error: (err: Error) => {
+        Swal.fire("Erro ao consultar países!", err.message, "error");
+      },
+    });
+  }
+
   cepControlValueChanges() {
     this.cepControl.valueChanges.pipe(debounceTime(1000)).subscribe((value) => {
       if (value.length == 8) {
@@ -89,9 +100,11 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  getCitiesByState(stateId: number): Observable<IBasicResponse> {
+  getCitiesByState(
+    stateId: number
+  ): Observable<IBasicResponseData<IListItem[]>> {
     return this.locationService.getCitiesByState(stateId).pipe(
-      map((response: IBasicResponse) => {
+      map((response: IBasicResponseData<ILocation[]>) => {
         return {
           data: response.data.map((city: { id: number; name: string }) => ({
             id: city.id,
@@ -104,7 +117,7 @@ export class ProfileComponent implements OnInit {
 
   onUpdateUserData() {
     this.userService.updateUserData(this.preUserData).subscribe({
-      next: (res: IBasicResponse) => {
+      next: (res: IBasicResponseMessage) => {
         Swal.fire("Sucesso", res.message, "success").then(() => {
           this.ngOnInit();
         });
@@ -154,7 +167,7 @@ export class ProfileComponent implements OnInit {
           newPassword: this.newPassword,
         })
         .subscribe({
-          next: (res: IBasicResponse) => {
+          next: (res: IBasicResponseMessage) => {
             Swal.fire("Sucesso", res.message, "success");
           },
           error: (err: Error) => {
@@ -180,7 +193,7 @@ export class ProfileComponent implements OnInit {
   onStateChange(stateId: number) {
     this.cities = [];
     this.getCitiesByState(stateId).subscribe({
-      next: (res: IBasicResponse) => {
+      next: (res: IBasicResponseData<IListItem[]>) => {
         this.cities = res.data;
       },
       error: (err: Error) => {
@@ -193,13 +206,19 @@ export class ProfileComponent implements OnInit {
     this.loadingCepSearch = true;
 
     this.locationService.getLocationByCep(cep).subscribe({
-      next: (res: IBasicResponse) => {
+      next: (
+        res: IBasicResponseData<{
+          address: string;
+          city: string;
+          state: string;
+        }>
+      ) => {
         this.preUserData.address = res.data.address;
         this.preUserData.stateId = Number(
           this.states.find((state) => state.label == res.data.state)?.id
         );
         this.getCitiesByState(this.preUserData.stateId).subscribe({
-          next: (res2: IBasicResponse) => {
+          next: (res2: IBasicResponseData<IListItem[]>) => {
             this.cities = res2.data;
             this.preUserData.cityId = Number(
               this.cities.find((city) => city.label == res.data.city)?.id
@@ -220,7 +239,7 @@ export class ProfileComponent implements OnInit {
 
   updateRoleToSeller() {
     this.userService.updateUserRole(2).subscribe({
-      next: (res: IBasicResponse) => {
+      next: (res: IBasicResponseMessage) => {
         Swal.fire("Sucesso", res.message, "success").then(() => {
           this.ngOnInit();
         });

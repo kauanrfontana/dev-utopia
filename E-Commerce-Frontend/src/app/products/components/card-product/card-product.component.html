@@ -1,1 +1,11 @@
-<div class="card">prod</div>
+<div class="card">
+  <div class="product-image">
+    <img [src]="product.urlImage" [alt]="product.description" />
+  </div>
+  <div class="product-details">
+    <p class="product-name text-secondary">
+      {{ product.name | cutLabel : 20 }}
+    </p>
+    <p class="text-primary">R$ {{ product.price | number : "1.2-2" }}</p>
+  </div>
+</div>

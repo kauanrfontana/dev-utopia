@@ -3,10 +3,10 @@
 namespace src;
 
 use App\DAO\{
-    LocationDAO,
+    ProductDAO,
     UserDAO,
     TokenDAO,
-    RoleDAO
+    RoleDAO,
 };
 
 
@@ -26,6 +26,7 @@ function slimConfiguration(): \Slim\Container
     $container->offsetSet(UserDAO::class, new UserDAO());
     $container->offsetSet(TokenDAO::class, new TokenDAO());
     $container->offsetSet(RoleDAO::class, new RoleDAO());
+    $container->offsetSet(ProductDAO::class, new ProductDAO());
 
 
     return $container;

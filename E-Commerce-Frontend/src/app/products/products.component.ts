@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { UserService } from "../shared/services/user.service";
+import { Tab } from "../shared/models/Tab";
 
 @Component({
   selector: "app-products",
@@ -7,7 +8,7 @@ import { UserService } from "../shared/services/user.service";
   styleUrls: ["./products.component.scss"],
 })
 export class ProductsComponent implements OnInit {
-  tabs: any = [];
+  tabs: Tab[] = [];
   roleCategory: number = 0;
 
   constructor(private userService: UserService) {
@@ -16,12 +17,8 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit(): void {
     this.tabs = [
-      { path: "/products", name: "Produtos", showIf: true },
-      {
-        path: "/products/my",
-        name: "Meus Produtos",
-        showIf: this.roleCategory > 1,
-      },
+      new Tab("/products", "Produtos", true),
+      new Tab("/products/mine", "Meus Produtos", this.roleCategory > 1),
     ];
   }
 }

@@ -5,13 +5,14 @@
   mat-align-tabs="start"
   color="warn"
 >
-  <ng-container *ngFor="let tab of tabs">
+  <ng-container *ngFor="let tab of tabs; let i = index">
     <a
       mat-tab-link
       *ngIf="tab.showIf"
       [routerLink]="[tab.path]"
       routerLinkActive
       #rla="routerLinkActive"
+      [routerLinkActiveOptions]="{ exact: true }"
       [active]="rla.isActive"
     >
       {{ tab.name }}

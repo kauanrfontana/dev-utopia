@@ -1,7 +1,10 @@
-import { User } from "../models/IUser.interface";
+import { User } from "../models/User";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { IBasicResponse } from "../models/IBasicResponse.interface";
+import {
+  IBasicResponseData,
+  IBasicResponseMessage,
+} from "../models/IBasicResponse.interfaces";
 import { Observable } from "rxjs";
 
 @Injectable({ providedIn: "root" })
@@ -14,30 +17,30 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  getUserData(userId?: number): Observable<IBasicResponse> {
+  getUserData(userId?: number): Observable<IBasicResponseData<User>> {
     let paramUserId = "";
     if (userId) paramUserId = `/${userId}`;
-    return this.http.get("user" + paramUserId);
+    return this.http.get<IBasicResponseData<User>>("user" + paramUserId);
   }
 
-  updateUserData(user: User): Observable<IBasicResponse> {
-    return this.http.put("user", user);
+  updateUserData(user: User): Observable<IBasicResponseMessage> {
+    return this.http.put<IBasicResponseMessage>("user", user);
   }
 
   updatePassword(changePasswordData: {
     currentPassword: string;
     newPassword: string;
-  }): Observable<IBasicResponse> {
-    return this.http.put("password", changePasswordData);
+  }): Observable<IBasicResponseMessage> {
+    return this.http.put<IBasicResponseMessage>("password", changePasswordData);
   }
 
   updateUserRole(
     newRoleCategory: number,
     userId?: number
-  ): Observable<IBasicResponse> {
+  ): Observable<IBasicResponseMessage> {
     let paramUserId = "";
     if (userId) paramUserId = `/${userId}`;
-    return this.http.put("userRole" + paramUserId, {
+    return this.http.put<IBasicResponseMessage>("userRole" + paramUserId, {
       newRoleCategory,
     });
   }

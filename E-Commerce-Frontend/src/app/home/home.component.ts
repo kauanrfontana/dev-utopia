@@ -1,7 +1,8 @@
 import { AuthService } from "src/app/auth/auth.service";
-import { IBasicResponse } from "../shared/models/IBasicResponse.interface";
+import { IBasicResponseData } from "../shared/models/IBasicResponse.interfaces";
 import { UserService } from "./../shared/services/user.service";
 import { Component, OnInit } from "@angular/core";
+import { User } from "../shared/models/User";
 
 @Component({
   selector: "app-home",
@@ -20,8 +21,8 @@ export class HomeComponent implements OnInit {
 
   setUserData() {
     this.userService.getUserData().subscribe({
-      next: (res: IBasicResponse) => {
-        const userData = res.data.user;
+      next: (res: IBasicResponseData<User>) => {
+        const userData = res.data;
         localStorage.setItem("userData", JSON.stringify(userData));
       },
       error: () => {
