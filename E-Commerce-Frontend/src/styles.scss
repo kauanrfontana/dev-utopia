@@ -182,6 +182,8 @@ form {
 
   //com preenchimento
   input:focus + label,
+  textarea:focus + label,
+  textarea:not(:placeholder-shown) + label,
   input:not(:placeholder-shown) + label {
     transform: translate(1px, -13px);
     font-size: 12px;
@@ -189,6 +191,7 @@ form {
   }
 
   select:focus + label,
+  textarea:focus + label,
   select.ng-valid + label {
     transform: translate(1px, -13px);
     font-size: 12px;
@@ -201,6 +204,15 @@ form {
     padding-left: 5px;
     height: 50px;
     width: 100%;
+
+    border-radius: 10px;
+    font-size: 15px;
+  }
+  textarea.form-control {
+    padding-top: 15px;
+    padding-left: 5px;
+    width: 100%;
+    resize: none;
 
     border-radius: 10px;
     font-size: 15px;

@@ -1,3 +1,4 @@
+import { UserService } from "./../../../shared/services/user.service";
 import { ProductsService, getProductsParams } from "./../../products.service";
 import { Component } from "@angular/core";
 import { IPaginatedResponse } from "src/app/shared/models/IPaginatedResponse.interface";
@@ -13,11 +14,18 @@ import Swal from "sweetalert2";
 export class ProductsList {
   productsList: Product[] = [];
 
+  isAdmin: boolean = false;
+
   loadingProducts: boolean = true;
 
   paginationData = new PaginationData();
 
-  constructor(private productService: ProductsService) {}
+  constructor(
+    private productService: ProductsService,
+    private userService: UserService
+  ) {
+    this.isAdmin = this.userService.isAdmin();
+  }
 
   getProductsPaginated(
     productsParams: getProductsParams,

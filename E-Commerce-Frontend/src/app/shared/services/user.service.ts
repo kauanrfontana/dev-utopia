@@ -23,6 +23,10 @@ export class UserService {
     return this.http.get<IBasicResponseData<User>>("user" + paramUserId);
   }
 
+  isAdmin() {
+    return this.userData().roleCategory === 3;
+  }
+
   updateUserData(user: User): Observable<IBasicResponseMessage> {
     return this.http.put<IBasicResponseMessage>("user", user);
   }

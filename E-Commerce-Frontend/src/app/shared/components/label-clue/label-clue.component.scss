@@ -1,13 +1,9 @@
 .container-clue {
-  display: block;
-
   position: relative;
-  width: fit-content;
   .label-clue {
     position: absolute;
     z-index: 2;
     top: -2px;
-    left: 18px;
     color: white;
     font-size: 11px;
     opacity: 0;
@@ -17,23 +13,43 @@
     border-radius: 5px;
 
     &::after {
-      z-index: 1;
+      z-index: -1;
       content: "";
       position: absolute;
-      top: 27%;
-      rotate: 83deg;
-      left: -3px;
-      margin-left: -8px;
+      top: 5%;
       border-width: 7px;
       border-style: solid;
       border-color: gray transparent transparent transparent;
     }
   }
 
-  &:hover {
+  &:hover,
+  &.hovered {
     .label-clue {
       width: auto;
       opacity: 0.8;
+    }
+  }
+  &.right {
+    .label-clue {
+      left: 18px;
+
+      &::after {
+        rotate: 83deg;
+        left: -2px;
+        margin-left: -8px;
+      }
+    }
+  }
+  &.left {
+    .label-clue {
+      right: 18px;
+
+      &::after {
+        rotate: -93deg;
+        right: -2px;
+        margin-right: -8px;
+      }
     }
   }
 }

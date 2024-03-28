@@ -44,6 +44,14 @@
       >
         <mat-icon>search</mat-icon>
       </button>
+      <button
+        class="btn btn-success h-100 w-100"
+        [routerLink]="['/products/create']"
+        *ngIf="canRegisterProduct"
+      >
+        <mat-icon style="vertical-align: bottom">add_circle</mat-icon> Cadastrar
+        Produto
+      </button>
     </div>
   </div>
 </section>

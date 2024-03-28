@@ -32,7 +32,7 @@ class ProductDAO extends Connection
 
             $procedurePaginationLine = PaginationService::getPaginationLine($filters["currentPage"], $filters["itemsPerPage"]);
 
-            $sql = "SELECT name, url_image as urlImage, price FROM products WHERE name LIKE " . "'%" . $likeClousure . "%'" . "ORDER BY $orderColumn $orderType $procedurePaginationLine";
+            $sql = "SELECT id, name, url_image as urlImage, price FROM products WHERE name LIKE " . "'%" . $likeClousure . "%'" . "ORDER BY $orderColumn $orderType $procedurePaginationLine";
 
             $statement = $this->pdo->prepare($sql);
 
@@ -44,7 +44,7 @@ class ProductDAO extends Connection
 
             $result["data"] = $products;
 
-            $sqlCount = "SELECT COUNT(*) as total FROM products";
+            $sqlCount = "SELECT COUNT(*) as total FROM products  WHERE name LIKE " . "'%" . $likeClousure . "%'";
 
             $statement = $this->pdo->prepare($sqlCount);
 

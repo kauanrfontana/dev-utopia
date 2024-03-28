@@ -32,6 +32,8 @@ export class ProductsFiltersComponent implements OnInit {
   @Output() paginationDataChange: EventEmitter<PaginationData> =
     new EventEmitter<PaginationData>();
 
+  @Input() canRegisterProduct: boolean = false;
+
   searchText: string = "";
 
   @Output() dispatchSearch: EventEmitter<{

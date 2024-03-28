@@ -60,3 +60,19 @@
     }
   }
 }
+
+@media only screen and (max-width: 600px) {
+  .navbar-container {
+    width: 70vw;
+    width: 70dvw;
+
+    ul.nav-list {
+      li.nav-item {
+        &.btn-logout {
+          position: absolute;
+          left: calc(70dvw - 50px);
+        }
+      }
+    }
+  }
+}

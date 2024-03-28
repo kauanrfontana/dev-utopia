@@ -7,8 +7,22 @@ import { Component, ElementRef, HostListener, ViewChild } from "@angular/core";
 })
 export class ShoppingCartComponent {
   @ViewChild("iconSection") iconSection?: ElementRef;
+  cluePosition: "left" | "right" = "right";
 
-  constructor() {}
+  constructor() {
+    if (window.innerWidth < 980) {
+      this.cluePosition = "left";
+    }
+  }
+
+  @HostListener("window:resize", ["$event"])
+  onResize() {
+    if (window.innerWidth < 980) {
+      this.cluePosition = "left";
+    } else {
+      this.cluePosition = "right";
+    }
+  }
 
   @HostListener("mouseenter") mouseover() {
     this.iconSection?.nativeElement.classList.add(

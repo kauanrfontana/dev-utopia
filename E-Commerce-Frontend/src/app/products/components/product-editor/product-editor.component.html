@@ -1,0 +1,102 @@
+<div class="container mt-5 p-5">
+  <div class="row d-flex flex-dinamic-direction">
+    <div class="col-md-4 col-sm-12 d-flex justify-content-center mb-5">
+      <div class="preview-image-container">
+        <img
+          [src]="urlPreviewImage"
+          alt="preview image"
+          (error)="previewImageDoestLoaded()"
+          *ngIf="urlPreviewImage"
+        />
+        <span *ngIf="!urlPreviewImage">
+          <mat-icon style="vertical-align: middle">photo</mat-icon>Prévia da
+          imagem
+        </span>
+      </div>
+    </div>
+    <div class="col-md-8 col-sm-12">
+      <div class="row">
+        <div class="col-md-8 col-sm-12">
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder=""
+              maxlength="200"
+              [(ngModel)]="productData.name"
+            />
+            <label>Nome</label>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <input
+              currencyMask
+              [options]="{
+                prefix: 'R$ ',
+                thousands: '.',
+                decimal: ',',
+                align: 'left',
+                allowNegative: false
+              }"
+              class="form-control"
+              placeholder=""
+              [(ngModel)]="productData.price"
+            />
+            <label>Preço</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-10">
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder=""
+              maxlength="500"
+              (keydown.enter)="urlPreviewImage = productData.urlImage"
+              [(ngModel)]="productData.urlImage"
+            />
+            <label>Link da imagem</label>
+          </div>
+        </div>
+        <div class="col-2">
+          <button
+            class="btn btn-info"
+            (click)="urlPreviewImage = productData.urlImage"
+            (mouseenter)="btnHover = true"
+            (mouseleave)="btnHover = false"
+          >
+            <app-label-clue [isHover]="btnHover">
+              <ng-container content>
+                <mat-icon>search</mat-icon>
+              </ng-container>
+              <ng-container label
+                >Clique para ver a prévia da imagem</ng-container
+              >
+            </app-label-clue>
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <textarea
+              class="form-control"
+              rows="4"
+              maxlength="400"
+              placeholder=""
+            ></textarea>
+            <label>Descrição</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <button class="btn btn-danger" (click)="goBack()">Voltar</button>
+    </div>
+  </div>
+</div>

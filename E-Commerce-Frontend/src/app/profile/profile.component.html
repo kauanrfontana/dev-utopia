@@ -70,129 +70,15 @@
       </div>
 
       <h4 class="caption">Localização</h4>
-      <div class="row">
-        <div class="col-6">
-          <h5 *ngIf="!isEditing">
-            CEP:
-            <span class="text-primary">{{
-              (user.zipCode | mask : "00000-000") || "---"
-            }}</span>
-          </h5>
-          <div class="form-group" *ngIf="isEditing">
-            <input
-              type="text"
-              placeholder=""
-              class="form-control"
-              mask="00000-000"
-              [formControl]="cepControl"
-            />
-            <label>CEP</label>
-          </div>
-        </div>
-        <div class="col-6" *ngIf="isEditing">
-          <app-label-clue>
-            <ng-container content
-              ><button
-                class="btn btn-info"
-                [disabled]="loadingCepSearch"
-                (click)="searchLocationByCep(preUserData.zipCode)"
-              >
-                <mat-icon>search</mat-icon>
-              </button></ng-container
-            >
-            <ng-container label>Clique para buscar o endereço</ng-container>
-          </app-label-clue>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6 col-sm-12">
-          <h5 *ngIf="!isEditing">
-            Estado:
-            <span class="text-primary">{{
-              user.stateId ? getStateLabelById(user.stateId) : "---"
-            }}</span>
-          </h5>
-          <div class="form-group" *ngIf="isEditing">
-            <small>Estado</small>
-            <app-search-select
-              value="id"
-              [arrToFilter]="states"
-              [(ngValue)]="preUserData.stateId"
-              (ngValueChange)="onStateChange(preUserData.stateId)"
-              [disabled]="loadingCepSearch"
-            ></app-search-select>
-          </div>
-        </div>
-        <div class="col-md-6 col-sm-12">
-          <h5 *ngIf="!isEditing">
-            Cidade:
-            <span class="text-primary">{{
-              user.cityId ? getCityLabelById(user.cityId) : "---"
-            }}</span>
-          </h5>
-          <div class="form-group" *ngIf="isEditing">
-            <small>Cidade</small>
-            <app-search-select
-              value="id"
-              [arrToFilter]="cities"
-              [(ngValue)]="preUserData.cityId"
-              [disabled]="cities.length < 1 || loadingCepSearch"
-            ></app-search-select>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <h5 *ngIf="!isEditing">
-            Endereço:
-            <span class="text-primary">{{ user.address || "---" }}</span>
-          </h5>
-          <div class="form-group" *ngIf="isEditing">
-            <input
-              type="text"
-              placeholder=""
-              class="form-control"
-              [(ngModel)]="preUserData.address"
-              [disabled]="loadingCepSearch"
-            />
-            <label>Endereço</label>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <h5 *ngIf="!isEditing">
-            Complemento:
-            <span class="text-primary">{{ user.complement || "---" }}</span>
-          </h5>
-          <div class="form-group" *ngIf="isEditing">
-            <input
-              type="text"
-              placeholder=""
-              class="form-control"
-              [(ngModel)]="preUserData.complement"
-            />
-            <label>Complemento</label>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6 col-sm-12">
-          <h5 *ngIf="!isEditing">
-            Número:
-            <span class="text-primary">{{ user.houseNumber || "---" }}</span>
-          </h5>
-          <div class="form-group" *ngIf="isEditing">
-            <input
-              type="text"
-              placeholder=""
-              class="form-control"
-              [(ngModel)]="preUserData.houseNumber"
-            />
-            <label>Número</label>
-          </div>
-        </div>
-      </div>
+      <ng-container *ngIf="!loadingUserData">
+        <app-location
+          [dataBefore]="userDataLocation"
+          [dataUpdated]="preUserDataLocation"
+          (dataUpdatedChanged)="preUserDataLocation = $event"
+          [isEditing]="isEditing"
+          (loadingData)="loadingLocationData = $event"
+        ></app-location>
+      </ng-container>
     </div>
   </div>
 </div>
@@ -207,6 +93,6 @@
   </div>
 </div>
 
-<div class="loader-container" *ngIf="loadingUserData">
+<div class="loader-container" *ngIf="verifyIsLoading()">
   <app-loader-dots></app-loader-dots>
 </div>

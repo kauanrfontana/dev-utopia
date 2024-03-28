@@ -1,12 +1,15 @@
 <app-products-filters
   (dispatchSearch)="
-    this.getProductsPaginated($event.getProductsParams, $event.paginationData)
+    getProductsPaginated($event.getProductsParams, $event.paginationData)
   "
   [(paginationData)]="paginationData"
 >
   <div class="products-list">
     <div class="products-item" *ngFor="let product of productsList">
-      <app-card-product [product]="product"></app-card-product>
+      <app-card-product
+        [product]="product"
+        [isOwner]="isAdmin"
+      ></app-card-product>
     </div>
   </div>
 </app-products-filters>

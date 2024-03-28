@@ -7,6 +7,7 @@ import { CardProductComponent } from "./components/card-product/card-product.com
 import { MatTabsModule } from "@angular/material/tabs";
 import { MineProductsList } from "./components/mine-products-list/mine-products-list.component";
 import { ProductsFiltersComponent } from "./components/products-filters/products-filters.component";
+import { ProductEditorComponent } from "./components/product-editor/product-editor.component";
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { ProductsFiltersComponent } from "./components/products-filters/products
     CardProductComponent,
     MineProductsList,
     ProductsFiltersComponent,
+    ProductEditorComponent,
   ],
   imports: [SharedModule, ProductsRoutingModule, MatTabsModule],
   providers: [],
