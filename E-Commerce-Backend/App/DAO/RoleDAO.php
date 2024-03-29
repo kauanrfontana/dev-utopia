@@ -46,7 +46,7 @@ class RoleDAO extends Connection
 
             $result = (int) $statement->fetchColumn();
             return $result;
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             throw $e;
         }
     }

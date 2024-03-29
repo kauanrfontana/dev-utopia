@@ -22,9 +22,8 @@ export class LocationData {
   styleUrls: ["./location.component.css"],
 })
 export class LocationComponent implements OnInit {
-  @Input() dataUpdated = new LocationData();
-  @Output() dataUpdatedChanged = new EventEmitter<LocationData>();
-  @Input() dataBefore = new LocationData();
+  @Input() data = new LocationData();
+  @Output() dataChanged = new EventEmitter<LocationData>();
   @Input() isEditing: boolean = false;
   @Output() loadingData = new EventEmitter<boolean>();
 
@@ -40,11 +39,11 @@ export class LocationComponent implements OnInit {
   constructor(private locationService: LocationSevice) {}
 
   ngOnInit() {
-    console.log(this.dataBefore);
+    this.cepControl.setValue(this.data.zipCode);
     this.cepControlValueChanges();
     this.getStates();
-    if (this.dataBefore.stateId) {
-      this.getCitiesByState(this.dataBefore.stateId).subscribe({
+    if (this.data.stateId) {
+      this.getCitiesByState(this.data.stateId).subscribe({
         next: (res: IBasicResponseData<IListItem[]>) => {
           this.cities = res.data;
           this.loadingData.emit(false);
@@ -62,6 +61,8 @@ export class LocationComponent implements OnInit {
   cepControlValueChanges() {
     this.cepControl.valueChanges.pipe(debounceTime(1000)).subscribe((value) => {
       if (value.length == 8) {
+        this.data.zipCode = value;
+        this.dataChanged.emit(this.data);
         this.searchLocationByCep(value);
       }
     });
@@ -78,19 +79,19 @@ export class LocationComponent implements OnInit {
           state: string;
         }>
       ) => {
-        this.dataUpdated.address = res.data.address;
-        this.dataUpdatedChanged.emit(this.dataUpdated);
-        this.dataUpdated.stateId = Number(
+        this.data.address = res.data.address;
+        this.dataChanged.emit(this.data);
+        this.data.stateId = Number(
           this.states.find((state) => state.label == res.data.state)?.id
         );
-        this.dataUpdatedChanged.emit(this.dataUpdated);
-        this.getCitiesByState(this.dataUpdated.stateId).subscribe({
+        this.dataChanged.emit(this.data);
+        this.getCitiesByState(this.data.stateId).subscribe({
           next: (res2: IBasicResponseData<IListItem[]>) => {
             this.cities = res2.data;
-            this.dataUpdated.cityId = Number(
+            this.data.cityId = Number(
               this.cities.find((city) => city.label == res.data.city)?.id
             );
-            this.dataUpdatedChanged.emit(this.dataUpdated);
+            this.dataChanged.emit(this.data);
             this.loadingCepSearch = false;
           },
           error: (err: Error) => {

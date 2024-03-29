@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { getProductsParams } from "../../products.service";
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { ProductsService, getProductsParams } from "../../products.service";
 import { PaginationData } from "src/app/shared/models/PaginationData";
+import { Subscription } from "rxjs";
 
 interface OrderIcon {
   iconType: number;
@@ -12,7 +13,7 @@ interface OrderIcon {
   templateUrl: "./products-filters.component.html",
   styleUrls: ["./products-filters.component.css"],
 })
-export class ProductsFiltersComponent implements OnInit {
+export class ProductsFiltersComponent implements OnInit, OnDestroy {
   priceOrder: OrderIcon = {
     iconType: 1,
     value: "DESC",
@@ -44,10 +45,17 @@ export class ProductsFiltersComponent implements OnInit {
     paginationData: PaginationData;
   }>();
 
-  constructor() {}
+  deleteSubscription = new Subscription()
+
+  constructor(private productsService: ProductsService ) {}
 
   ngOnInit() {
     this.dispatchSearchAction(this.productsParams, this.paginationData);
+    this.deleteSubscription.add(
+      this.productsService.onDeleteProductEvent.subscribe(() => {
+        this.dispatchSearchAction(this.productsParams, this.paginationData);
+      })
+    );
   }
 
   get productsParams(): getProductsParams {
@@ -96,5 +104,9 @@ export class ProductsFiltersComponent implements OnInit {
     };
     this.paginationDataChange.emit(this.paginationData);
     this.dispatchSearchAction(this.productsParams, this.paginationData);
+  }
+
+  ngOnDestroy() {
+    this.deleteSubscription.unsubscribe();
   }
 }

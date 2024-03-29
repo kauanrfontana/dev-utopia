@@ -3,7 +3,7 @@
     <h5 *ngIf="!isEditing">
       CEP:
       <span class="text-primary">{{
-        (dataBefore.zipCode | mask : "00000-000") || "---"
+        (data.zipCode | mask : "00000-000") || "---"
       }}</span>
     </h5>
     <div class="form-group" *ngIf="isEditing">
@@ -21,7 +21,7 @@
     <button
       class="btn btn-info"
       [disabled]="loadingCepSearch"
-      (click)="searchLocationByCep(dataUpdated.zipCode)"
+      (click)="searchLocationByCep(data.zipCode)"
       (mouseenter)="btnHover = true"
       (mouseleave)="btnHover = false"
     >
@@ -39,7 +39,7 @@
     <h5 *ngIf="!isEditing">
       Estado:
       <span class="text-primary">{{
-        dataBefore.stateId ? getStateLabelById(dataBefore.stateId) : "---"
+        data.stateId ? getStateLabelById(data.stateId) : "---"
       }}</span>
     </h5>
     <div class="form-group" *ngIf="isEditing">
@@ -47,8 +47,8 @@
       <app-search-select
         value="id"
         [arrToFilter]="states"
-        [(ngValue)]="dataUpdated.stateId"
-        (ngValueChange)="onStateChange(dataUpdated.stateId)"
+        [(ngValue)]="data.stateId"
+        (ngValueChange)="onStateChange(data.stateId)"
         [disabled]="loadingCepSearch"
       ></app-search-select>
     </div>
@@ -57,7 +57,7 @@
     <h5 *ngIf="!isEditing">
       Cidade:
       <span class="text-primary">{{
-        dataBefore.cityId ? getCityLabelById(dataBefore.cityId) : "---"
+        data.cityId ? getCityLabelById(data.cityId) : "---"
       }}</span>
     </h5>
     <div class="form-group" *ngIf="isEditing">
@@ -65,8 +65,8 @@
       <app-search-select
         value="id"
         [arrToFilter]="cities"
-        [(ngValue)]="dataUpdated.cityId"
-        (ngValueChange)="dataUpdatedChanged.emit(dataUpdated)"
+        [(ngValue)]="data.cityId"
+        (ngValueChange)="dataChanged.emit(data)"
         [disabled]="cities.length < 1 || loadingCepSearch"
       ></app-search-select>
     </div>
@@ -76,15 +76,15 @@
   <div class="col-md-12">
     <h5 *ngIf="!isEditing">
       Endereço:
-      <span class="text-primary">{{ dataBefore.address || "---" }}</span>
+      <span class="text-primary">{{ data.address || "---" }}</span>
     </h5>
     <div class="form-group" *ngIf="isEditing">
       <input
         type="text"
         placeholder=""
         class="form-control"
-        [(ngModel)]="dataUpdated.address"
-        (ngModelChange)="dataUpdatedChanged.emit(dataUpdated)"
+        [(ngModel)]="data.address"
+        (ngModelChange)="dataChanged.emit(data)"
         [disabled]="loadingCepSearch"
       />
       <label>Endereço</label>
@@ -95,33 +95,33 @@
   <div class="col-md-12">
     <h5 *ngIf="!isEditing">
       Complemento:
-      <span class="text-primary">{{ dataBefore.complement || "---" }}</span>
+      <span class="text-primary">{{ data.complement || "---" }}</span>
     </h5>
     <div class="form-group" *ngIf="isEditing">
       <input
         type="text"
         placeholder=""
         class="form-control"
-        [(ngModel)]="dataUpdated.complement"
-        (ngModelChange)="dataUpdatedChanged.emit(dataUpdated)"
+        [(ngModel)]="data.complement"
+        (ngModelChange)="dataChanged.emit(data)"
       />
       <label>Complemento</label>
     </div>
   </div>
 </div>
 <div class="row">
-  <div class="col-md-6 col-sm-12">
+  <div class="col-12">
     <h5 *ngIf="!isEditing">
       Número:
-      <span class="text-primary">{{ dataBefore.houseNumber || "---" }}</span>
+      <span class="text-primary">{{ data.houseNumber || "---" }}</span>
     </h5>
     <div class="form-group" *ngIf="isEditing">
       <input
         type="text"
         placeholder=""
         class="form-control"
-        [(ngModel)]="dataUpdated.houseNumber"
-        (ngModelChange)="dataUpdatedChanged.emit(dataUpdated)"
+        [(ngModel)]="data.houseNumber"
+        (ngModelChange)="dataChanged.emit(data)"
       />
       <label>Número</label>
     </div>

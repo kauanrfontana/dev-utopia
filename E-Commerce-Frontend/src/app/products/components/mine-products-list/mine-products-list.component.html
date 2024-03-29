@@ -5,11 +5,11 @@
   [(paginationData)]="paginationData"
   [canRegisterProduct]="true"
 >
-  <div class="mine-products-list">
-    <div class="products-item" *ngFor="let product of productsList">
-      <app-card-product [product]="product" [isOwner]="true"></app-card-product>
+    <div class="mine-products-list">
+      <div class="products-item" *ngFor="let product of productsList">
+        <app-card-product [product]="product" [isOwner]="true" ></app-card-product>
+      </div>
     </div>
-  </div>
 </app-products-filters>
 
 <div class="loader-container" *ngIf="loadingProducts">

@@ -47,7 +47,7 @@
               type="text"
               placeholder=""
               class="form-control"
-              [(ngModel)]="preUserData.name"
+              [(ngModel)]="user.name"
             />
             <label>Nome</label>
           </div>
@@ -62,7 +62,7 @@
               type="text"
               placeholder=""
               class="form-control"
-              [(ngModel)]="preUserData.email"
+              [(ngModel)]="user.email"
             />
             <label>Email</label>
           </div>
@@ -72,9 +72,8 @@
       <h4 class="caption">Localização</h4>
       <ng-container *ngIf="!loadingUserData">
         <app-location
-          [dataBefore]="userDataLocation"
-          [dataUpdated]="preUserDataLocation"
-          (dataUpdatedChanged)="preUserDataLocation = $event"
+          [data]="user.getLocationData()"
+          (dataChanged)="user.setLocationData($event)"
           [isEditing]="isEditing"
           (loadingData)="loadingLocationData = $event"
         ></app-location>

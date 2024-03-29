@@ -1,7 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
+import { IBasicResponseData, IBasicResponseMessage } from "src/app/shared/models/IBasicResponse.interfaces";
 import { Product } from "src/app/shared/models/Product";
 import Swal from "sweetalert2";
+import { ProductsService } from "../../products.service";
 
 @Component({
   selector: "app-product-editor",
@@ -10,13 +12,123 @@ import Swal from "sweetalert2";
 })
 export class ProductEditorComponent implements OnInit {
   btnHover: boolean = false;
+  isUpdating: boolean = false;
 
   urlPreviewImage: string = "";
 
-  productData = new Product();
-  constructor(private router: Router) {}
+  loadingProductData: boolean = false;
 
-  ngOnInit() {}
+  loadingLocationData: boolean = false;
+
+  product = new Product();
+
+  constructor(private router: Router, private route: ActivatedRoute, private productsService: ProductsService) {}
+
+  ngOnInit() {
+    this.route.params.subscribe((params) => {
+      if (params["id"]) {
+        this.loadingProductData = true;
+        this.isUpdating = true;
+        this.getProductData(params["id"]);
+      }
+    });
+  }
+
+  getProductData(id: number) {
+    this.loadingProductData = true;
+    this.productsService.getProductById(id).subscribe({
+      next: (res: IBasicResponseData<Product>) => {
+        this.product.setProductData(res.data);
+        this.urlPreviewImage = this.product.urlImage;
+        this.loadingProductData = false;
+      },
+      error: (err: Error) => {
+        Swal.fire("Erro ao consultar produto!", err.message, "error");
+        this.loadingProductData = false;
+      },
+    });
+  }
+
+  saveProductData() {
+    const mandatoryFields : {
+    [key: string]: string
+    } = {
+      name: "Nome",
+      description: "Descrição",
+      price: "Preço",
+      stateId: "Estado",
+      cityId: "Cidade",
+      address: "Endereço",
+      houseNumber: "Número da casa",
+      zipCode: "CEP",
+    }
+
+    for (let key in mandatoryFields) {
+      if (!this.product[key as keyof Product]) {
+        Swal.fire('Erro ao cadastrar produto!', `o campo ${mandatoryFields[key]} é obrigatório!`, "error");
+        return;
+      }
+    }
+
+    if(this.isUpdating){
+      this.updateProductData();
+    }else{
+      this.insertProductData();
+    }
+
+  }
+
+  insertProductData(){
+    Swal.fire({
+      title: "Confirmação",
+      text: "Deseja realmente cadastrar este produto?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sim",
+      cancelButtonText: "Cancelar",
+      preConfirm: () => {
+        return this.productsService.insertProduct(this.product).subscribe({
+          next: (res: IBasicResponseMessage) => {
+            Swal.fire("Sucesso", res.message, "success");
+            this.goBack();
+          },
+          error: (err: Error) => {
+            Swal.fire("Erro ao cadastrar produto!", err.message, "error");
+          },
+        });
+      }
+    }).then((result) => {
+      if(result.dismiss) return;
+    });
+  }
+
+  updateProductData(){
+    Swal.fire({
+      title: "Confirmação",
+      text: "Deseja realmente atualizar este produto?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sim",
+      cancelButtonText: "Cancelar",
+      preConfirm: () => {
+        return this.productsService.updateProduct(this.product).subscribe({
+          next: (res: IBasicResponseMessage) => {
+            Swal.fire("Sucesso", res.message, "success");
+            this.goBack();
+          },
+          error: (err: Error) => {
+            Swal.fire("Erro ao atualizar produto!", err.message, "error");
+          },
+        });
+      }
+    }).then((result) => {
+      if(result.dismiss) return;
+    });
+  }
+
+  verifyIsLoading(): boolean {
+    return this.loadingProductData || this.loadingLocationData;
+  }
 
   previewImageDoestLoaded() {
     this.urlPreviewImage = "";
@@ -28,6 +140,6 @@ export class ProductEditorComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(["/products"]);
+    this.router.navigate(["/products/mine"]);
   }
 }

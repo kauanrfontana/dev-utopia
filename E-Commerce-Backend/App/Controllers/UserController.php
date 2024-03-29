@@ -26,7 +26,7 @@ final class UserController
         try {
             $users = $this->userDAO->getAllUsers();
             $response = $response->withJson($users, null, JSON_NUMERIC_CHECK);
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             $response = $response->withStatus(500)->withJson([
                 "message" => $e->getMessage()
             ]);
@@ -35,7 +35,7 @@ final class UserController
         return $response;
     }
 
-    public function getUser(Request $request, Response $response, array $args): Response
+    public function getUserById(Request $request, Response $response, array $args): Response
     {
         $userId = 0;
         $token = "";
@@ -51,7 +51,7 @@ final class UserController
                 $userData = AuthService::decodeToken($token);
                 $userId = $userData->sub;
             }
-            $user = $this->userDAO->getUser($userId);
+            $user = $this->userDAO->getUserById($userId);
 
             $response = $response->withStatus(200)->withJson([
                 "data" => $user
@@ -63,7 +63,7 @@ final class UserController
             $response = $response->withStatus(400)->withJson([
                 "message" => $e->getMessage()
             ]);
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             $response = $response->withStatus(500)->withJson([
                 "message" => $e->getMessage()
             ]);
@@ -102,7 +102,7 @@ final class UserController
             $response = $response->withStatus(400)->withJson([
                 "message" => $e->getMessage()
             ]);
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             $response = $response->withStatus(500)->withJson([
                 "message" => $e->getMessage()
             ]);
@@ -151,7 +151,7 @@ final class UserController
             $response = $response->withStatus(400)->withJson([
                 "message" => $e->getMessage()
             ]);
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             $response = $response->withStatus(500)->withJson([
                 "message" => $e->getMessage()
             ]);
@@ -194,7 +194,7 @@ final class UserController
             $response = $response->withStatus(404)->withJson([
                 "message" => $e->getMessage()
             ]);
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             $response = $response->withStatus(500)->withJson([
                 "message" => $e->getMessage()
             ]);
@@ -225,7 +225,7 @@ final class UserController
             $response = $response->withStatus(400)->withJson([
                 "message" => $e->getMessage()
             ]);
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             $response = $response->withStatus(500)->withJson([
                 "message" => $e->getMessage()
             ]);

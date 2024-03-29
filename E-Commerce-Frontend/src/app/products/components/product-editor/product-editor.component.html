@@ -23,7 +23,7 @@
               class="form-control"
               placeholder=""
               maxlength="200"
-              [(ngModel)]="productData.name"
+              [(ngModel)]="product.name"
             />
             <label>Nome</label>
           </div>
@@ -41,7 +41,7 @@
               }"
               class="form-control"
               placeholder=""
-              [(ngModel)]="productData.price"
+              [(ngModel)]="product.price"
             />
             <label>Preço</label>
           </div>
@@ -55,8 +55,8 @@
               class="form-control"
               placeholder=""
               maxlength="500"
-              (keydown.enter)="urlPreviewImage = productData.urlImage"
-              [(ngModel)]="productData.urlImage"
+              (keydown.enter)="urlPreviewImage = product.urlImage"
+              [(ngModel)]="product.urlImage"
             />
             <label>Link da imagem</label>
           </div>
@@ -64,7 +64,7 @@
         <div class="col-2">
           <button
             class="btn btn-info"
-            (click)="urlPreviewImage = productData.urlImage"
+            (click)="urlPreviewImage = product.urlImage"
             (mouseenter)="btnHover = true"
             (mouseleave)="btnHover = false"
           >
@@ -87,6 +87,7 @@
               rows="4"
               maxlength="400"
               placeholder=""
+              [(ngModel)]="product.description"
             ></textarea>
             <label>Descrição</label>
           </div>
@@ -95,8 +96,23 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-12">
-      <button class="btn btn-danger" (click)="goBack()">Voltar</button>
+    <h4 class="caption">Localização</h4>
+    <ng-container *ngIf="!loadingProductData">
+      <app-location
+        [data]="product.getLocationData()"
+        (dataChanged)="product.setLocationData($event)"
+        [isEditing]="true"
+        (loadingData)="loadingLocationData = $event"
+      ></app-location>
+    </ng-container>
+  </div>
+  <div class="row">
+    <div class="col-md-12 d-flex justify-content-between" style="column-gap: 100px;">
+      <button class="btn btn-danger w-50" (click)="goBack()">Voltar</button>
+      <button class="btn btn-success w-50" (click)="saveProductData()">Salvar</button>
     </div>
   </div>
+</div>
+<div class="loader-container" *ngIf="verifyIsLoading()">
+  <app-loader-dots></app-loader-dots>
 </div>

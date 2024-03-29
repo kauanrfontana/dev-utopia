@@ -6,11 +6,6 @@ import {
   IBasicResponseMessage,
 } from "../shared/models/IBasicResponse.interfaces";
 import Swal from "sweetalert2";
-import { LocationSevice, ILocation } from "../shared/services/location.service";
-import { IListItem } from "../shared/components/search-select/IListItem.interface";
-import { Observable, debounceTime, map } from "rxjs";
-import { FormControl } from "@angular/forms";
-import { LocationData } from "../shared/components/location/location.component";
 
 @Component({
   selector: "app-profile",
@@ -21,76 +16,34 @@ export class ProfileComponent implements OnInit {
   isEditing: boolean = false;
   btnHover: boolean = false;
 
-  cepControl: FormControl = new FormControl(null);
-
   user = new User();
-
-  preUserData = new User();
-
-  states: IListItem[] = [];
-  cities: IListItem[] = [];
 
   currentPassword: string = "";
   newPassword: string = "";
 
   loadingUserData: boolean = false;
   loadingLocationData: boolean = false;
-  /*  loadingCepSearch: boolean = false; */
-  userDataLocation: LocationData = new LocationData();
-  preUserDataLocation: LocationData = new LocationData();
 
   constructor(
     private userService: UserService,
-    private locationService: LocationSevice
   ) {}
 
   ngOnInit(): void {
     this.loadingUserData = true;
     this.isEditing = false;
 
-    /* this.cepControlValueChanges(); */
-
-    /* this.getStates(); */
-
     this.getUserData();
   }
 
-  /* cepControlValueChanges() {
-    this.cepControl.valueChanges.pipe(debounceTime(1000)).subscribe((value) => {
-      if (value.length == 8) {
-        this.searchLocationByCep(value);
-      }
-    });
-  } */
+ 
 
   getUserData() {
     this.userService.getUserData().subscribe({
       next: (res: IBasicResponseData<User>) => {
-        this.user = res.data;
-        this.userDataLocation = {
-          stateId: res.data.stateId,
-          cityId: res.data.cityId,
-          address: res.data.address,
-          houseNumber: res.data.houseNumber,
-          complement: res.data.complement,
-          zipCode: res.data.zipCode,
-        };
-        this.cepControl.setValue(this.user.zipCode);
+        this.user.setUserData(res.data);
         localStorage.setItem("userData", JSON.stringify(this.user));
-        /* if (this.user.stateId) {
-          this.getCitiesByState(this.user.stateId).subscribe({
-            next: (res: IBasicResponseData<IListItem[]>) => {
-              this.cities = res.data;
-              this.loadingUserData = false;
-            },
-            error: (err: Error) => {
-              Swal.fire("Erro ao consultar cidades!", err.message, "error");
-              this.loadingUserData = false;
-            },
-          });
-        } else { */
         this.loadingUserData = false;
-        /*  } */
+
       },
       error: (err: Error) => {
         Swal.fire("Erro ao consultar usuário!", err.message, "error");
@@ -103,37 +56,9 @@ export class ProfileComponent implements OnInit {
     return this.loadingUserData || this.loadingLocationData;
   }
 
-  /* getStates() {
-    this.locationService.getStates().subscribe({
-      next: (res: IBasicResponseData<ILocation[]>) => {
-        this.states = res.data.map((state: { id: number; name: string }) => ({
-          id: state.id,
-          label: state.name,
-        }));
-      },
-      error: (err: Error) => {
-        Swal.fire("Erro ao consultar países!", err.message, "error");
-      },
-    });
-  } */
-
-  /*  getCitiesByState(
-    stateId: number
-  ): Observable<IBasicResponseData<IListItem[]>> {
-    return this.locationService.getCitiesByState(stateId).pipe(
-      map((response: IBasicResponseData<ILocation[]>) => {
-        return {
-          data: response.data.map((city: { id: number; name: string }) => ({
-            id: city.id,
-            label: city.name,
-          })),
-        };
-      })
-    );
-  } */
 
   onUpdateUserData() {
-    this.userService.updateUserData(this.preUserData).subscribe({
+    this.userService.updateUserData(this.user).subscribe({
       next: (res: IBasicResponseMessage) => {
         Swal.fire("Sucesso", res.message, "success").then(() => {
           this.ngOnInit();
@@ -207,52 +132,6 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  /* onStateChange(stateId: number) {
-    this.cities = [];
-    this.getCitiesByState(stateId).subscribe({
-      next: (res: IBasicResponseData<IListItem[]>) => {
-        this.cities = res.data;
-      },
-      error: (err: Error) => {
-        Swal.fire("Erro ao consultar cidades!", err.message, "error");
-      },
-    });
-  } */
-
-  /*  searchLocationByCep(cep: string) {
-    this.loadingCepSearch = true;
-
-    this.locationService.getLocationByCep(cep).subscribe({
-      next: (
-        res: IBasicResponseData<{
-          address: string;
-          city: string;
-          state: string;
-        }>
-      ) => {
-        this.preUserData.address = res.data.address;
-        this.preUserData.stateId = Number(
-          this.states.find((state) => state.label == res.data.state)?.id
-        );
-        this.getCitiesByState(this.preUserData.stateId).subscribe({
-          next: (res2: IBasicResponseData<IListItem[]>) => {
-            this.cities = res2.data;
-            this.preUserData.cityId = Number(
-              this.cities.find((city) => city.label == res.data.city)?.id
-            );
-            this.loadingCepSearch = false;
-          },
-          error: (err: Error) => {
-            Swal.fire("Erro ao consultar cidades!", err.message, "error");
-          },
-        });
-      },
-      error: (err: Error) => {
-        Swal.fire("Erro ao consultar cep!", err.message, "error");
-        this.loadingCepSearch = false;
-      },
-    });
-  } */
   updateRoleToSeller() {
     this.userService.updateUserRole(2).subscribe({
       next: (res: IBasicResponseMessage) => {
@@ -267,23 +146,10 @@ export class ProfileComponent implements OnInit {
   }
 
   changeEditState() {
-    this.preUserData = { ...this.user };
-    this.preUserDataLocation = {
-      stateId: this.user.stateId,
-      cityId: this.user.cityId,
-      address: this.user.address,
-      houseNumber: this.user.houseNumber,
-      complement: this.user.complement,
-      zipCode: this.user.zipCode,
-    };
+    if(this.isEditing){
+      this.ngOnInit();
+    }
     this.isEditing = !this.isEditing;
   }
 
-  /* getStateLabelById(id: number): string | undefined {
-    return this.states.find((state) => state?.id == +id)?.label;
-  } */
-
-  /* getCityLabelById(id: number): string | undefined {
-    return this.cities.find((city) => city?.id == +id)?.label;
-  } */
 }

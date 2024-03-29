@@ -57,7 +57,7 @@ final class UserDAO extends Connection
 
     }
 
-    public function getUser(int $userId): array
+    public function getUserById(int $userId): array
     {
         $result = [];
 
@@ -112,7 +112,7 @@ final class UserDAO extends Connection
 
             $result = $user;
             return $result;
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             throw $e;
         }
     }
@@ -187,7 +187,7 @@ final class UserDAO extends Connection
             $this->pdo->commit();
             return $result;
 
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             $this->pdo->rollBack();
             throw $e;
         }
@@ -229,7 +229,7 @@ final class UserDAO extends Connection
 
             return $result;
 
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             throw $e;
         }
     }
@@ -253,7 +253,7 @@ final class UserDAO extends Connection
             $result["message"] = "Senha atualizada com sucesso.";
 
             return $result;
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             throw $e;
         }
     }
@@ -282,7 +282,7 @@ final class UserDAO extends Connection
             }
             $result["message"] = "Perfil do usuário atualizado com sucesso.";
             return $result;
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             throw $e;
         }
 

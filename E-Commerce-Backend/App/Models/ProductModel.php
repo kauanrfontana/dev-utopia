@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-final class UserModel
+final class ProductModel
 {
     private int $id;
+    private int $userId;
     private string $name;
     private float $price;
     private string $description;
@@ -42,6 +43,30 @@ final class UserModel
     public function setId(int $id): self
     {
         $this->id = $id;
+        return $this;
+    }
+
+      /**
+     * Get the value of userId
+     *
+     * @return int
+     */
+    public function getUserId(): int
+    {
+        return $this->userId;
+    }
+
+    /**
+     * Set the value of userId
+     *
+     * @param int $userId
+     *
+     * @return self
+     */
+    public function setUserId(int $userId): self
+    {
+        $this->userId = $userId;
+
         return $this;
     }
 
