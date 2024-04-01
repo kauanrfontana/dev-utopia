@@ -18,7 +18,7 @@ export class ProductsComponent implements OnInit {
   ngOnInit(): void {
     this.tabs = [
       new Tab("/products", "Produtos", true),
-      new Tab("/products/mine", "Meus Produtos", this.roleCategory > 1),
+      new Tab("/products/my", "Meus Produtos", this.roleCategory > 1),
     ];
   }
 }

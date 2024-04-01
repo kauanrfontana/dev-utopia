@@ -12,6 +12,8 @@ import { IBasicResponseMessage } from "src/app/shared/models/IBasicResponse.inte
 export class CardProductComponent {
   @Input("product") product: Product = new Product();
   @Input() isOwner: boolean = false;
+  isViewingProduct: boolean = false;
+  @Output() onClickProduct = new EventEmitter<void>();
 
   constructor(private productsService: ProductsService) {}
 

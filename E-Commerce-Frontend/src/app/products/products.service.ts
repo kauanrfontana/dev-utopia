@@ -31,6 +31,19 @@ export class ProductsService {
     return this.http.get<IPaginatedResponse<Product[]>>("products", { params });
   }
 
+  getMyProducts(
+    productsParams: getProductsParams,
+    paginationData: PaginationData
+  ): Observable<IPaginatedResponse<Product[]>> {
+    let params = new HttpParams();
+    params = params.append("searchText", productsParams.searchText);
+    params = params.append("orderColumn", productsParams.orderColumn);
+    params = params.append("orderType", productsParams.orderType);
+    params = params.appendAll({ ...paginationData });
+
+    return this.http.get<IPaginatedResponse<Product[]>>("products/my", { params });
+  }
+
   getProductById(id: number): Observable<IBasicResponseData<Product>> {
     return this.http.get<IBasicResponseData<Product>>(`product/${id}`);
   }

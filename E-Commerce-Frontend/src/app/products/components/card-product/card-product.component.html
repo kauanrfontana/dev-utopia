@@ -1,4 +1,4 @@
-<div class="card" [ngClass]="{ owner: isOwner }">
+<div class="card" [ngClass]="{ owner: isOwner }" (click)="onClickProduct.emit()">
   <div class="product-actions">
     <button
       class="btn btn-warning"

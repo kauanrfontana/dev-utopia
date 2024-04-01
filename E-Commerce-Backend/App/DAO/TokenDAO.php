@@ -40,7 +40,7 @@ class TokenDAO extends Connection
                 WHERE refresh_token = :refresh_token AND active = 1";
         $statement = $this->pdo->prepare($sql);
         $statement->bindParam(":refresh_token", $refreshToken, \PDO::PARAM_STR);
-
+        
         $statement->execute();
 
         $tokens = $statement->fetchAll(\PDO::FETCH_ASSOC);

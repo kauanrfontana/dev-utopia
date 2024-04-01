@@ -40,6 +40,33 @@ final class ProductController
 
         return $response;
     }
+    public function getMyProducts(Request $request, Response $response, array $args): Response
+    {
+        $mandatoryPaginationParams = ["currentPage", "itemsPerPage"];
+        $data = $request->getParams();
+        $tokenData = $request->getAttribute("jwt");
+        try {
+            foreach ($mandatoryPaginationParams as $param) {
+                if (empty ($data[$param])) {
+                    throw new \InvalidArgumentException("Parâmetro de paginação obrigatório não encontrado!");
+                }
+            }
+            $userId = $tokenData["sub"];
+
+            $products = $this->productDAO->getMyProducts($data, $userId);
+            $response = $response->withJson($products, null, JSON_NUMERIC_CHECK);
+        } catch (\InvalidArgumentException $e) {
+            $response = $response->withStatus(400)->withJson([
+                "message" => $e->getMessage()
+            ]);
+        } catch (\Exception $e) {
+            $response = $response->withStatus(500)->withJson([
+                "message" => $e->getMessage()
+            ]);
+        }
+
+        return $response;
+    }
 
     public function getProductById(Request $request, Response $response, array $args): Response
     {

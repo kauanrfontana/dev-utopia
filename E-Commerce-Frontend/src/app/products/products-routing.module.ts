@@ -1,22 +1,25 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { ProductsComponent } from "./products.component";
-import { ProductsList } from "./components/products-list/products-list.component";
-import { MineProductsList } from "./components/mine-products-list/mine-products-list.component";
+import { ProductsListComponent } from "./components/products-list/products-list.component";
+import { MyProductsListComponent } from "./components/my-products-list/my-products-list.component";
 import { ProductEditorComponent } from "./components/product-editor/product-editor.component";
+import { ViewProductComponent } from "./components/view-product/view-product.component";
 
 const routes: Routes = [
   {
     path: "",
     component: ProductsComponent,
+    
     children: [
-      { path: "", component: ProductsList },
+      { path: "", component: ProductsListComponent },
       {
-        path: "mine",
-        component: MineProductsList,
+        path: "my",
+        component: MyProductsListComponent,
       },
     ],
   },
+  { path: "view/:id", component: ViewProductComponent },
   { path: "edit/:id", component: ProductEditorComponent },
   { path: "create", component: ProductEditorComponent },
   { path: "**", redirectTo: "" },

@@ -140,6 +140,6 @@ export class ProductEditorComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(["/products/mine"]);
+    this.router.navigate(["/products/my"]);
   }
 }

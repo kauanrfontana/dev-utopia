@@ -38,8 +38,6 @@ final class UserController
     public function getUserById(Request $request, Response $response, array $args): Response
     {
         $userId = 0;
-        $token = "";
-
         try {
             if (isset ($args["id"])) {
                 if (!filter_var($args["id"], FILTER_VALIDATE_INT)) {
@@ -47,14 +45,13 @@ final class UserController
                 }
                 $userId = (int) $args["id"];
             } else {
-                $token = $request->getHeaderLine("X-Auth-Token");
-                $userData = AuthService::decodeToken($token);
-                $userId = $userData->sub;
+                $userData = $request->getAttribute("jwt");
+                $userId = $userData["sub"];
             }
             $user = $this->userDAO->getUserById($userId);
 
             $response = $response->withStatus(200)->withJson([
-                "data" => $user
+                "data" => $user,
             ], null, JSON_NUMERIC_CHECK);
 
 
@@ -126,7 +123,7 @@ final class UserController
             "complement",
             "zipCode",
         ];
-        $tokenData = AuthService::decodeToken($request->getHeaderLine("X-Auth-Token"));
+        $tokenData = $request->getAttribute("jwt");
 
         $data = $request->getParsedBody();
         $user = new UserModel();
@@ -142,7 +139,7 @@ final class UserController
             foreach ($fields as $field) {
                 $user->{"set" . ucfirst($field)}($data[$field]);
             }
-            $user->setId($tokenData->sub);
+            $user->setId($tokenData["sub"]);
 
 
             $response = $response->withStatus(201)->withJson($this->userDAO->updateUser($user));
@@ -165,7 +162,7 @@ final class UserController
 
         $data = $request->getParsedBody();
 
-        $tokenData = AuthService::decodeToken($request->getHeaderLine("X-Auth-Token"));
+        $tokenData = $request->getAttribute("jwt");
 
         try {
             foreach ($mandatoryFields as $field => $description) {
@@ -174,7 +171,7 @@ final class UserController
                 }
             }
 
-            $user = $this->userDAO->getUserByEmail($tokenData->email);
+            $user = $this->userDAO->getUserByEmail($tokenData["email"]);
 
             $currentPassword = $data["currentPassword"];
             if (!password_verify($currentPassword, $user->getPassword())) {
@@ -185,7 +182,7 @@ final class UserController
 
             $user = new UserModel();
 
-            $user->setId($tokenData->sub)
+            $user->setId($tokenData["sub"])
                 ->setPassword($newPassword);
 
             $response = $response->withStatus(200)->withJson($this->userDAO->updatePassword($user));
@@ -208,9 +205,9 @@ final class UserController
     {
         $data = $request->getParsedBody();
         $userId = 0;
-        $tokenData = AuthService::decodeToken($request->getHeaderLine("X-Auth_token"));
+        $tokenData = $request->getAttribute("jwt");
         try {
-            $userId = $tokenData->sub;
+            $userId = $tokenData["sub"];
             if (isset ($args["id"])) {
                 $userId = (int) $args["id"];
             }

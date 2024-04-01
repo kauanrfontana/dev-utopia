@@ -58,16 +58,29 @@ export class ProfileComponent implements OnInit {
 
 
   onUpdateUserData() {
-    this.userService.updateUserData(this.user).subscribe({
-      next: (res: IBasicResponseMessage) => {
-        Swal.fire("Sucesso", res.message, "success").then(() => {
-          this.ngOnInit();
+    Swal.fire({
+      title: "Confirmação", 
+      text: "Deseja realmente atualizar seus dados?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sim",
+      cancelButtonText: "Cancelar",
+      preConfirm: () => {
+        return this.userService.updateUserData(this.user).subscribe({
+          next: (res: IBasicResponseMessage) => {
+            Swal.fire("Sucesso", res.message, "success").then(() => {
+              this.ngOnInit();
+            });
+          },
+          error: (err: Error) => {
+            Swal.fire("Erro ao atualizar usuário!", err.message, "error");
+          },
         });
       },
-      error: (err: Error) => {
-        Swal.fire("Erro ao atualizar usuário!", err.message, "error");
-      },
+    }).then((result) => {
+      if (result.dismiss) return;
     });
+    
   }
 
   onUpdatePassword() {
@@ -148,8 +161,9 @@ export class ProfileComponent implements OnInit {
   changeEditState() {
     if(this.isEditing){
       this.ngOnInit();
+    }else{
+      this.isEditing = !this.isEditing;
     }
-    this.isEditing = !this.isEditing;
   }
 
 }

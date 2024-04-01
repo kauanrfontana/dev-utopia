@@ -1,3 +1,4 @@
+import { Router } from "@angular/router";
 import { UserService } from "./../../../shared/services/user.service";
 import { ProductsService, getProductsParams } from "./../../products.service";
 import { Component } from "@angular/core";
@@ -11,7 +12,7 @@ import Swal from "sweetalert2";
   templateUrl: "./products-list.component.html",
   styleUrls: ["./products-list.component.scss"],
 })
-export class ProductsList {
+export class ProductsListComponent {
   productsList: Product[] = [];
 
   isAdmin: boolean = false;
@@ -22,7 +23,8 @@ export class ProductsList {
 
   constructor(
     private productService: ProductsService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) {
     this.isAdmin = this.userService.isAdmin();
   }
@@ -48,5 +50,9 @@ export class ProductsList {
         });
       },
     });
+  }
+
+  viewProduct(product: Product) {
+    this.router.navigate(['/products/view/' + product.id]);
   }
 }

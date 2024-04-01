@@ -3,6 +3,7 @@ import { LocationData } from "../components/location/location.component";
 export class Product {
   constructor(
     public id: number = 0,
+    public userId: number = 0,
     public name: string = "",
     public price: number = 0,
     public description: string = "",
@@ -28,6 +29,7 @@ export class Product {
 
   setProductData(productData: Product) {
     this.id = productData.id;
+    this.userId = productData.userId;
     this.name = productData.name;
     this.price = productData.price;
     this.description = productData.description;
