@@ -51,17 +51,8 @@ FOREIGN KEY ([user_id]) REFERENCES [users]([id])
 CREATE TABLE [shopping_carts](
 [id] int IDENTITY(1,1) PRIMARY KEY,
 [user_id] int NOT NULL,
-[qtd_itens] int NOT NULL,
-[total_price] money NOT NULL,
-FOREIGN KEY ([user_id]) REFERENCES [users]([id])
-);
-
-CREATE TABLE [shopping_cart_products](
-[id] int IDENTITY(1,1) PRIMARY KEY,
-[shopping_cart_id] int NOT NULL,
 [product_id] int NOT NULL,
-[qtd] int NOT NULL,
-FOREIGN KEY ([shopping_cart_id]) REFERENCES [shopping_carts]([id]),
+FOREIGN KEY ([user_id]) REFERENCES [users]([id]),
 FOREIGN KEY ([product_id]) REFERENCES [products]([id])
 );
 

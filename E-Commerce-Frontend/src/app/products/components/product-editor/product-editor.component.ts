@@ -1,6 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { IBasicResponseData, IBasicResponseMessage } from "src/app/shared/models/IBasicResponse.interfaces";
+import {
+  IBasicResponseData,
+  IBasicResponseMessage,
+} from "src/app/shared/models/IBasicResponse.interfaces";
 import { Product } from "src/app/shared/models/Product";
 import Swal from "sweetalert2";
 import { ProductsService } from "../../products.service";
@@ -22,7 +25,11 @@ export class ProductEditorComponent implements OnInit {
 
   product = new Product();
 
-  constructor(private router: Router, private route: ActivatedRoute, private productsService: ProductsService) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private productsService: ProductsService
+  ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -50,8 +57,8 @@ export class ProductEditorComponent implements OnInit {
   }
 
   saveProductData() {
-    const mandatoryFields : {
-    [key: string]: string
+    const mandatoryFields: {
+      [key: string]: string;
     } = {
       name: "Nome",
       description: "Descrição",
@@ -61,24 +68,27 @@ export class ProductEditorComponent implements OnInit {
       address: "Endereço",
       houseNumber: "Número da casa",
       zipCode: "CEP",
-    }
-
+    };
+    console.log(this.product);
     for (let key in mandatoryFields) {
       if (!this.product[key as keyof Product]) {
-        Swal.fire('Erro ao cadastrar produto!', `o campo ${mandatoryFields[key]} é obrigatório!`, "error");
+        Swal.fire(
+          "Erro ao cadastrar produto!",
+          `o campo ${mandatoryFields[key]} é obrigatório!`,
+          "error"
+        );
         return;
       }
     }
 
-    if(this.isUpdating){
+    if (this.isUpdating) {
       this.updateProductData();
-    }else{
+    } else {
       this.insertProductData();
     }
-
   }
 
-  insertProductData(){
+  insertProductData() {
     Swal.fire({
       title: "Confirmação",
       text: "Deseja realmente cadastrar este produto?",
@@ -96,13 +106,13 @@ export class ProductEditorComponent implements OnInit {
             Swal.fire("Erro ao cadastrar produto!", err.message, "error");
           },
         });
-      }
+      },
     }).then((result) => {
-      if(result.dismiss) return;
+      if (result.dismiss) return;
     });
   }
 
-  updateProductData(){
+  updateProductData() {
     Swal.fire({
       title: "Confirmação",
       text: "Deseja realmente atualizar este produto?",
@@ -120,9 +130,9 @@ export class ProductEditorComponent implements OnInit {
             Swal.fire("Erro ao atualizar produto!", err.message, "error");
           },
         });
-      }
+      },
     }).then((result) => {
-      if(result.dismiss) return;
+      if (result.dismiss) return;
     });
   }
 

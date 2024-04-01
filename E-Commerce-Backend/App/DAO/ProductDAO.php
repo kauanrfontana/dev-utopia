@@ -25,7 +25,7 @@ class ProductDAO extends Connection
             if ($filters["orderColumn"] == "createdAt") {
                 $orderColumn = "created_at";
             }
-            if (!empty ($filters["orderType"])) {
+            if (!empty($filters["orderType"])) {
                 $orderType = $filters["orderType"];
             }
 
@@ -36,12 +36,12 @@ class ProductDAO extends Connection
             $sql = "SELECT 
                         id, 
                         name, 
-                        url_image as urlImage, 
+                        url_image AS urlImage, 
                         price 
                     FROM products 
                     WHERE 
-                        name LIKE " . "'%" . $likeClousure . "%'" . 
-                    "ORDER BY $orderColumn $orderType 
+                        name LIKE " . "'%" . $likeClousure . "%'" .
+                "ORDER BY $orderColumn $orderType 
                     $procedurePaginationLine";
 
             $statement = $this->pdo->prepare($sql);
@@ -84,7 +84,7 @@ class ProductDAO extends Connection
             if ($filters["orderColumn"] == "createdAt") {
                 $orderColumn = "created_at";
             }
-            if (!empty ($filters["orderType"])) {
+            if (!empty($filters["orderType"])) {
                 $orderType = $filters["orderType"];
             }
 
@@ -100,8 +100,8 @@ class ProductDAO extends Connection
                     FROM products 
                     WHERE
                         user_id = :userId AND 
-                        name LIKE " . "'%" . $likeClousure . "%'" . 
-                    "ORDER BY $orderColumn $orderType 
+                        name LIKE " . "'%" . $likeClousure . "%'" .
+                "ORDER BY $orderColumn $orderType 
                     $procedurePaginationLine";
 
             $statement = $this->pdo->prepare($sql);
@@ -219,12 +219,12 @@ class ProductDAO extends Connection
             $statement->bindValue(":houseNumber", $productModel->getHouseNumber(), \PDO::PARAM_STR);
             $statement->bindValue(":zipCode", $productModel->getZipCode(), \PDO::PARAM_STR);
 
-            if(!$statement->execute()){
+            if (!$statement->execute()) {
                 throw new \Exception("Não foi possível inserir o produto no momento. Por favor, tente mais tarde.");
             }
 
             $result["message"] = "Produto inserido com sucesso!";
-            return $result ;
+            return $result;
 
         } catch (\Exception $e) {
             throw $e;
@@ -263,7 +263,7 @@ class ProductDAO extends Connection
             $statement->bindValue(":zipCode", $productModel->getZipCode(), \PDO::PARAM_STR);
             $statement->bindValue(":id", $productModel->getId(), \PDO::PARAM_INT);
 
-            if(!$statement->execute()){
+            if (!$statement->execute()) {
                 throw new \Exception("Não foi possível atualizar o produto no momento. Por favor, tente mais tarde.");
             }
 
@@ -284,10 +284,10 @@ class ProductDAO extends Connection
 
             $statement->bindValue(":id", $productId, \PDO::PARAM_INT);
 
-            if(!$statement->execute()){
+            if (!$statement->execute()) {
                 throw new \Exception("Não foi possível excluir o produto no momento. Por favor, tente mais tarde.");
             }
-            
+
             $result["message"] = "Produto excluído com sucesso!";
             return $result;
         } catch (\Exception $e) {

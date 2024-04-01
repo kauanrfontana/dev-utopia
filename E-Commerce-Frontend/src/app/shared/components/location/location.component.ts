@@ -137,6 +137,7 @@ export class LocationComponent implements OnInit {
 
   onStateChange(stateId: number) {
     this.cities = [];
+    this.dataChanged.emit(this.data);
     this.getCitiesByState(stateId).subscribe({
       next: (res: IBasicResponseData<IListItem[]>) => {
         this.cities = res.data;

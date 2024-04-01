@@ -3,7 +3,8 @@ use App\Controllers\{
     AuthController,
     LocationController,
     UserController,
-    ProductController
+    ProductController,
+    ShoppingCartController
 };
 use App\Middlewares\TokenMiddleware;
 use function src\{slimConfiguration, jwtAuth};
@@ -49,20 +50,24 @@ $app->group("", function () use ($app) {
     $app->put("/userRole[/{id}]", UserController::class . ":updateUserRole");
 
     $app->get("/users", UserController::class . ":getAllUsers");
-    
+
     $app->get("/user[/{id}]", UserController::class . ":getUserById");
-    
+
     $app->get("/products", ProductController::class . ":getAllProducts");
 
     $app->get("/products/my", ProductController::class . ":getMyProducts");
-    
+
     $app->get("/product/{id}", ProductController::class . ":getProductById");
 
     $app->post("/product", ProductController::class . ":insertProduct");
-    
+
     $app->put("/product", ProductController::class . ":updateProduct");
 
     $app->delete("/product/{id}", ProductController::class . ":deleteProduct");
+
+    $app->get("/shoppingCart", ShoppingCartController::class . ":getShoppingCartByUserId");
+
+    $app->post("/shoppingCart", ShoppingCartController::class . ":addProductToShoppingCart");
 
 
 })->add(TokenMiddleware::class)->add(jwtAuth());

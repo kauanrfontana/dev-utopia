@@ -80,7 +80,7 @@ final class UserDAO extends Connection
             $statement->bindParam(":userId", $userId, \PDO::PARAM_INT);
 
             if (!$statement->execute()) {
-                throw new \Exception("Não foi possível consultar o usuário, confira os dados, e tente novamente mais tarde!");
+                throw new \Exception("Não foi possível consultar o usuário no momento. Por favor, tente mais tarde.");
             }
 
             $user = $statement->fetch(\PDO::FETCH_ASSOC);
@@ -98,7 +98,7 @@ final class UserDAO extends Connection
             $statement->bindParam(":userId", $userId, \PDO::PARAM_INT);
 
             if (!$statement->execute()) {
-                throw new \Exception("Não foi possível consultar o usuário, confira os dados, e tente novamente mais tarde!");
+                throw new \Exception("Não foi possível consultar o usuário no momento. Por favor, tente mais tarde.");
             }
 
             $roles = [
@@ -278,7 +278,7 @@ final class UserDAO extends Connection
             $statement->bindParam(":category", $category, \PDO::PARAM_INT);
 
             if (!$statement->execute()) {
-                throw new \Exception("Não foi possível atualizar o perfil do usuário, tente novamente mais tarde.");
+                throw new \Exception("Não foi possível atualizar o perfil do usuário no momento. Por favor, tente mais tarde.");
             }
             $result["message"] = "Perfil do usuário atualizado com sucesso.";
             return $result;

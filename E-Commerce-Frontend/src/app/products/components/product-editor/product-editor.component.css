@@ -18,3 +18,10 @@ input,
 textarea {
   margin-bottom: 1rem;
 }
+
+h3,
+h4 {
+  color: var(--secondary-color);
+  text-wrap: nowrap;
+  margin-bottom: 1rem;
+}

@@ -1,4 +1,9 @@
 <div class="container mt-5 p-5">
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <h3>Dados do Produto</h3>
+    </div>
+  </div>
   <div class="row d-flex">
     <div class="col-md-4 col-sm-12 d-flex justify-content-center mb-5">
       <div class="preview-image-container">
@@ -95,8 +100,8 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <h4 class="caption">Localização</h4>
+  <div class="row text-center">
+    <h4>Localização</h4>
     <ng-container *ngIf="!loadingProductData">
       <app-location
         [data]="product.getLocationData()"
@@ -107,9 +112,14 @@
     </ng-container>
   </div>
   <div class="row">
-    <div class="col-md-12 d-flex justify-content-between" style="column-gap: 100px;">
+    <div
+      class="col-md-12 d-flex justify-content-between"
+      style="column-gap: 100px"
+    >
       <button class="btn btn-danger w-50" (click)="goBack()">Voltar</button>
-      <button class="btn btn-success w-50" (click)="saveProductData()">Salvar</button>
+      <button class="btn btn-success w-50" (click)="saveProductData()">
+        Salvar
+      </button>
     </div>
   </div>
 </div>

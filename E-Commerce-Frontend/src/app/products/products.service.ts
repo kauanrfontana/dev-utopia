@@ -4,7 +4,10 @@ import { Observable, Subject } from "rxjs";
 import { Product } from "../shared/models/Product";
 import { PaginationData } from "../shared/models/PaginationData";
 import { IPaginatedResponse } from "../shared/models/IPaginatedResponse.interface";
-import { IBasicResponseData, IBasicResponseMessage } from "../shared/models/IBasicResponse.interfaces";
+import {
+  IBasicResponseData,
+  IBasicResponseMessage,
+} from "../shared/models/IBasicResponse.interfaces";
 
 export interface getProductsParams {
   orderColumn: string;
@@ -41,7 +44,9 @@ export class ProductsService {
     params = params.append("orderType", productsParams.orderType);
     params = params.appendAll({ ...paginationData });
 
-    return this.http.get<IPaginatedResponse<Product[]>>("products/my", { params });
+    return this.http.get<IPaginatedResponse<Product[]>>("products/my", {
+      params,
+    });
   }
 
   getProductById(id: number): Observable<IBasicResponseData<Product>> {

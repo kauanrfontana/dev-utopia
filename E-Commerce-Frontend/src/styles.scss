@@ -132,6 +132,21 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+::-webkit-scrollbar {
+  width: 15px;
+}
+::-webkit-scrollbar-track {
+  background: white;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--dark-color);
+  border-radius: 5px;
+  &:hover {
+    background: #2c2c3b;
+  }
+}
+
 /* Utility classes */
 
 .primary-color {
