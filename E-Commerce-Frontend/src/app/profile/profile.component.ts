@@ -6,6 +6,8 @@ import {
   IBasicResponseMessage,
 } from "../shared/models/IBasicResponse.interfaces";
 import Swal from "sweetalert2";
+import { PaginationData } from "../shared/models/PaginationData";
+import { IPaginatedResponse } from "../shared/models/IPaginatedResponse.interface";
 
 @Component({
   selector: "app-profile",
@@ -18,32 +20,57 @@ export class ProfileComponent implements OnInit {
 
   user = new User();
 
+  users = new Array<User>();
+
   currentPassword: string = "";
   newPassword: string = "";
 
   loadingUserData: boolean = false;
+  loadingUsersData: boolean = false;
   loadingLocationData: boolean = false;
 
-  constructor(
-    private userService: UserService,
-  ) {}
+  paginationData = new PaginationData();
+
+  isAdmin: boolean = false;
+
+  searchName: string = "";
+
+  constructor(private userService: UserService) {
+    this.isAdmin = this.userService.isAdmin();
+  }
 
   ngOnInit(): void {
-    this.loadingUserData = true;
     this.isEditing = false;
 
     this.getUserData();
+
+    if (this.isAdmin) this.getAllUsersData();
   }
 
- 
+  getAllUsersData() {
+    this.loadingUsersData = true;
+    this.userService
+      .getAllUsersData(this.searchName, this.paginationData)
+      .subscribe({
+        next: (res: IPaginatedResponse<User[]>) => {
+          this.users = res.data;
+          this.loadingUsersData = false;
+          this.paginationData.totalItems = res.totalItems;
+        },
+        error: (err: Error) => {
+          Swal.fire("Erro ao consultar usuários!", err.message, "error");
+          this.loadingUsersData = false;
+        },
+      });
+  }
 
   getUserData() {
+    this.loadingUserData = true;
     this.userService.getUserData().subscribe({
       next: (res: IBasicResponseData<User>) => {
         this.user.setUserData(res.data);
         localStorage.setItem("userData", JSON.stringify(this.user));
         this.loadingUserData = false;
-
       },
       error: (err: Error) => {
         Swal.fire("Erro ao consultar usuário!", err.message, "error");
@@ -53,13 +80,14 @@ export class ProfileComponent implements OnInit {
   }
 
   verifyIsLoading(): boolean {
-    return this.loadingUserData || this.loadingLocationData;
+    return (
+      this.loadingUserData || this.loadingUsersData || this.loadingLocationData
+    );
   }
-
 
   onUpdateUserData() {
     Swal.fire({
-      title: "Confirmação", 
+      title: "Confirmação",
       text: "Deseja realmente atualizar seus dados?",
       icon: "question",
       showCancelButton: true,
@@ -80,7 +108,6 @@ export class ProfileComponent implements OnInit {
     }).then((result) => {
       if (result.dismiss) return;
     });
-    
   }
 
   onUpdatePassword() {
@@ -159,11 +186,45 @@ export class ProfileComponent implements OnInit {
   }
 
   changeEditState() {
-    if(this.isEditing){
+    if (this.isEditing) {
       this.ngOnInit();
-    }else{
+    } else {
       this.isEditing = !this.isEditing;
     }
   }
 
+  onDeleteUser(id: number) {
+    Swal.fire({
+      title: "Confirmação",
+      text: "Deseja realmente deletar este usuário?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sim",
+      cancelButtonText: "Cancelar",
+      preConfirm: () => {
+        return this.userService.deleteUserById(id).subscribe({
+          next: (res: IBasicResponseMessage) => {
+            Swal.fire("Sucesso", res.message, "success").then(() => {
+              this.ngOnInit();
+            });
+          },
+          error: (err: Error) => {
+            Swal.fire("Erro ao deletar usuário!", err.message, "error");
+          },
+        });
+      },
+    }).then((result) => {
+      if (result.dismiss) return;
+    });
+  }
+
+  pageChanged(event: any) {
+    this.paginationData = {
+      ...this.paginationData,
+      currentPage: event.pageIndex + 1,
+      itemsPerPage: event.pageSize,
+    };
+
+    this.getAllUsersData();
+  }
 }

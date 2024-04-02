@@ -2,6 +2,7 @@
 namespace App\DAO;
 
 use App\Models\UserModel;
+use App\Services\PaginationService;
 
 final class UserDAO extends Connection
 {
@@ -9,12 +10,33 @@ final class UserDAO extends Connection
     {
         parent::__construct();
     }
-    public function getAllUsers(): array
+    public function getAllUsers(array $filters): array
     {
         $result = [];
 
         try {
-            $sql = "SELECT * FROM users";
+
+            $procedurePaginationLine = PaginationService::getPaginationLine($filters["currentPage"], $filters["itemsPerPage"]);
+
+            $likeClousure = $filters["name"];
+
+            $sql = "SELECT 
+                    u.*,
+                    CASE 
+	                    WHEN r.name = 'customer' THEN 'cliente'
+	                    WHEN r.name = 'seller' THEN 'vendedor'
+	                    ELSE 'admin'
+                    END AS role,
+                    r.category AS roleCategory
+                    FROM users u
+                    INNER JOIN user_roles ur
+                    ON u.id = ur.user_id
+                    INNER JOIN roles r
+                    ON ur.role_id = r.id
+                    WHERE u.name LIKE '%$likeClousure%'
+                    ORDER BY u.id
+                    $procedurePaginationLine";
+
             $statement = $this->pdo->prepare($sql);
 
             if (!$statement->execute()) {
@@ -22,7 +44,24 @@ final class UserDAO extends Connection
             }
             $users = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-            $result["users"] = $users;
+            $sqlCount = "SELECT 
+                    COUNT(*) AS total
+                    FROM users u
+                    INNER JOIN user_roles ur
+                    ON u.id = ur.user_id
+                    INNER JOIN roles r
+                    ON ur.role_id = r.id
+                    WHERE u.name LIKE '%$likeClousure%'
+                  ";
+
+            $statement = $this->pdo->prepare($sqlCount);
+
+            $statement->execute();
+
+            $result["totalItems"] = (int) $statement->fetch(\PDO::FETCH_COLUMN);
+
+            $result["data"] = $users;
+
             return $result;
 
         } catch (\Exception $e) {
@@ -63,17 +102,28 @@ final class UserDAO extends Connection
 
         try {
             $sql = "SELECT 
-                    COALESCE(name, '') AS name, 
-                    COALESCE(email, '') AS email, 
-                    COALESCE(address, '') AS address, 
-                    COALESCE(state_id, 0) AS stateId, 
-                    COALESCE(city_id, 0) AS cityId, 
-                    COALESCE(house_number, '') AS houseNumber, 
-                    COALESCE(complement, '') AS complement, 
-                    COALESCE(zip_code, '') AS zipCode
-            FROM users 
-            WHERE id = :userId
-            ";
+                    u.id, 
+                    u.name, 
+                    u.email, 
+                    COALESCE(u.address, '') AS address, 
+                    COALESCE(u.state_id, 0) AS stateId, 
+                    COALESCE(u.city_id, 0) AS cityId, 
+                    COALESCE(u.house_number, '') AS houseNumber, 
+                    COALESCE(u.complement, '') AS complement, 
+                    COALESCE(u.zip_code, '') AS zipCode,
+                    CASE 
+	                    WHEN r.name = 'customer' THEN 'cliente'
+	                    WHEN r.name = 'seller' THEN 'vendedor'
+	                    ELSE 'admin'
+                    END AS role,
+                    r.category AS roleCategory
+                    FROM users u
+                    INNER JOIN user_roles ur
+                    ON u.id = ur.user_id
+                    INNER JOIN roles r
+                    ON ur.role_id = r.id
+                    WHERE u.id = :userId
+                    ";
 
             $statement = $this->pdo->prepare($sql);
 
@@ -85,30 +135,6 @@ final class UserDAO extends Connection
 
             $user = $statement->fetch(\PDO::FETCH_ASSOC);
 
-            $sqlRole = "SELECT r.name, r.category
-                    FROM users u
-                    INNER JOIN user_roles ur
-                    ON u.id = ur.user_id
-                    INNER JOIN roles r
-                    ON ur.role_id = r.id
-                    WHERE u.id = :userId";
-
-            $statement = $this->pdo->prepare($sqlRole);
-
-            $statement->bindParam(":userId", $userId, \PDO::PARAM_INT);
-
-            if (!$statement->execute()) {
-                throw new \Exception("Não foi possível consultar o usuário no momento. Por favor, tente mais tarde.");
-            }
-
-            $roles = [
-                "customer" => "cliente",
-                "seller" => "vendedor",
-                "admin" => "admin",
-            ];
-            $userRole = $statement->fetch(\PDO::FETCH_ASSOC);
-            $user["role"] = $roles[$userRole["name"]];
-            $user["roleCategory"] = $userRole["category"];
 
             $result = $user;
             return $result;
@@ -286,5 +312,28 @@ final class UserDAO extends Connection
             throw $e;
         }
 
+    }
+
+    public function deleteUserById(int $id): array
+    {
+        $result = [];
+
+        try {
+            $sql = "DELETE FROM users WHERE id = :id";
+
+            $statement = $this->pdo->prepare($sql);
+
+            $statement->bindParam(":id", $id, \PDO::PARAM_INT);
+
+            if (!$statement->execute()) {
+                throw new \Exception("Não foi possível excluir o usuário no momento. Por favor, tente mais tarde.");
+            }
+
+            $result["message"] = "Usuário excluído com sucesso.";
+
+            return $result;
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 }

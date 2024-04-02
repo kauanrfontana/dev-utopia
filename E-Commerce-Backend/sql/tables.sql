@@ -1,3 +1,4 @@
+
 CREATE DATABASE devutopia;
 
 USE devutopia;
@@ -27,7 +28,7 @@ CREATE TABLE [user_roles](
 [user_id] int NOT NULL,
 [role_id] int NOT NULL,
 PRIMARY KEY([user_id], [role_id]),
-FOREIGN KEY([user_id]) REFERENCES [users]([id]),
+FOREIGN KEY([user_id]) REFERENCES [users]([id]) ON DELETE CASCADE,
 FOREIGN KEY([role_id]) REFERENCES [roles]([id])
 ); 
 
@@ -45,15 +46,15 @@ CREATE TABLE [products](
 [house_number] varchar(5) NOT NULL,
 [complement] varchar(200),
 [zip_code] varchar(8) NOT NULL,
-FOREIGN KEY ([user_id]) REFERENCES [users]([id])
+FOREIGN KEY ([user_id]) REFERENCES [users]([id]) ON DELETE CASCADE
 );
 
 CREATE TABLE [shopping_carts](
 [id] int IDENTITY(1,1) PRIMARY KEY,
 [user_id] int NOT NULL,
 [product_id] int NOT NULL,
-FOREIGN KEY ([user_id]) REFERENCES [users]([id]),
-FOREIGN KEY ([product_id]) REFERENCES [products]([id])
+FOREIGN KEY ([product_id]) REFERENCES [products]([id]) ON DELETE CASCADE,
+FOREIGN KEY ([user_id]) REFERENCES [users]([id]) ON DELETE CASCADE
 );
 
 CREATE TABLE [tokens] (
@@ -63,5 +64,17 @@ CREATE TABLE [tokens] (
 [refresh_token] VARCHAR(1000) NOT NULL,
 [expired_at] datetime NOT NULL,
 [active] TINYINT NOT NULL DEFAULT 1,
-FOREIGN KEY ([user_id]) REFERENCES [users]([id])
+FOREIGN KEY ([user_id]) REFERENCES [users]([id]) ON DELETE CASCADE
 );
+
+CREATE TABLE [purchased_items](
+[user_id] int NOT NULL,
+[product_id] int NOT NULL,
+PRIMARY KEY([user_id], [product_id]),
+FOREIGN KEY([user_id]) REFERENCES [users]([id]) ON DELETE CASCADE,
+FOREIGN KEY([product_id]) REFERENCES [products]([id]) ON DELETE CASCADE
+); 
+
+-- Via sql server ao tentar criar uma tabela com duas colunas de DELETE CASCADE ele gera um erro, para resolver isso pode ser criado uma trigger,
+-- ou apenas criar a tabela sem uma dos DELETE CASCADE, e editar a tabela pela interface do SQL Server.
+-- caminho: SQL Server Management Studio -> Databases -> Tables -> Keys -> Botão direito na Chave Estrangeira que está sem o CASCADE -> Modify -> Na janela aberta vá em Table Designer -> Expanda a linha INSERT And UPDATE Specification -> Em DELETE Rule selecione CASCADE -> Close -> Feche a janela e salve. 

@@ -84,8 +84,8 @@ final class ShoppingCartController
             $userData = $request->getAttribute("jwt");
 
             $userId = $userData["sub"];
-            
-            if (!isset($args["id"]) || empty($args["id"])){
+
+            if (!isset($args["id"]) || empty($args["id"])) {
                 throw new \InvalidArgumentException("O campo id do produto é obrigatório.");
             }
             $productId = (int) $args["id"];

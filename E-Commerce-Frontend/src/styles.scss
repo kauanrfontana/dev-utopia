@@ -149,6 +149,13 @@ body {
 
 /* Utility classes */
 
+.table-default {
+  width: 100%;
+  tr {
+    vertical-align: baseline;
+  }
+}
+
 .primary-color {
   color: var(--primary-color);
 }

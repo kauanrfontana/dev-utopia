@@ -2,6 +2,7 @@ import { LocationData } from "../components/location/location.component";
 
 export class User {
   constructor(
+    public id: number = 0,
     public name: string = "",
     public email: string = "",
     public stateId: number = 0,
@@ -26,6 +27,7 @@ export class User {
   }
 
   setUserData(userData: User) {
+    this.id = userData.id;
     this.name = userData.name;
     this.email = userData.email;
     this.stateId = userData.stateId;

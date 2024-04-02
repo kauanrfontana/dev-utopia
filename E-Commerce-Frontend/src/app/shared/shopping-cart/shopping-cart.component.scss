@@ -75,6 +75,7 @@
     overflow-y: auto;
     max-height: 400px;
     font-size: 15px;
+
     .product {
       padding-block: 5px;
       display: flex;
@@ -85,6 +86,10 @@
       .text-secondary {
         flex: 1;
         justify-self: start;
+        &:hover {
+          color: rgb(255, 255, 255) !important;
+          cursor: pointer;
+        }
       }
       .text-primary {
         flex: 1;

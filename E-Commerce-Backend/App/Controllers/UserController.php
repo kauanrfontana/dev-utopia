@@ -23,9 +23,19 @@ final class UserController
     }
     public function getAllUsers(Request $request, Response $response, array $args): Response
     {
+        $mandatoryPaginationParams = ["currentPage", "itemsPerPage"];
+        $data = $request->getParams();
         try {
-            $users = $this->userDAO->getAllUsers();
-            $response = $response->withJson($users, null, JSON_NUMERIC_CHECK);
+            foreach ($mandatoryPaginationParams as $param) {
+                if (empty($data[$param])) {
+                    throw new \InvalidArgumentException("Parâmetro de paginação obrigatório não encontrado!");
+                }
+            }
+            $response = $response->withStatus(200)->withJson($this->userDAO->getAllUsers($data), null, JSON_NUMERIC_CHECK);
+        } catch (\InvalidArgumentException $e) {
+            $response = $response->withStatus(400)->withJson([
+                "message" => $e->getMessage()
+            ]);
         } catch (\Exception $e) {
             $response = $response->withStatus(500)->withJson([
                 "message" => $e->getMessage()
@@ -39,7 +49,7 @@ final class UserController
     {
         $userId = 0;
         try {
-            if (isset ($args["id"])) {
+            if (isset($args["id"])) {
                 if (!filter_var($args["id"], FILTER_VALIDATE_INT)) {
                     throw new \InvalidArgumentException("Não foi possível consultar o usuário, parâmetro informado é inválido!");
                 }
@@ -78,13 +88,13 @@ final class UserController
         try {
 
             foreach ($mandatoryFields as $field => $description) {
-                if (empty ($data[$field])) {
+                if (empty($data[$field])) {
                     throw new \InvalidArgumentException("O campo {$description} é obrigatório.");
                 }
                 $user->{"set" . ucfirst($field)}($data[$field]);
             }
 
-            if (empty ($data["password"]) || strlen($data["password"]) < 6) {
+            if (empty($data["password"]) || strlen($data["password"]) < 6) {
                 throw new \InvalidArgumentException("O campo senha deve conter no mínimo 6 caracteres!");
             }
 
@@ -131,7 +141,7 @@ final class UserController
         try {
 
             foreach ($mandatoryFields as $field => $description) {
-                if (empty ($data[$field])) {
+                if (empty($data[$field])) {
                     throw new \InvalidArgumentException("O campo {$description} é obrigatório.");
                 }
             }
@@ -166,7 +176,7 @@ final class UserController
 
         try {
             foreach ($mandatoryFields as $field => $description) {
-                if (empty ($data[$field])) {
+                if (empty($data[$field])) {
                     throw new \InvalidArgumentException("O campo {$description} é obrigatório.");
                 }
             }
@@ -208,15 +218,38 @@ final class UserController
         $tokenData = $request->getAttribute("jwt");
         try {
             $userId = $tokenData["sub"];
-            if (isset ($args["id"])) {
+            if (isset($args["id"])) {
                 $userId = (int) $args["id"];
             }
 
-            if (empty ($data["newRoleCategory"])) {
+            if (empty($data["newRoleCategory"])) {
                 throw new \InvalidArgumentException("Não foi possível atalizar o perfil, categoria do novo perfil não informada!");
             }
             $category = $data["newRoleCategory"];
             $response = $response->withStatus(200)->withJson($this->userDAO->updateUserRole($userId, $category));
+
+        } catch (\InvalidArgumentException $e) {
+            $response = $response->withStatus(400)->withJson([
+                "message" => $e->getMessage()
+            ]);
+        } catch (\Exception $e) {
+            $response = $response->withStatus(500)->withJson([
+                "message" => $e->getMessage()
+            ]);
+        }
+        return $response;
+    }
+
+    public function deleteUserById(Request $request, Response $response, array $args): Response
+    {
+        $userId = 0;
+
+        try {
+            if (!isset($args["id"]) || empty($args["id"])) {
+                throw new \InvalidArgumentException("Não foi possível excluir o usuário, parâmetro informado é inválido!");
+            }
+            $userId = (int) $args["id"];
+            $response = $response->withStatus(200)->withJson($this->userDAO->deleteUserById($userId));
 
         } catch (\InvalidArgumentException $e) {
             $response = $response->withStatus(400)->withJson([

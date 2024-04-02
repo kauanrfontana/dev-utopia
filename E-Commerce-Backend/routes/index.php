@@ -53,6 +53,8 @@ $app->group("", function () use ($app) {
 
     $app->get("/user[/{id}]", UserController::class . ":getUserById");
 
+    $app->delete("/user/{id}", UserController::class . ":deleteUserById");
+
     $app->get("/products", ProductController::class . ":getAllProducts");
 
     $app->get("/products/my", ProductController::class . ":getMyProducts");

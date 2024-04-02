@@ -6,6 +6,8 @@ import {
   IBasicResponseMessage,
 } from "../models/IBasicResponse.interfaces";
 import { Observable } from "rxjs";
+import { PaginationData } from "../models/PaginationData";
+import { IPaginatedResponse } from "../models/IPaginatedResponse.interface";
 
 @Injectable({ providedIn: "root" })
 export class UserService {
@@ -21,6 +23,15 @@ export class UserService {
     let paramUserId = "";
     if (userId) paramUserId = `/${userId}`;
     return this.http.get<IBasicResponseData<User>>("user" + paramUserId);
+  }
+
+  getAllUsersData(
+    name: string,
+    paginationData: PaginationData
+  ): Observable<IPaginatedResponse<User[]>> {
+    return this.http.get<IPaginatedResponse<User[]>>("users", {
+      params: { ...paginationData, name },
+    });
   }
 
   isAdmin() {
@@ -47,5 +58,9 @@ export class UserService {
     return this.http.put<IBasicResponseMessage>("userRole" + paramUserId, {
       newRoleCategory,
     });
+  }
+
+  deleteUserById(userId: number): Observable<IBasicResponseMessage> {
+    return this.http.delete<IBasicResponseMessage>("user/" + userId);
   }
 }

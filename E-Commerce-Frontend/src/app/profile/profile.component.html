@@ -81,7 +81,7 @@
     </div>
   </div>
 </div>
-<div class="container" style="margin-top: 1rem" *ngIf="user.role == 'cliente'">
+<div class="container mt-5" *ngIf="user.role == 'cliente'">
   <div class="col-md-12">
     <h2 class="text-center secondary-color">Deseja vender seus produtos?</h2>
   </div>
@@ -90,6 +90,66 @@
       Tornar-se Vendedor
     </button>
   </div>
+</div>
+
+<div class="container mt-5" *ngIf="this.isAdmin">
+  <div class="row">
+    <div class="col-md-12">
+      <h3 class="text-center secondary-color">Usuários do Sistema</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group w-100 h-100">
+        <input
+          type="search"
+          class="form-control"
+          placeholder=""
+          [(ngModel)]="searchName"
+          (keydown.enter)="getAllUsersData()"
+        />
+        <label>Nome do Usuário</label>
+      </div>
+    </div>
+    <div class="col-md-6 d-flex align-items-center">
+      <button class="btn btn-info" (click)="getAllUsersData()">
+        <mat-icon>search</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-default">
+        <thead class="text-center">
+          <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Perfil</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          <tr *ngFor="let user of users">
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td style="text-transform: capitalize">{{ user.role }}</td>
+            <td>
+              <button class="btn btn-danger" (click)="onDeleteUser(user.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <app-paginator
+    [totalItems]="paginationData.totalItems"
+    [itemsPerPage]="paginationData.itemsPerPage"
+    (pageChange)="pageChanged($event)"
+  ></app-paginator>
 </div>
 
 <div class="loader-container" *ngIf="verifyIsLoading()">

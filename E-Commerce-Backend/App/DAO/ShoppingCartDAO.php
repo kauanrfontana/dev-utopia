@@ -77,6 +77,16 @@ final class ShoppingCartDAO extends Connection
     {
         $result = [];
         try {
+            $sqlValidationItem = "SELECT * FROM shopping_carts WHERE user_id = :userId AND product_id = :productId";
+
+            $statement = $this->pdo->prepare($sqlValidationItem);
+
+            $statement->bindParam("userId", $userId, \PDO::PARAM_INT);
+            $statement->bindParam("productId", $productId, \PDO::PARAM_INT);
+            $statement->execute();
+            if (count($statement->fetchAll(\PDO::FETCH_ASSOC)) > 0) {
+                throw new \InvalidArgumentException("Produto já adicionado ao carrinho de compras.");
+            }
             $sql = "INSERT INTO shopping_carts (user_id, product_id) VALUES (:userId, :productId)";
 
             $statement = $this->pdo->prepare($sql);
@@ -117,5 +127,10 @@ final class ShoppingCartDAO extends Connection
         } catch (\Exception $e) {
             throw $e;
         }
+    }
+
+    public function purchase()
+    {
+
     }
 }

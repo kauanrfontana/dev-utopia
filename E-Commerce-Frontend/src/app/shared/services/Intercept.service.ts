@@ -21,10 +21,10 @@ export class InterceptService implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const hasToken =
-      request.url.split("/")[0] != "login" &&
-      request.url.split("/")[0] != "users" &&
-      request.method != "post";
+    const isRegister: boolean =
+      request.url == "users" && request.method == "post";
+    const hasToken = request.url != "login" && !isRegister;
+
     request = request.clone({
       url: environment.serverUrl + `${request.url}`,
     });
