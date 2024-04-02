@@ -15,7 +15,11 @@ export class ShoppingCartService {
     return this.http.get<IBasicResponseData<ShoppingCart>>("shoppingCart");
   }
 
-  addProductToCart(productId: number): Observable<IBasicResponseMessage> {
+  addProductToShoppingCart(productId: number): Observable<IBasicResponseMessage> {
     return this.http.post<IBasicResponseMessage>("shoppingCart", { productId });
+  }
+
+  removeProductFromShoppingCart(productId: number): Observable<IBasicResponseMessage> {
+    return this.http.delete<IBasicResponseMessage>("shoppingCart/" + productId);
   }
 }

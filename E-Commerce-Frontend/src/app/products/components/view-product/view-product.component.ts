@@ -79,7 +79,7 @@ export class ViewProductComponent implements OnInit {
       cancelButtonText: "Não",
       preConfirm: () => {
         return this.shoppingCartService
-          .addProductToCart(this.product.id)
+          .addProductToShoppingCart(this.product.id)
           .subscribe({
             next: (res: IBasicResponseMessage) => {
               Swal.fire("Sucesso", res.message, "success");

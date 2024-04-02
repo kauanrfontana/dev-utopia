@@ -75,5 +75,32 @@ final class ShoppingCartController
         return $response;
     }
 
+    public function removeProductFromShoppingCart(Request $request, Response $response, array $args): Response
+    {
+        $userId = 0;
+        $productId = 0;
+
+        try {
+            $userData = $request->getAttribute("jwt");
+
+            $userId = $userData["sub"];
+            
+            if (!isset($args["id"]) || empty($args["id"])){
+                throw new \InvalidArgumentException("O campo id do produto é obrigatório.");
+            }
+            $productId = (int) $args["id"];
+            $response = $response->withStatus(200)->withJson($this->shoppingCartDAO->removeProductFromShoppingCart($userId, $productId));
+        } catch (\InvalidArgumentException $e) {
+            $response = $response->withStatus(400)->withJson([
+                "message" => $e->getMessage()
+            ]);
+        } catch (\Exception $e) {
+            $response = $response->withStatus(500)->withJson([
+                "message" => $e->getMessage()
+            ]);
+        }
+        return $response;
+    }
+
 
 }

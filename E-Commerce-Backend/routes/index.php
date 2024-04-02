@@ -69,6 +69,8 @@ $app->group("", function () use ($app) {
 
     $app->post("/shoppingCart", ShoppingCartController::class . ":addProductToShoppingCart");
 
+    $app->delete("/shoppingCart/{id}", ShoppingCartController::class . ":removeProductFromShoppingCart");
+
 
 })->add(TokenMiddleware::class)->add(jwtAuth());
 

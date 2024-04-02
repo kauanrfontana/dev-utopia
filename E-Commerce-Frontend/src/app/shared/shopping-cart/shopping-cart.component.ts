@@ -16,9 +16,20 @@ export class ShoppingCartComponent {
 
   shoppingCartData = new ShoppingCart();
 
-  constructor(private shoppingCartService: ShoppingCartService) {
+  constructor(private shoppingCartService: ShoppingCartService, private elementRef: ElementRef) {
     if (window.innerWidth < 980) {
       this.cluePosition = "left";
+    }
+  }
+
+  @HostListener('document:click', ['$event.target'])
+  public onClick(targetElement: HTMLElement): void {
+    const clickedInside = this.elementRef.nativeElement.contains(targetElement);
+    if (!clickedInside) {
+      if(this.dropdownShowing){
+        this.doAnimation();
+        this.dropdownShowing = false;
+      }
     }
   }
 
@@ -30,23 +41,26 @@ export class ShoppingCartComponent {
       this.cluePosition = "right";
     }
   }
-  onMouseEnter() {
+
+  doAnimation(){
     this.iconSection?.nativeElement.classList.add(
       "animate",
       "shake",
       "animate--fast"
     );
-  }
 
-  onMoouseLeave() {
-    this.iconSection?.nativeElement.classList.remove(
-      "animate",
-      "shake",
-      "animate--fast"
-    );
+    setTimeout(() => {
+      this.iconSection?.nativeElement.classList.remove(
+        "animate",
+        "shake",
+        "animate--fast"
+      );
+    }, 500);
   }
 
   getShoppingCartData() {
+    this.doAnimation();
+
     if (!this.dropdownShowing) {
       this.dropdownShowing = true;
       this.shoppingCartService.getShoppingCartData().subscribe({
@@ -60,5 +74,18 @@ export class ShoppingCartComponent {
     } else {
       this.dropdownShowing = false;
     }
+  }
+
+  onRemoveProduct(productId: number) {
+    this.shoppingCartService.removeProductFromShoppingCart(productId).subscribe({
+      next: (res) => {
+        Swal.fire("Sucesso", res.message, "success").then(() => {
+          this.getShoppingCartData();
+        });
+      },
+      error: (err: Error) => {
+        Swal.fire("Erro ao remover produto!", err.message, "error");
+      },
+    });
   }
 }

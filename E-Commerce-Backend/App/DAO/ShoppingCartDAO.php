@@ -14,6 +14,7 @@ final class ShoppingCartDAO extends Connection
     {
         try {
             $sql = "SELECT 
+                p.id AS productId,
                 p.name,
                 p.url_image AS urlImage,
                 p.description,
@@ -43,6 +44,7 @@ final class ShoppingCartDAO extends Connection
             $totalPrice = 0;
             foreach ($shoppingCartData as $shoppingCart) {
                 $products[] = [
+                    "id" => $shoppingCart["productId"],
                     "name" => $shoppingCart["name"],
                     "urlImage" => $shoppingCart["urlImage"],
                     "description" => $shoppingCart["description"],
@@ -87,6 +89,29 @@ final class ShoppingCartDAO extends Connection
             }
 
             $result["message"] = "Produto adicionado ao carrinho de compras com sucesso!";
+
+            return $result;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function removeProductFromShoppingCart(int $userId, int $productId): array
+    {
+        $result = [];
+        try {
+            $sql = "DELETE FROM shopping_carts WHERE user_id = :userId AND product_id = :productId";
+
+            $statement = $this->pdo->prepare($sql);
+
+            $statement->bindParam("userId", $userId, \PDO::PARAM_INT);
+            $statement->bindParam("productId", $productId, \PDO::PARAM_INT);
+
+            if (!$statement->execute()) {
+                throw new \Exception("Não foi possível remover o produto do carrinho de compras no momento. Por favor, tente mais tarde.");
+            }
+
+            $result["message"] = "Produto removido do carrinho de compras com sucesso!";
 
             return $result;
         } catch (\Exception $e) {

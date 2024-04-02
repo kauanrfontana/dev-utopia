@@ -3,8 +3,6 @@
     <app-label-clue [position]="cluePosition">
       <ng-container content
         ><mat-icon
-          (mouseenter)="onMouseEnter()"
-          (mouseleave)="onMoouseLeave()"
           (click)="getShoppingCartData()"
           >shopping_cart</mat-icon
         ></ng-container
@@ -20,7 +18,7 @@
       <h5>Produtos no carrinho</h5>
       <div class="totals">
         <p>
-          Quantidade de itens:
+          Total Itens:
           <span class="text-primary">{{
             shoppingCartData.qtdProducts | number : "1.0-0"
           }}</span>
@@ -39,8 +37,7 @@
           {{ product.name | cutLabel : 18 }}
         </p>
         <p class="text-primary">R$ {{ product.price | number : "1.2-2" }}</p>
-        <button class="btn btn-danger h-100">
-          <!-- (click)="onRemoveProduct(product)" -->
+        <button class="btn btn-danger h-100" (click)="onRemoveProduct(product.id)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
