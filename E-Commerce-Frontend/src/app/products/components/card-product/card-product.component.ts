@@ -3,6 +3,7 @@ import { Product } from "src/app/shared/models/Product";
 import Swal from "sweetalert2";
 import { ProductsService } from "../../products.service";
 import { IBasicResponseMessage } from "src/app/shared/models/IBasicResponse.interfaces";
+import { ShoppingCartService } from "src/app/shared/services/shopping-cart.service";
 
 @Component({
   selector: "app-card-product",
@@ -15,7 +16,10 @@ export class CardProductComponent {
   isViewingProduct: boolean = false;
   @Output() onClickProduct = new EventEmitter<void>();
 
-  constructor(private productsService: ProductsService) {}
+  constructor(
+    private productsService: ProductsService,
+    private shoppingCartService: ShoppingCartService
+  ) {}
 
   onDeleteProduct() {
     Swal.fire({
@@ -28,7 +32,8 @@ export class CardProductComponent {
       preConfirm: () => {
         return this.productsService.deleteProduct(this.product.id).subscribe({
           next: (res: IBasicResponseMessage) => {
-            Swal.fire("Sucesso", res.message, "success").then(() =>{
+            Swal.fire("Sucesso", res.message, "success").then(() => {
+              this.shoppingCartService.shoppingCartDataChanged.emit();
               this.productsService.onDeleteProductEvent.next();
             });
           },
@@ -36,9 +41,9 @@ export class CardProductComponent {
             Swal.fire("Erro ao excluir produto!", err.message, "error");
           },
         });
-      }
+      },
     }).then((result) => {
-      if(result.dismiss) return;
+      if (result.dismiss) return;
     });
   }
 }

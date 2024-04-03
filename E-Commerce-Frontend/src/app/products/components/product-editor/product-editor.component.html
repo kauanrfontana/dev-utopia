@@ -4,8 +4,8 @@
       <h3>Dados do Produto</h3>
     </div>
   </div>
-  <div class="row d-flex">
-    <div class="col-md-4 col-sm-12 d-flex justify-content-center mb-5">
+  <div class="row">
+    <div class="col-md-5 col-sm-12 d-flex flex-column align-items-center mb-5">
       <div class="preview-image-container">
         <img
           [src]="urlPreviewImage"
@@ -18,8 +18,11 @@
           imagem
         </span>
       </div>
+      <small class="text-secondary"
+        >(Prefira imagens em proporção 16:9 para melhor exibição)</small
+      >
     </div>
-    <div class="col-md-8 col-sm-12">
+    <div class="col-md-7 col-sm-12">
       <div class="row">
         <div class="col-md-8 col-sm-12">
           <div class="form-group">
@@ -100,8 +103,8 @@
       </div>
     </div>
   </div>
-  <div class="row text-center">
-    <h4>Localização</h4>
+  <div class="row">
+    <h4 class="text-center">Localização</h4>
     <ng-container *ngIf="!loadingProductData">
       <app-location
         [data]="product.getLocationData()"

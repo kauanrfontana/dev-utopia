@@ -4,7 +4,9 @@ use App\Controllers\{
     LocationController,
     UserController,
     ProductController,
-    ShoppingCartController
+    ShoppingCartController,
+    ReviewController,
+    PurchasedItemController
 };
 use App\Middlewares\TokenMiddleware;
 use function src\{slimConfiguration, jwtAuth};
@@ -35,43 +37,54 @@ $app->post("/login", AuthController::class . ":login");
 $app->post("/user", UserController::class . ":insertUser");
 
 $app->group("", function () use ($app) {
-    $app->get("/locations", LocationController::class . ":getAllLocationsByType");
+    $app->group("/locations", function () use ($app) {
+        $app->get("/states", LocationController::class . ":getStates");
 
-    $app->get("/states", LocationController::class . ":getStates");
+        $app->get("/cities", LocationController::class . ":getCitiesByState");
 
-    $app->get("/cities", LocationController::class . ":getCitiesByState");
+        $app->get("/cep/{cep}", LocationController::class . ":getLocationByCep");
+    });
 
-    $app->get("/cep/{cep}", LocationController::class . ":getLocationByCep");
+    $app->group("/users", function () use ($app) {
+        $app->get("", UserController::class . ":getAllUsers");
 
-    $app->put("/user", UserController::class . ":updateUser");
+        $app->put("", UserController::class . ":updateUser");
 
-    $app->put("/password", UserController::class . ":updatePassword");
+        $app->put("/password", UserController::class . ":updatePassword");
 
-    $app->put("/userRole[/{id}]", UserController::class . ":updateUserRole");
+        $app->put("/userRole[/{id}]", UserController::class . ":updateUserRole");
 
-    $app->get("/users", UserController::class . ":getAllUsers");
+        $app->delete("/{id}", UserController::class . ":deleteUserById");
+    });
 
     $app->get("/user[/{id}]", UserController::class . ":getUserById");
 
-    $app->delete("/user/{id}", UserController::class . ":deleteUserById");
+    $app->group("/products", function () use ($app) {
+        $app->get("", ProductController::class . ":getAllProducts");
 
-    $app->get("/products", ProductController::class . ":getAllProducts");
+        $app->get("/my", ProductController::class . ":getMyProducts");
 
-    $app->get("/products/my", ProductController::class . ":getMyProducts");
+        $app->get("/{id}", ProductController::class . ":getProductById");
 
-    $app->get("/product/{id}", ProductController::class . ":getProductById");
+        $app->get("/{id}/review", ReviewController::class . ":getReviewsByProduct");
 
-    $app->post("/product", ProductController::class . ":insertProduct");
+        $app->post("", ProductController::class . ":insertProduct");
 
-    $app->put("/product", ProductController::class . ":updateProduct");
+        $app->put("", ProductController::class . ":updateProduct");
 
-    $app->delete("/product/{id}", ProductController::class . ":deleteProduct");
+        $app->delete("/{id}", ProductController::class . ":deleteProduct");
+    });
 
-    $app->get("/shoppingCart", ShoppingCartController::class . ":getShoppingCartByUserId");
+    $app->group("/shoppingCart", function () use ($app) {
+        $app->get("", ShoppingCartController::class . ":getShoppingCartByUserId");
 
-    $app->post("/shoppingCart", ShoppingCartController::class . ":addProductToShoppingCart");
+        $app->post("", ShoppingCartController::class . ":addProductToShoppingCart");
 
-    $app->delete("/shoppingCart/{id}", ShoppingCartController::class . ":removeProductFromShoppingCart");
+        $app->delete("/shoppingCart/{id}", ShoppingCartController::class . ":removeProductFromShoppingCart");
+
+    });
+
+    $app->post("/purchase", PurchasedItemController::class . ":insertPurchase");
 
 
 })->add(TokenMiddleware::class)->add(jwtAuth());

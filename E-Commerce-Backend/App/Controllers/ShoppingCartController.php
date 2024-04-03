@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\DAO\ShoppingCartDAO;
+use App\Models\ProductModel;
 use App\Models\ShoppingCartModel;
 use Slim\Container;
 use Slim\Http\Request;
@@ -45,22 +46,20 @@ final class ShoppingCartController
 
     public function addProductToShoppingCart(Request $request, Response $response, array $args): Response
     {
-        $userId = 0;
-        $productId = 0;
         $data = $request->getParsedBody();
+        $product = new ProductModel();
 
         try {
             $userData = $request->getAttribute("jwt");
-            $userId = $userData["sub"];
-
 
             if (!isset($data["productId"]) || empty($data["productId"])) {
                 throw new \InvalidArgumentException("O campo id do produto é obrigatório.");
             }
-            $productId = (int) $data["productId"];
 
+            $product->setId($data["productId"])
+                ->setUserId($userData["sub"]);
 
-            $response = $response->withStatus(201)->withJson($this->shoppingCartDAO->addProductToShoppingCart($userId, $productId));
+            $response = $response->withStatus(201)->withJson($this->shoppingCartDAO->addProductToShoppingCart($product));
 
         } catch (\InvalidArgumentException $e) {
             $response = $response->withStatus(400)->withJson([

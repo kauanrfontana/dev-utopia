@@ -7,7 +7,9 @@ use App\DAO\{
     UserDAO,
     TokenDAO,
     RoleDAO,
-    ShoppingCartDAO
+    ShoppingCartDAO,
+    ReviewDAO,
+    PurchasedItemDAO
 };
 
 
@@ -29,6 +31,8 @@ function slimConfiguration(): \Slim\Container
     $container->offsetSet(RoleDAO::class, new RoleDAO());
     $container->offsetSet(ProductDAO::class, new ProductDAO());
     $container->offsetSet(ShoppingCartDAO::class, new ShoppingCartDAO());
+    $container->offsetSet(ReviewDAO::class, new ReviewDAO());
+    $container->offsetSet(PurchasedItemDAO::class, new PurchasedItemDAO());
 
 
     return $container;

@@ -75,14 +75,15 @@ export class ViewProductComponent implements OnInit {
       text: "Deseja adicionar este produto ao carrinho?",
       icon: "question",
       showCancelButton: true,
-      confirmButtonText: "Sim",
-      cancelButtonText: "Não",
+      confirmButtonText: "Confirmar",
+      cancelButtonText: "Cancelar",
       preConfirm: () => {
         return this.shoppingCartService
           .addProductToShoppingCart(this.product.id)
           .subscribe({
             next: (res: IBasicResponseMessage) => {
               Swal.fire("Sucesso", res.message, "success");
+              this.shoppingCartService.shoppingCartDataChanged.emit();
               this.router.navigate(["/products"]);
             },
             error: (err: Error) => {

@@ -6,10 +6,6 @@ final class ShoppingCartModel
 {
     private int $userId;
     private array $products;
-    private int $qtdProducts;
-    private float $totalPrice;
-
-
 
 
     /**
@@ -58,49 +54,4 @@ final class ShoppingCartModel
         return $this;
     }
 
-    /**
-     * Get the value of qtdProducts
-     *
-     * @return int
-     */
-    public function getQtdProducts(): int
-    {
-        return $this->qtdProducts;
-    }
-
-    /**
-     * Set the value of qtdProducts
-     *
-     * @param int $qtdProducts
-     *
-     * @return self
-     */
-    public function setQtdProducts(int $qtdProducts): self
-    {
-        $this->qtdProducts = $qtdProducts;
-        return $this;
-    }
-
-    /**
-     * Get the value of totalPrice
-     *
-     * @return float
-     */
-    public function getTotalPrice(): float
-    {
-        return $this->totalPrice;
-    }
-
-    /**
-     * Set the value of totalPrice
-     *
-     * @param float $totalPrice
-     *
-     * @return self
-     */
-    public function setTotalPrice(float $totalPrice): self
-    {
-        $this->totalPrice = $totalPrice;
-        return $this;
-    }
 }

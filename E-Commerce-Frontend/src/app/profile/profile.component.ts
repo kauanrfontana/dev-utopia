@@ -91,7 +91,7 @@ export class ProfileComponent implements OnInit {
       text: "Deseja realmente atualizar seus dados?",
       icon: "question",
       showCancelButton: true,
-      confirmButtonText: "Sim",
+      confirmButtonText: "Confirmar",
       cancelButtonText: "Cancelar",
       preConfirm: () => {
         return this.userService.updateUserData(this.user).subscribe({
@@ -199,7 +199,7 @@ export class ProfileComponent implements OnInit {
       text: "Deseja realmente deletar este usuário?",
       icon: "question",
       showCancelButton: true,
-      confirmButtonText: "Sim",
+      confirmButtonText: "Confirmar",
       cancelButtonText: "Cancelar",
       preConfirm: () => {
         return this.userService.deleteUserById(id).subscribe({

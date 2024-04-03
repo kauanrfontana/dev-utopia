@@ -1,5 +1,6 @@
 .preview-image-container {
   width: 356px;
+  max-width: 100%;
   height: 252px;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -24,4 +25,9 @@ h4 {
   color: var(--secondary-color);
   text-wrap: nowrap;
   margin-bottom: 1rem;
+}
+
+small {
+  font-size: 12px;
+  text-align: center;
 }

@@ -68,12 +68,25 @@ FOREIGN KEY ([user_id]) REFERENCES [users]([id]) ON DELETE CASCADE
 );
 
 CREATE TABLE [purchased_items](
+[id] int IDENTITY(1, 1) PRIMARY KEY,
 [user_id] int NOT NULL,
 [product_id] int NOT NULL,
-PRIMARY KEY([user_id], [product_id]),
+[purchase_date] datetime NOT NULL,
 FOREIGN KEY([user_id]) REFERENCES [users]([id]) ON DELETE CASCADE,
 FOREIGN KEY([product_id]) REFERENCES [products]([id]) ON DELETE CASCADE
 ); 
+
+CREATE TABLE [product_reviews](
+[id] int IDENTITY(1,1) PRIMARY KEY,
+[stars] smallint NOT NULL,
+[review] varchar(500) NOT NULL,
+[product_id] int NOT NULL,
+[user_id] int NOT NULL,
+[created_at] datetime NOT NULL,
+[updated_at] datetime,
+FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+FOREIGN KEY (user_id) REFERENCES users(id)
+);
 
 -- Via sql server ao tentar criar uma tabela com duas colunas de DELETE CASCADE ele gera um erro, para resolver isso pode ser criado uma trigger,
 -- ou apenas criar a tabela sem uma dos DELETE CASCADE, e editar a tabela pela interface do SQL Server.

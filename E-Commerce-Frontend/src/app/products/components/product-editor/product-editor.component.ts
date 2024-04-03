@@ -94,7 +94,7 @@ export class ProductEditorComponent implements OnInit {
       text: "Deseja realmente cadastrar este produto?",
       icon: "question",
       showCancelButton: true,
-      confirmButtonText: "Sim",
+      confirmButtonText: "Confirmar",
       cancelButtonText: "Cancelar",
       preConfirm: () => {
         return this.productsService.insertProduct(this.product).subscribe({
@@ -118,7 +118,7 @@ export class ProductEditorComponent implements OnInit {
       text: "Deseja realmente atualizar este produto?",
       icon: "question",
       showCancelButton: true,
-      confirmButtonText: "Sim",
+      confirmButtonText: "Confirmar",
       cancelButtonText: "Cancelar",
       preConfirm: () => {
         return this.productsService.updateProduct(this.product).subscribe({

@@ -12,14 +12,16 @@ export class LocationSevice {
   constructor(private http: HttpClient) {}
 
   getStates(stateId?: number): Observable<IBasicResponseData<ILocation[]>> {
-    const url = stateId ? `states?stateId=${stateId}` : `states`;
+    const url = stateId
+      ? `locations/states?stateId=${stateId}`
+      : `locations/states`;
     return this.http.get<IBasicResponseData<ILocation[]>>(url);
   }
 
   getCitiesByState(
     stateId: number
   ): Observable<IBasicResponseData<ILocation[]>> {
-    return this.http.get<IBasicResponseData<ILocation[]>>("cities", {
+    return this.http.get<IBasicResponseData<ILocation[]>>("locations/cities", {
       params: { stateId },
     });
   }
@@ -37,6 +39,6 @@ export class LocationSevice {
         city: string;
         state: string;
       }>
-    >("cep/" + cep);
+    >("locations/cep/" + cep);
   }
 }

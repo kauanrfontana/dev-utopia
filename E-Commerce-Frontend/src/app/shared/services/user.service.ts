@@ -39,14 +39,17 @@ export class UserService {
   }
 
   updateUserData(user: User): Observable<IBasicResponseMessage> {
-    return this.http.put<IBasicResponseMessage>("user", user);
+    return this.http.put<IBasicResponseMessage>("users", user);
   }
 
   updatePassword(changePasswordData: {
     currentPassword: string;
     newPassword: string;
   }): Observable<IBasicResponseMessage> {
-    return this.http.put<IBasicResponseMessage>("password", changePasswordData);
+    return this.http.put<IBasicResponseMessage>(
+      "users/password",
+      changePasswordData
+    );
   }
 
   updateUserRole(
@@ -55,12 +58,15 @@ export class UserService {
   ): Observable<IBasicResponseMessage> {
     let paramUserId = "";
     if (userId) paramUserId = `/${userId}`;
-    return this.http.put<IBasicResponseMessage>("userRole" + paramUserId, {
-      newRoleCategory,
-    });
+    return this.http.put<IBasicResponseMessage>(
+      "users/userRole" + paramUserId,
+      {
+        newRoleCategory,
+      }
+    );
   }
 
   deleteUserById(userId: number): Observable<IBasicResponseMessage> {
-    return this.http.delete<IBasicResponseMessage>("user/" + userId);
+    return this.http.delete<IBasicResponseMessage>("users/" + userId);
   }
 }

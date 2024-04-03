@@ -50,18 +50,22 @@ export class ProductsService {
   }
 
   getProductById(id: number): Observable<IBasicResponseData<Product>> {
-    return this.http.get<IBasicResponseData<Product>>(`product/${id}`);
+    return this.http.get<IBasicResponseData<Product>>(`products/${id}`);
+  }
+
+  getProductReviews(id: number): Observable<IBasicResponseData<Product>> {
+    return this.http.get<IBasicResponseData<Product>>(`products/${id}/reviews`);
   }
 
   insertProduct(product: Product): Observable<IBasicResponseMessage> {
-    return this.http.post<IBasicResponseMessage>("product", product);
+    return this.http.post<IBasicResponseMessage>("products", product);
   }
 
   updateProduct(product: Product): Observable<IBasicResponseMessage> {
-    return this.http.put<IBasicResponseMessage>("product", product);
+    return this.http.put<IBasicResponseMessage>("products", product);
   }
 
   deleteProduct(id: number): Observable<IBasicResponseMessage> {
-    return this.http.delete<IBasicResponseMessage>(`product/${id}`);
+    return this.http.delete<IBasicResponseMessage>(`products/${id}`);
   }
 }

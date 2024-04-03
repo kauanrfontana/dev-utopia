@@ -1,6 +1,7 @@
 <?php
 namespace App\DAO;
 
+use App\Models\ProductModel;
 use App\Models\ShoppingCartModel;
 
 final class ShoppingCartDAO extends Connection
@@ -73,7 +74,7 @@ final class ShoppingCartDAO extends Connection
         }
     }
 
-    public function addProductToShoppingCart(int $userId, int $productId): array
+    public function addProductToShoppingCart(ProductModel $product): array
     {
         $result = [];
         try {
@@ -81,8 +82,8 @@ final class ShoppingCartDAO extends Connection
 
             $statement = $this->pdo->prepare($sqlValidationItem);
 
-            $statement->bindParam("userId", $userId, \PDO::PARAM_INT);
-            $statement->bindParam("productId", $productId, \PDO::PARAM_INT);
+            $statement->bindValue("userId", $product->getUserId(), \PDO::PARAM_INT);
+            $statement->bindValue("productId", $product->getId(), \PDO::PARAM_INT);
             $statement->execute();
             if (count($statement->fetchAll(\PDO::FETCH_ASSOC)) > 0) {
                 throw new \InvalidArgumentException("Produto já adicionado ao carrinho de compras.");
@@ -91,8 +92,8 @@ final class ShoppingCartDAO extends Connection
 
             $statement = $this->pdo->prepare($sql);
 
-            $statement->bindParam("userId", $userId, \PDO::PARAM_INT);
-            $statement->bindParam("productId", $productId, \PDO::PARAM_INT);
+            $statement->bindValue("userId", $product->getUserId(), \PDO::PARAM_INT);
+            $statement->bindValue("productId", $product->getId(), \PDO::PARAM_INT);
 
             if (!$statement->execute()) {
                 throw new \Exception("Não foi possível adicionar o produto ao carrinho de compras no momento. Por favor, tente mais tarde.");
@@ -101,6 +102,24 @@ final class ShoppingCartDAO extends Connection
             $result["message"] = "Produto adicionado ao carrinho de compras com sucesso!";
 
             return $result;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function clearShoppingCart(int $userId): void
+    {
+        try {
+            $sql = "DELETE FROM shopping_carts WHERE user_id = :userId";
+
+            $statement = $this->pdo->prepare($sql);
+
+            $statement->bindParam("userId", $userId, \PDO::PARAM_INT);
+
+            if (!$statement->execute()) {
+                throw new \Exception("Não foi possível remover os produtos do carrinho de compras no momento. Por favor, tente mais tarde.");
+            }
+
         } catch (\Exception $e) {
             throw $e;
         }
@@ -129,8 +148,4 @@ final class ShoppingCartDAO extends Connection
         }
     }
 
-    public function purchase()
-    {
-
-    }
 }

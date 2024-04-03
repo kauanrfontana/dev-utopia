@@ -31,7 +31,7 @@ export class LocationComponent implements OnInit {
 
   btnHover: boolean = false;
 
-  cepControl: FormControl = new FormControl(null);
+  cepControl: FormControl = new FormControl("");
 
   states: IListItem[] = [];
   cities: IListItem[] = [];
@@ -39,7 +39,7 @@ export class LocationComponent implements OnInit {
   constructor(private locationService: LocationSevice) {}
 
   ngOnInit() {
-    this.cepControl.setValue(this.data.zipCode);
+    this.cepControl.setValue(String(this.data.zipCode));
     this.cepControlValueChanges();
     this.getStates();
     if (this.data.stateId) {
@@ -59,13 +59,15 @@ export class LocationComponent implements OnInit {
   }
 
   cepControlValueChanges() {
-    this.cepControl.valueChanges.pipe(debounceTime(1000)).subscribe((value) => {
-      if (value.length == 8) {
-        this.data.zipCode = value;
-        this.dataChanged.emit(this.data);
-        this.searchLocationByCep(value);
-      }
-    });
+    this.cepControl.valueChanges
+      .pipe(debounceTime(1000))
+      .subscribe((value: string) => {
+        if (value.length == 8) {
+          this.data.zipCode = value;
+          this.dataChanged.emit(this.data);
+          this.searchLocationByCep(value);
+        }
+      });
   }
 
   searchLocationByCep(cep: string) {

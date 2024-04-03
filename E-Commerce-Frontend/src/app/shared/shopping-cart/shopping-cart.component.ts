@@ -1,21 +1,31 @@
-import { Component, ElementRef, HostListener, ViewChild } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { ShoppingCartService } from "../services/shopping-cart.service";
 import { ShoppingCart } from "../models/ShoppingCart";
 import { IBasicResponseData } from "../models/IBasicResponse.interfaces";
 import Swal from "sweetalert2";
 import { Router } from "@angular/router";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-shopping-cart",
   templateUrl: "./shopping-cart.component.html",
   styleUrls: ["./shopping-cart.component.scss"],
 })
-export class ShoppingCartComponent {
+export class ShoppingCartComponent implements OnInit, OnDestroy {
   @ViewChild("iconSection") iconSection?: ElementRef;
   cluePosition: "left" | "right" = "right";
   dropdownShowing: boolean = false;
 
   shoppingCartData = new ShoppingCart();
+
+  subscriptionShoppingCartData = new Subscription();
 
   constructor(
     private shoppingCartService: ShoppingCartService,
@@ -47,6 +57,14 @@ export class ShoppingCartComponent {
     }
   }
 
+  ngOnInit(): void {
+    this.getShoppingCartData();
+    this.subscriptionShoppingCartData =
+      this.shoppingCartService.shoppingCartDataChanged.subscribe(() => {
+        this.getShoppingCartData();
+      });
+  }
+
   doAnimation() {
     this.iconSection?.nativeElement.classList.add(
       "animate",
@@ -65,7 +83,6 @@ export class ShoppingCartComponent {
 
   onOpenDropdown() {
     this.doAnimation();
-    if (!this.dropdownShowing) this.getShoppingCartData();
     this.dropdownShowing = !this.dropdownShowing;
   }
 
@@ -73,6 +90,7 @@ export class ShoppingCartComponent {
     this.shoppingCartService.getShoppingCartData().subscribe({
       next: (res: IBasicResponseData<ShoppingCart>) => {
         this.shoppingCartData = res.data;
+        this.shoppingCartService.shoppingCartData.next(this.shoppingCartData);
       },
       error: (err: Error) => {
         Swal.fire("Erro ao consultar carrinho!", err.message, "error");
@@ -86,6 +104,7 @@ export class ShoppingCartComponent {
       .subscribe({
         next: (res) => {
           Swal.fire("Sucesso", res.message, "success").then(() => {
+            this.shoppingCartService.shoppingCartDataChanged.emit();
             this.getShoppingCartData();
           });
         },
@@ -96,9 +115,11 @@ export class ShoppingCartComponent {
   }
 
   onCheckout() {
-    this.router.navigate(["/checkout"], {
-      queryParams: { shoppingCartData: JSON.stringify(this.shoppingCartData) },
-    });
+    this.router.navigate(["/checkout"]);
     this.dropdownShowing = false;
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionShoppingCartData.unsubscribe();
   }
 }
