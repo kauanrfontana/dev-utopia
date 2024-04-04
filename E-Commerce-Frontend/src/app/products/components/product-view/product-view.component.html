@@ -85,19 +85,39 @@
     </div>
   </div>
 
-  <div class="row">
-    <div
-      class="col-md-12 d-flex justify-content-between"
-      style="column-gap: 100px"
-    >
-      <button class="btn btn-danger w-50" (click)="goBack()">Voltar</button>
-      <button class="btn btn-success w-50" (click)="addProductToShoppingCart()">
-        <mat-icon style="vertical-align: middle">shopping_cart</mat-icon
-        >Adicionar ao Carrinho
-      </button>
-    </div>
+  <div class="mt-5">
+    <h4 class="text-secondary reviews-opener" (click)="toggleReviews()">
+      {{ !isShowingReviews ? "Mostrar" : "Esconder" }}
+      Avaliações/Avaliar<mat-icon style="vertical-align: middle">{{
+        !isShowingReviews ? "keyboard_arrow_up" : "keyboard_arrow_down"
+      }}</mat-icon>
+    </h4>
+    <app-product-reviews
+      *ngIf="isShowingReviews"
+      [productId]="product.id"
+      (loadingReviews)="loadingReviews = $event"
+    ></app-product-reviews>
   </div>
 </div>
+
+<div class="actions">
+  <div
+    class="col-md-12 d-flex justify-content-between"
+    style="column-gap: 100px"
+  >
+    <button class="btn btn-danger btn-lg w-50" (click)="goBack()">
+      Voltar
+    </button>
+    <button
+      class="btn btn-success btn-lg w-50"
+      (click)="addProductToShoppingCart()"
+    >
+      <mat-icon style="vertical-align: middle">shopping_cart</mat-icon>Adicionar
+      ao Carrinho
+    </button>
+  </div>
+</div>
+
 <div class="loader-container" *ngIf="verifyIsLoading()">
   <app-loader-dots></app-loader-dots>
 </div>

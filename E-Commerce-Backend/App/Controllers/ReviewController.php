@@ -23,20 +23,24 @@ class ReviewController
 
     public function getReviewsByProduct(Request $request, Response $response, array $args)
     {
+        $mandatoryPaginationParams = ["currentPage", "itemsPerPage"];
+        $data = $request->getParams();
         $productId = 0;
-        $tokenData = $request->getAttribute("token");
+        $tokenData = $request->getAttribute("jwt");
         try {
             if (!isset($args["id"]) || !is_numeric($args["id"])) {
                 throw new \InvalidArgumentException("Não foi possível consultar as avaliações, parâmetro informado é inválido!");
             }
+            foreach ($mandatoryPaginationParams as $param) {
+                if (empty($data[$param])) {
+                    throw new \InvalidArgumentException("Parâmetro de paginação obrigatório não encontrado!");
+                }
+            }
 
             $productId = (int) $args["id"];
             $userId = $tokenData["sub"];
-            $reviews = $this->reviewDAO->getReviewsByProduct($productId, $userId);
 
-            return $response->withStatus(200)->withJson([
-                "data" => $reviews
-            ], null, JSON_NUMERIC_CHECK);
+            return $response->withStatus(200)->withJson($this->reviewDAO->getReviewsByProduct($productId, $userId, $data), null, JSON_NUMERIC_CHECK);
         } catch (\InvalidArgumentException $e) {
             return $response->withStatus(400)->withJson([
                 "message" => $e->getMessage()
@@ -50,11 +54,13 @@ class ReviewController
 
     public function insertReview(Request $request, Response $response, array $args)
     {
-        $mandatoryFields = ["productId" => "id do produto", "stars" => "estrelas", "review" => "avaliação"];
+        $mandatoryFields = ["stars" => "estrelas", "review" => "avaliação"];
         $data = $request->getParsedBody();
         $tokenData = $request->getAttribute("token");
         try {
-
+            if (!isset($args["id"]) || !is_numeric($args["id"])) {
+                throw new \InvalidArgumentException("Não foi possível inserir a avaliação, parâmetro informado é inválido!");
+            }
             foreach ($mandatoryFields as $field => $description) {
                 if (empty($data[$field])) {
                     throw new \InvalidArgumentException("O campo {$description} é obrigatório!");
@@ -62,7 +68,7 @@ class ReviewController
             }
 
             $review = new ReviewModel();
-            $review->setProductId($data["productId"])
+            $review->setProductId($args["id"])
                 ->setUserId($tokenData["sub"])
                 ->setStars($data["stars"])
                 ->setReview($data["review"]);

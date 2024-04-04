@@ -4,13 +4,13 @@ import { ProductsComponent } from "./products.component";
 import { ProductsListComponent } from "./components/products-list/products-list.component";
 import { MyProductsListComponent } from "./components/my-products-list/my-products-list.component";
 import { ProductEditorComponent } from "./components/product-editor/product-editor.component";
-import { ViewProductComponent } from "./components/view-product/view-product.component";
+import { ProductViewComponent } from "./components/product-view/product-view.component";
 
 const routes: Routes = [
   {
     path: "",
     component: ProductsComponent,
-    
+
     children: [
       { path: "", component: ProductsListComponent },
       {
@@ -19,7 +19,7 @@ const routes: Routes = [
       },
     ],
   },
-  { path: "view/:id", component: ViewProductComponent },
+  { path: "view/:id", component: ProductViewComponent },
   { path: "edit/:id", component: ProductEditorComponent },
   { path: "create", component: ProductEditorComponent },
   { path: "**", redirectTo: "" },

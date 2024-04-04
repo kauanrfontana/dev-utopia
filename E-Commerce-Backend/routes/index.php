@@ -66,7 +66,9 @@ $app->group("", function () use ($app) {
 
         $app->get("/{id}", ProductController::class . ":getProductById");
 
-        $app->get("/{id}/review", ReviewController::class . ":getReviewsByProduct");
+        $app->get("/{id}/reviews", ReviewController::class . ":getReviewsByProduct");
+
+        $app->post("/{id}/reviews", ReviewController::class . ":insertReview");
 
         $app->post("", ProductController::class . ":insertProduct");
 

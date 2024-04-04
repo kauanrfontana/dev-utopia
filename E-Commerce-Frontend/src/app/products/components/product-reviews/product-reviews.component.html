@@ -1,0 +1,160 @@
+<div class="row">
+  <div class="col-md-12">
+    <h4 class="text-center">Avaliações</h4>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-8">
+        <div class="form-group">
+          <textarea
+            rows="3"
+            class="form-control"
+            placeholder=""
+            [(ngModel)]="ownReview.review"
+          ></textarea>
+          <label>Escreva sua avaliação</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-8">
+        <div class="rating active">
+          <input
+            type="radio"
+            name="rating"
+            id="rating-5"
+            (click)="setReviewRating(5)"
+          />
+          <label for="rating-5"></label>
+          <input
+            type="radio"
+            name="rating"
+            id="rating-4"
+            (click)="setReviewRating(4)"
+          />
+          <label for="rating-4"></label>
+          <input
+            type="radio"
+            name="rating"
+            id="rating-3"
+            (click)="setReviewRating(3)"
+          />
+          <label for="rating-3"></label>
+          <input
+            type="radio"
+            name="rating"
+            id="rating-2"
+            (click)="setReviewRating(2)"
+          />
+          <label for="rating-2"></label>
+          <input
+            type="radio"
+            name="rating"
+            id="rating-1"
+            (click)="setReviewRating(1)"
+          />
+          <label for="rating-1"></label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row mt-2">
+  <div class="col-md-12">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-8">
+        <button
+          class="btn btn-primary btn-lg w-100 h-100"
+          (click)="insertReview()"
+        >
+          Enviar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-container *ngFor="let review of reviewsList">
+  <div class="row mt-5">
+    <div class="col-md-12">
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-8">
+          <div class="creator-data text-white">
+            <h5>Usuário: {{ review.userName | cutLabel : 10 }}</h5>
+            <ng-container *ngIf="review.updatedAt">
+              <h5>
+                Alteração: {{ review.updatedAt | date : "dd/MM/YYYY HH:mm" }}
+              </h5>
+            </ng-container>
+            <ng-container *ngIf="!review.updatedAt">
+              <h5>
+                Criação: {{ review.createdAt | date : "dd/MM/YYYY HH:mm" }}
+              </h5>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-8">
+          <div class="form-group">
+            <textarea
+              rows="3"
+              class="form-control"
+              placeholder=""
+              disabled="true"
+              [value]="review.review"
+            ></textarea>
+            <label>Escreva sua avaliação</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-8">
+          <div class="rating readonly">
+            <input
+              disabled="true"
+              type="radio"
+              name="rating"
+              id="rating-5"
+              checked="true"
+            />
+            <label></label>
+            <input disabled="true" type="radio" name="rating" id="rating-4" />
+            <label></label>
+            <input disabled="true" type="radio" name="rating" id="rating-3" />
+            <label></label>
+            <input disabled="true" type="radio" name="rating" id="rating-2" />
+            <label></label>
+            <input
+              disabled="true"
+              type="radio"
+              name="rating"
+              id="rating-1"
+              (click)="setReviewRating(1)"
+            />
+            <label></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<app-paginator
+  [totalItems]="paginationData.totalItems"
+  [itemsPerPage]="paginationData.itemsPerPage"
+  (pageChange)="pageChanged($event)"
+></app-paginator>

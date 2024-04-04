@@ -10,16 +10,21 @@ import Swal from "sweetalert2";
 import { UserService } from "src/app/shared/services/user.service";
 import { User } from "src/app/shared/models/User";
 import { ShoppingCartService } from "src/app/shared/services/shopping-cart.service";
+import { IPaginatedResponse } from "src/app/shared/models/IPaginatedResponse.interface";
+import { Review } from "src/app/shared/models/Review";
 
 @Component({
-  selector: "app-view-product",
-  templateUrl: "./view-product.component.html",
-  styleUrls: ["./view-product.component.scss"],
+  selector: "app-product-view",
+  templateUrl: "./product-view.component.html",
+  styleUrls: ["./product-view.component.scss"],
 })
-export class ViewProductComponent implements OnInit {
+export class ProductViewComponent implements OnInit {
   loadingProductData: boolean = false;
   loadingSellerData: boolean = false;
   loadingLocationData: boolean = false;
+
+  isShowingReviews: boolean = false;
+  loadingReviews: boolean = false;
 
   product = new Product();
   seller = new User();
@@ -104,8 +109,14 @@ export class ViewProductComponent implements OnInit {
     return (
       this.loadingLocationData ||
       this.loadingProductData ||
-      this.loadingSellerData
+      this.loadingSellerData ||
+      this.loadingReviews
     );
+  }
+
+  toggleReviews() {
+    this.isShowingReviews = !this.isShowingReviews;
+    if (this.isShowingReviews) this.loadingReviews = true;
   }
 
   goBack() {

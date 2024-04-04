@@ -69,7 +69,6 @@ export class ProductEditorComponent implements OnInit {
       houseNumber: "Número da casa",
       zipCode: "CEP",
     };
-    console.log(this.product);
     for (let key in mandatoryFields) {
       if (!this.product[key as keyof Product]) {
         Swal.fire(

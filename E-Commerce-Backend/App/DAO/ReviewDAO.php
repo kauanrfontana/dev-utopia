@@ -3,6 +3,7 @@
 namespace App\DAO;
 
 use App\Models\ReviewModel;
+use App\Services\PaginationService;
 
 class ReviewDAO extends Connection
 {
@@ -11,17 +12,32 @@ class ReviewDAO extends Connection
         parent::__construct();
     }
 
-    public function getReviewsByProduct(int $productId, int $userId)
+    public function getReviewsByProduct(int $productId, int $userId, array $filters)
     {
+        $result = [];
         try {
-            $sql = "SELECT * 
-                    FROM product_reviews 
-                    WHERE product_id = :productId
+
+            $procedurePaginationLine = PaginationService::getPaginationLine($filters["currentPage"], $filters["itemsPerPage"]);
+
+            $sql = "SELECT 
+                        pr.id, 
+                        pr.stars, 
+                        pr.review, 
+                        pr.product_id AS productId, 
+                        pr.user_id AS userId, 
+                        pr.created_at AS createdAt, 
+                        pr.updated_at AS updatedAt, 
+                        u.name AS userName 
+                    FROM product_reviews pr
+                    INNER JOIN users u
+                    ON pr.user_id = u.id
+                    WHERE pr.product_id = :productId
                     ORDER BY
                         CASE 
-                            WHEN user_id = :userId THEN 0
+                            WHEN pr.user_id = :userId THEN 0
                             ELSE 1
-                        END";
+                        END, pr.stars DESC
+                        $procedurePaginationLine";
 
             $statement = $this->pdo->prepare($sql);
 
@@ -34,7 +50,23 @@ class ReviewDAO extends Connection
 
             $reviews = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-            return $reviews;
+            $result["data"] = $reviews;
+
+            $sqlCount = "SELECT COUNT(*) AS total
+                         FROM product_reviews pr
+                         INNER JOIN users u
+                         ON pr.user_id = u.id
+                         WHERE pr.product_id = :productId";
+
+            $statement = $this->pdo->prepare($sqlCount);
+
+            $statement->bindParam(':productId', $productId, \PDO::PARAM_INT);
+
+            $statement->execute();
+
+            $result["totalItems"] = $statement->fetch(\PDO::FETCH_COLUMN);
+
+            return $result;
         } catch (\Exception $e) {
             throw $e;
         }
@@ -45,7 +77,7 @@ class ReviewDAO extends Connection
         $result = [];
         try {
             $sql = "INSERT INTO product_reviews (product_id, user_id, stars, review, created_at)
-                    VALUES (:productId, :userId, :stars, :review, NOW())";
+                    VALUES (:productId, :userId, :stars, :review, GETDATE())";
 
             $statement = $this->pdo->prepare($sql);
 

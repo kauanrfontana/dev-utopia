@@ -8,6 +8,7 @@ import {
   IBasicResponseData,
   IBasicResponseMessage,
 } from "../shared/models/IBasicResponse.interfaces";
+import { Review } from "../shared/models/Review";
 
 export interface getProductsParams {
   orderColumn: string;
@@ -53,12 +54,25 @@ export class ProductsService {
     return this.http.get<IBasicResponseData<Product>>(`products/${id}`);
   }
 
-  getProductReviews(id: number): Observable<IBasicResponseData<Product>> {
-    return this.http.get<IBasicResponseData<Product>>(`products/${id}/reviews`);
+  getProductReviews(
+    id: number,
+    paginationData: PaginationData
+  ): Observable<IPaginatedResponse<Review[]>> {
+    return this.http.get<IPaginatedResponse<Review[]>>(
+      `products/${id}/reviews`,
+      { params: { ...paginationData } }
+    );
   }
 
   insertProduct(product: Product): Observable<IBasicResponseMessage> {
     return this.http.post<IBasicResponseMessage>("products", product);
+  }
+
+  insertReview(id: number, review: Review): Observable<IBasicResponseMessage> {
+    return this.http.post<IBasicResponseMessage>(
+      `products/${id}/reviews`,
+      review
+    );
   }
 
   updateProduct(product: Product): Observable<IBasicResponseMessage> {
