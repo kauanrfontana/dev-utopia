@@ -1,6 +1,8 @@
 <div class="row">
   <div class="col-md-12">
-    <h4 class="text-center">Avaliações</h4>
+    <h4 class="text-center">
+      {{ editingReview ? "Altere" : "Faça" }} sua Avaliação
+    </h4>
   </div>
 </div>
 
@@ -13,6 +15,7 @@
             rows="3"
             class="form-control"
             placeholder=""
+            maxlength="500"
             [(ngModel)]="ownReview.review"
           ></textarea>
           <label>Escreva sua avaliação</label>
@@ -30,6 +33,7 @@
             type="radio"
             name="rating"
             id="rating-5"
+            [checked]="ownReview.stars == 5"
             (click)="setReviewRating(5)"
           />
           <label for="rating-5"></label>
@@ -37,6 +41,7 @@
             type="radio"
             name="rating"
             id="rating-4"
+            [checked]="ownReview.stars == 4"
             (click)="setReviewRating(4)"
           />
           <label for="rating-4"></label>
@@ -44,6 +49,7 @@
             type="radio"
             name="rating"
             id="rating-3"
+            [checked]="ownReview.stars == 3"
             (click)="setReviewRating(3)"
           />
           <label for="rating-3"></label>
@@ -51,6 +57,7 @@
             type="radio"
             name="rating"
             id="rating-2"
+            [checked]="ownReview.stars == 2"
             (click)="setReviewRating(2)"
           />
           <label for="rating-2"></label>
@@ -58,6 +65,7 @@
             type="radio"
             name="rating"
             id="rating-1"
+            [checked]="ownReview.stars == 1"
             (click)="setReviewRating(1)"
           />
           <label for="rating-1"></label>
@@ -69,34 +77,75 @@
 <div class="row mt-2">
   <div class="col-md-12">
     <div class="row d-flex justify-content-center">
-      <div class="col-md-8">
-        <button
-          class="btn btn-primary btn-lg w-100 h-100"
-          (click)="insertReview()"
-        >
-          Enviar
-        </button>
+      <div class="col-md-8 d-flex" style="column-gap: 10px">
+        <ng-container *ngIf="!editingReview">
+          <button
+            class="btn btn-primary btn-lg w-100 h-100"
+            (click)="insertReview()"
+          >
+            Enviar
+          </button>
+        </ng-container>
+        <ng-container *ngIf="editingReview">
+          <button
+            class="btn btn-danger btn-lg w-50 h-100"
+            (click)="onCancelEditReview()"
+          >
+            Cancelar
+          </button>
+          <button
+            class="btn btn-warning btn-lg w-50 h-100"
+            (click)="updateReview()"
+          >
+            Alterar
+          </button>
+        </ng-container>
       </div>
     </div>
   </div>
 </div>
+<div class="row mt-5">
+  <div class="col-md-12">
+    <h4 class="text-center">Avaliações Anteriores</h4>
+  </div>
+</div>
 <ng-container *ngFor="let review of reviewsList">
-  <div class="row mt-5">
+  <div class="row">
     <div class="col-md-12">
       <div class="row d-flex justify-content-center">
         <div class="col-md-8">
-          <div class="creator-data text-white">
-            <h5>Usuário: {{ review.userName | cutLabel : 10 }}</h5>
+          <div class="creator-data text-white backdrop-top">
+            <p>
+              <span>Usuário:</span>
+              <span class="text-primary">{{
+                review.userId == selfId
+                  ? "Você"
+                  : (review.userName | cutLabel : 10)
+              }}</span>
+            </p>
             <ng-container *ngIf="review.updatedAt">
-              <h5>
-                Alteração: {{ review.updatedAt | date : "dd/MM/YYYY HH:mm" }}
-              </h5>
+              <p>
+                <span>Alteração:</span>
+                <span class="text-primary">{{
+                  review.updatedAt | date : "dd/MM/YYYY HH:mm"
+                }}</span>
+              </p>
             </ng-container>
             <ng-container *ngIf="!review.updatedAt">
-              <h5>
-                Criação: {{ review.createdAt | date : "dd/MM/YYYY HH:mm" }}
-              </h5>
+              <p>
+                <span>Criação:</span>
+                <span class="text-primary">{{
+                  review.createdAt | date : "dd/MM/YYYY HH:mm"
+                }}</span>
+              </p>
             </ng-container>
+            <button
+              class="btn btn-warning btn-update-review"
+              (click)="onStartEditReview(review.id)"
+              *ngIf="review.userId == selfId"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
           </div>
         </div>
       </div>
@@ -106,7 +155,7 @@
     <div class="col-md-12">
       <div class="row d-flex justify-content-center">
         <div class="col-md-8">
-          <div class="form-group">
+          <div class="form-group backdrop">
             <textarea
               rows="3"
               class="form-control"
@@ -124,27 +173,40 @@
     <div class="col-md-12">
       <div class="row d-flex justify-content-center">
         <div class="col-md-8">
-          <div class="rating readonly">
+          <div class="rating backdrop-bottom">
             <input
               disabled="true"
               type="radio"
-              name="rating"
               id="rating-5"
-              checked="true"
+              [checked]="review.stars == 5"
             />
             <label></label>
-            <input disabled="true" type="radio" name="rating" id="rating-4" />
-            <label></label>
-            <input disabled="true" type="radio" name="rating" id="rating-3" />
-            <label></label>
-            <input disabled="true" type="radio" name="rating" id="rating-2" />
+            <input
+              disabled="true"
+              type="radio"
+              id="rating-4"
+              [checked]="review.stars == 4"
+            />
             <label></label>
             <input
               disabled="true"
               type="radio"
-              name="rating"
+              id="rating-3"
+              [checked]="review.stars == 3"
+            />
+            <label></label>
+            <input
+              disabled="true"
+              type="radio"
+              id="rating-2"
+              [checked]="review.stars == 2"
+            />
+            <label></label>
+            <input
+              disabled="true"
+              type="radio"
               id="rating-1"
-              (click)="setReviewRating(1)"
+              [checked]="review.stars == 1"
             />
             <label></label>
           </div>
@@ -152,6 +214,7 @@
       </div>
     </div>
   </div>
+  <hr />
 </ng-container>
 <app-paginator
   [totalItems]="paginationData.totalItems"

@@ -50,7 +50,7 @@ class ReviewDAO extends Connection
 
             $reviews = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-            $result["data"] = $reviews;
+            $result["data"]["reviews"] = $reviews;
 
             $sqlCount = "SELECT COUNT(*) AS total
                          FROM product_reviews pr
@@ -65,6 +65,9 @@ class ReviewDAO extends Connection
             $statement->execute();
 
             $result["totalItems"] = $statement->fetch(\PDO::FETCH_COLUMN);
+
+            $purchaseDAO = new PurchasedItemDAO();
+            $result["data"]["wasPurchased"] = $purchaseDAO->productWasPurchasedItemByUser($productId, $userId);
 
             return $result;
         } catch (\Exception $e) {
@@ -91,6 +94,32 @@ class ReviewDAO extends Connection
             }
 
             $result["message"] = "Avaliação inserida com sucesso!";
+            return $result;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function updateReview(ReviewModel $review)
+    {
+        $result = [];
+        try {
+            $sql = "UPDATE product_reviews
+                    SET stars = :stars, review = :review, updated_at = GETDATE()
+                    WHERE product_id = :productId AND user_id = :userId";
+
+            $statement = $this->pdo->prepare($sql);
+
+            $statement->bindValue(':productId', $review->getProductId(), \PDO::PARAM_INT);
+            $statement->bindValue(':userId', $review->getUserId(), \PDO::PARAM_INT);
+            $statement->bindValue(':stars', $review->getStars(), \PDO::PARAM_INT);
+            $statement->bindValue(':review', $review->getReview(), \PDO::PARAM_STR);
+
+            if (!$statement->execute()) {
+                throw new \Exception("Não foi possível atualizar a avaliação do produto no momento. Por favor, tente novamente mais tarde.");
+            }
+
+            $result["message"] = "Avaliação atualizada com sucesso!";
             return $result;
         } catch (\Exception $e) {
             throw $e;

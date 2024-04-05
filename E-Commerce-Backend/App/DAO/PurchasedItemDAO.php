@@ -9,6 +9,30 @@ final class PurchasedItemDAO extends Connection
         parent::__construct();
     }
 
+    public function productWasPurchasedItemByUser(int $productId, int $userId): bool
+    {
+        $sql = "SELECT 
+                    COUNT(*)
+                FROM purchased_items                 
+                WHERE product_id = :productId
+                AND user_id = :userId";
+
+        $statement = $this->pdo->prepare($sql);
+
+        $statement->bindParam("productId", $productId, \PDO::PARAM_INT);
+
+        $statement->bindParam("userId", $userId, \PDO::PARAM_INT);
+
+        if (!$statement->execute()) {
+            throw new \Exception("Não foi possível consultar o item comprado no momento. Por favor, tente novamente mais tarde.");
+        }
+
+        $purchasedItem = $statement->fetch(\PDO::FETCH_COLUMN);
+
+
+        return $purchasedItem != 0;
+    }
+
     public function insertPurchase(int $userId, array $products)
     {
         $result = [];

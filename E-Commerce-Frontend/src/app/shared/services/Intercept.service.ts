@@ -42,15 +42,13 @@ export class InterceptService implements HttpInterceptor {
     return next.handle(request).pipe(
       tap((response) => {
         if (response instanceof HttpResponse && hasToken) {
-          const authToken = response.headers.get("X-Auth-Token");
-          const refreshToken = response.headers.get("X-Refresh-Token");
-          if (authToken !== null && refreshToken !== null) {
-            localStorage.setItem("token", authToken);
-            localStorage.setItem("refresh_token", refreshToken);
-          }
+          this.RefreshToken(response);
         }
       }),
       catchError((err) => {
+        if (err.status !== 401 && hasToken) {
+          this.RefreshToken(err);
+        }
         if (err.status === 401 && hasToken) {
           setTimeout(() => {
             Swal.fire({
@@ -69,5 +67,14 @@ export class InterceptService implements HttpInterceptor {
         return throwError(error);
       })
     );
+  }
+
+  RefreshToken(response: HttpResponse<any>) {
+    const authToken = response.headers.get("X-Auth-Token");
+    const refreshToken = response.headers.get("X-Refresh-Token");
+    if (authToken !== null && refreshToken !== null) {
+      localStorage.setItem("token", authToken);
+      localStorage.setItem("refresh_token", refreshToken);
+    }
   }
 }

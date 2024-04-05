@@ -100,22 +100,30 @@
   </div>
 
   <div class="row">
-    <div class="col-md-6 col-sm-12">
-      <div class="form-group w-100 h-100">
-        <input
-          type="search"
-          class="form-control"
-          placeholder=""
-          [(ngModel)]="searchName"
-          (keydown.enter)="getAllUsersData()"
-        />
-        <label>Nome do Usuário</label>
+    <div class="col-md-12">
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-10 col-sm-12">
+              <div class="form-group w-100 h-100">
+                <input
+                  type="search"
+                  class="form-control"
+                  placeholder=""
+                  [(ngModel)]="searchName"
+                  (keydown.enter)="getAllUsersData()"
+                />
+                <label>Nome do Usuário</label>
+              </div>
+            </div>
+            <div class="col-md-2 d-flex align-items-center">
+              <button class="btn btn-info" (click)="getAllUsersData()">
+                <mat-icon>search</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="col-md-6 d-flex align-items-center">
-      <button class="btn btn-info" (click)="getAllUsersData()">
-        <mat-icon>search</mat-icon>
-      </button>
     </div>
   </div>
   <div class="row">

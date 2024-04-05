@@ -56,7 +56,7 @@ class ReviewController
     {
         $mandatoryFields = ["stars" => "estrelas", "review" => "avaliação"];
         $data = $request->getParsedBody();
-        $tokenData = $request->getAttribute("token");
+        $tokenData = $request->getAttribute("jwt");
         try {
             if (!isset($args["id"]) || !is_numeric($args["id"])) {
                 throw new \InvalidArgumentException("Não foi possível inserir a avaliação, parâmetro informado é inválido!");
@@ -74,6 +74,39 @@ class ReviewController
                 ->setReview($data["review"]);
 
             return $response->withStatus(201)->withJson($this->reviewDAO->insertReview($review));
+        } catch (\InvalidArgumentException $e) {
+            return $response->withStatus(400)->withJson([
+                "message" => $e->getMessage()
+            ]);
+        } catch (\Exception $e) {
+            return $response->withStatus(500)->withJson([
+                "message" => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function updateReview(Request $request, Response $response, array $args)
+    {
+        $mandatoryFields = ["stars" => "estrelas", "review" => "avaliação"];
+        $data = $request->getParsedBody();
+        $tokenData = $request->getAttribute("jwt");
+        try {
+            if (!isset($args["id"]) || !is_numeric($args["id"])) {
+                throw new \InvalidArgumentException("Não foi possível atualizar a avaliação, parâmetro informado é inválido!");
+            }
+            foreach ($mandatoryFields as $field => $description) {
+                if (empty($data[$field])) {
+                    throw new \InvalidArgumentException("O campo {$description} é obrigatório!");
+                }
+            }
+
+            $review = new ReviewModel();
+            $review->setProductId($args["id"])
+                ->setUserId($tokenData["sub"])
+                ->setStars($data["stars"])
+                ->setReview($data["review"]);
+
+            return $response->withStatus(200)->withJson($this->reviewDAO->updateReview($review));
         } catch (\InvalidArgumentException $e) {
             return $response->withStatus(400)->withJson([
                 "message" => $e->getMessage()

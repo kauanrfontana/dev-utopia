@@ -1,5 +1,5 @@
 .container {
-  padding-bottom: 5rem !important;
+  padding-bottom: 10rem !important;
   .preview-image-container {
     width: 356px;
     height: 252px;
@@ -29,6 +29,7 @@ h4 {
 
 .actions {
   position: fixed;
+  z-index: 90;
   background-color: rgba(0, 0, 0, 0.151);
   bottom: 0;
   left: 10vw;
@@ -38,6 +39,9 @@ h4 {
   padding-bottom: 1rem;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
+  .btn {
+    max-height: 80px;
+  }
 }
 
 .reviews-opener {

@@ -106,8 +106,6 @@ export class ProductEditorComponent implements OnInit {
           },
         });
       },
-    }).then((result) => {
-      if (result.dismiss) return;
     });
   }
 
@@ -130,8 +128,6 @@ export class ProductEditorComponent implements OnInit {
           },
         });
       },
-    }).then((result) => {
-      if (result.dismiss) return;
     });
   }
 

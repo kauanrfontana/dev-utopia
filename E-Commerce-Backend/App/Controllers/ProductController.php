@@ -22,7 +22,7 @@ final class ProductController
         $data = $request->getParams();
         try {
             foreach ($mandatoryPaginationParams as $param) {
-                if (empty ($data[$param])) {
+                if (empty($data[$param])) {
                     throw new \InvalidArgumentException("Parâmetro de paginação obrigatório não encontrado!");
                 }
             }
@@ -47,7 +47,7 @@ final class ProductController
         $tokenData = $request->getAttribute("jwt");
         try {
             foreach ($mandatoryPaginationParams as $param) {
-                if (empty ($data[$param])) {
+                if (empty($data[$param])) {
                     throw new \InvalidArgumentException("Parâmetro de paginação obrigatório não encontrado!");
                 }
             }
@@ -72,13 +72,13 @@ final class ProductController
     {
         $productId = 0;
         try {
-            if(!isset($args["id"]) || !filter_var($args["id"], FILTER_VALIDATE_INT)){
+            if (!isset($args["id"]) || !filter_var($args["id"], FILTER_VALIDATE_INT)) {
                 throw new \InvalidArgumentException("Não foi possível consultar o produto, parâmetro informado é inválido!");
             }
             $productId = (int) $args["id"];
             $product = $this->productDAO->getProductById($productId);
             $response = $response->withStatus(200)->withJson($product, null, JSON_NUMERIC_CHECK);
-            
+
         } catch (\InvalidArgumentException $e) {
             $response = $response->withStatus(400)->withJson([
                 "message" => $e->getMessage()
@@ -121,18 +121,18 @@ final class ProductController
         $tokenData = $request->getAttribute("jwt");
 
         try {
-            foreach($mandatoryFields as $field => $description){
-                if(empty($data[$field])){
+            foreach ($mandatoryFields as $field => $description) {
+                if (empty($data[$field])) {
                     throw new \InvalidArgumentException("O campo {$description} é obrigatório!");
                 }
             }
-            foreach($fields as $field){
-                    $product->{"set" . ucfirst($field)}($data[$field]);
+            foreach ($fields as $field) {
+                $product->{"set" . ucfirst($field)}($data[$field]);
             }
             $product->setUserId($tokenData["sub"]);
 
             $response = $response->withStatus(201)->withJson($this->productDAO->insertProduct($product));
-            
+
         } catch (\InvalidArgumentException $e) {
             $response = $response->withStatus(400)->withJson([
                 "message" => $e->getMessage()
@@ -176,17 +176,17 @@ final class ProductController
         $product = new ProductModel();
 
         try {
-            foreach($mandatoryFields as $field => $description){
-                if(empty($data[$field])){
+            foreach ($mandatoryFields as $field => $description) {
+                if (empty($data[$field])) {
                     throw new \InvalidArgumentException("O campo {$description} é obrigatório!");
                 }
             }
-            foreach($fields as $field){
-                    $product->{"set" . ucfirst($field)}($data[$field]);
+            foreach ($fields as $field) {
+                $product->{"set" . ucfirst($field)}($data[$field]);
             }
 
             $response = $response->withStatus(201)->withJson($this->productDAO->updateProduct($product));
-            
+
         } catch (\InvalidArgumentException $e) {
             $response = $response->withStatus(400)->withJson([
                 "message" => $e->getMessage()
@@ -204,12 +204,12 @@ final class ProductController
     {
         $productId = 0;
         try {
-            if(!isset($args["id"]) || !filter_var($args["id"], FILTER_VALIDATE_INT)){
+            if (!isset($args["id"]) || !filter_var($args["id"], FILTER_VALIDATE_INT)) {
                 throw new \InvalidArgumentException("Não foi possível excluir o produto, id informado é inválido!");
             }
             $productId = (int) $args["id"];
             $response = $response->withStatus(200)->withJson($this->productDAO->deleteProduct($productId));
-            
+
         } catch (\InvalidArgumentException $e) {
             $response = $response->withStatus(400)->withJson([
                 "message" => $e->getMessage()

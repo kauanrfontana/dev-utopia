@@ -42,8 +42,6 @@ export class CardProductComponent {
           },
         });
       },
-    }).then((result) => {
-      if (result.dismiss) return;
     });
   }
 }

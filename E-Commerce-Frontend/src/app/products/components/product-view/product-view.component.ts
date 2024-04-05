@@ -77,7 +77,7 @@ export class ProductViewComponent implements OnInit {
   addProductToShoppingCart() {
     Swal.fire({
       title: "Confirmação",
-      text: "Deseja adicionar este produto ao carrinho?",
+      text: "Deseja realmente adicionar este produto ao carrinho?",
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Confirmar",

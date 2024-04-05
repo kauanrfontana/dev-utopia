@@ -74,6 +74,8 @@ $app->group("", function () use ($app) {
 
         $app->put("", ProductController::class . ":updateProduct");
 
+        $app->put("/{id}/reviews", ReviewController::class . ":updateReview");
+
         $app->delete("/{id}", ProductController::class . ":deleteProduct");
     });
 

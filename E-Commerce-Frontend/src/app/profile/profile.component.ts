@@ -105,8 +105,6 @@ export class ProfileComponent implements OnInit {
           },
         });
       },
-    }).then((result) => {
-      if (result.dismiss) return;
     });
   }
 
@@ -213,8 +211,6 @@ export class ProfileComponent implements OnInit {
           },
         });
       },
-    }).then((result) => {
-      if (result.dismiss) return;
     });
   }
 

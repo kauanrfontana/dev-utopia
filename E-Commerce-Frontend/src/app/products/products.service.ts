@@ -16,6 +16,11 @@ export interface getProductsParams {
   searchText: string;
 }
 
+export type reviewInfo = {
+  reviews: Review[];
+  wasPurchased: boolean;
+};
+
 @Injectable({ providedIn: "root" })
 export class ProductsService {
   onDeleteProductEvent = new Subject<void>();
@@ -57,8 +62,8 @@ export class ProductsService {
   getProductReviews(
     id: number,
     paginationData: PaginationData
-  ): Observable<IPaginatedResponse<Review[]>> {
-    return this.http.get<IPaginatedResponse<Review[]>>(
+  ): Observable<IPaginatedResponse<reviewInfo>> {
+    return this.http.get<IPaginatedResponse<reviewInfo>>(
       `products/${id}/reviews`,
       { params: { ...paginationData } }
     );
@@ -77,6 +82,13 @@ export class ProductsService {
 
   updateProduct(product: Product): Observable<IBasicResponseMessage> {
     return this.http.put<IBasicResponseMessage>("products", product);
+  }
+
+  updateReview(id: number, review: Review): Observable<IBasicResponseMessage> {
+    return this.http.put<IBasicResponseMessage>(
+      `products/${id}/reviews`,
+      review
+    );
   }
 
   deleteProduct(id: number): Observable<IBasicResponseMessage> {

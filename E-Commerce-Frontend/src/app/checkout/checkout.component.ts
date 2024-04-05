@@ -32,7 +32,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   onPayment() {
     Swal.fire({
       title: "Confirmação",
-      text: "Deseja confirmar a compra?",
+      text: "Deseja realmente realizar a compra?",
       icon: "question",
       showCancelButton: true,
       cancelButtonText: "Cancelar",
