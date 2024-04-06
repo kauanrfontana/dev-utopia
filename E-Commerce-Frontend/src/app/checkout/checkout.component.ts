@@ -48,6 +48,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
                 icon: "success",
               }).then((result) => {
                 if (result.dismiss) return;
+                this.shoppingCartService.shoppingCartDataChanged.emit();
                 this.router.navigate(["/"]);
               });
             },

@@ -84,7 +84,7 @@ $app->group("", function () use ($app) {
 
         $app->post("", ShoppingCartController::class . ":addProductToShoppingCart");
 
-        $app->delete("/shoppingCart/{id}", ShoppingCartController::class . ":removeProductFromShoppingCart");
+        $app->delete("/{id}", ShoppingCartController::class . ":removeProductFromShoppingCart");
 
     });
 
