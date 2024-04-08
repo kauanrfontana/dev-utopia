@@ -76,10 +76,60 @@ Ao clicar no lápis na tela, independente do perfil, o card dos dados se expande
 
 ![localhost_63549_profile (4)](https://github.com/kauanrfontana/FullStackProject-E-Commerce/assets/96593822/dbb57713-c900-4289-bc24-f24a85252f78)
 
+## Produtos
+A tela de Produtos desempenha um papel central ao apresentar todos os itens disponíveis no sistema, oferecendo aos usuários uma experiência de navegação intuitiva e eficiente. Equipada com funcionalidades úteis, como filtros por nome e opções de ordenação por preço ou data de criação, ela proporciona uma experiência de compra personalizada e conveniente.
 
+Além disso, essa tela também varia de acordo com o perfil do usuário, adaptando-se às suas necessidades específicas.
 
+### Produtos como Cliente
+A tela apresenta todos os recursos citados anteriormente.
 
+![localhost_63549_products_view_6](https://github.com/kauanrfontana/FullStackProject-E-Commerce/assets/96593822/00cd2f47-0ab3-409f-ba5c-a0746f9ad4bb)
 
+### Produtos como Vendedor
+Além dos recursos básicos, os vendedores têm acesso a uma aba adicional no topo chamada "Meus Produtos". Esta aba exibe a listagem dos produtos pertencentes ao vendedor, juntamente com botões que permitem editar, excluir e cadastrar novos produtos diretamente. Essa funcionalidade proporciona aos vendedores um controle completo sobre seus produtos, facilitando a gestão e atualização de seu catálogo na plataforma.
+
+![localhost_63549_products_view_6 (1)](https://github.com/kauanrfontana/FullStackProject-E-Commerce/assets/96593822/4ebc97a3-ff91-4a06-9079-cab2c26e1d55)
+
+### Produtos como Admin
+Além dos recursos padrão, o perfil de administrador possui a capacidade exclusiva de editar ou excluir qualquer produto na plataforma. Isso garante um gerenciamento completo e abrangente, permitindo que o administrador mantenha total controle sobre o catálogo de produtos. Essa funcionalidade é essencial para garantir a integridade e a qualidade do conteúdo oferecido aos usuários, além de proporcionar uma gestão eficaz e ágil do sistema como um todo.
+
+![localhost_63549_products_view_6 (2)](https://github.com/kauanrfontana/FullStackProject-E-Commerce/assets/96593822/0fb8a436-f41f-48b4-8229-f20278b22108)
+
+### Visualização de Produto
+Ao clicar em um dos produtos abre a perte referente ao detalhamento dele.
+
+![localhost_63549_products_view_6 (3)](https://github.com/kauanrfontana/FullStackProject-E-Commerce/assets/96593822/ab23aae3-9fca-4e2b-8d44-661a7791953b)
+
+Ao clicar para exibir as avaliações de um produto:
+
+![localhost_63549_products_view_6 (5)](https://github.com/kauanrfontana/FullStackProject-E-Commerce/assets/96593822/db46d9f3-8e50-4f4c-b9a4-10a29fdd6e74)
+
+OBS: Os botões que aparecem sobre a tela no print, é devido a eles serem fixos(acompanharem a tela) então com o print de tela toda ele aparenta estar meio solto.
+Exemplo da tela normal:
+
+![image](https://github.com/kauanrfontana/FullStackProject-E-Commerce/assets/96593822/4a89a027-be5c-41c2-91fb-2b844514b0fd)
+
+### Edição de Produto
+
+![localhost_63549_products_view_6 (6)](https://github.com/kauanrfontana/FullStackProject-E-Commerce/assets/96593822/e17668c8-cb95-4428-9dcd-674656a1a1d6)
+
+### Criação de Produto
+
+![localhost_63549_products_view_6 (7)](https://github.com/kauanrfontana/FullStackProject-E-Commerce/assets/96593822/566bb8e9-7746-436c-9b70-eb7548c34218)
+
+## Carrinho de Compras
+O carrinho de compras tem a função fundamental de armazenar os produtos selecionados pelo usuário durante a sessão de compras. Ele permite que os usuários visualizem e revisem os itens escolhidos antes de prosseguir para a tela de finalização da compra. Essa funcionalidade proporciona uma experiência de compra conveniente e organizada, permitindo que os usuários controlem e gerenciem seus pedidos de forma eficiente antes de concluir a compra.
+
+Ao clicar no ícone na top bar abre a exibição do carrinho:
+
+![image](https://github.com/kauanrfontana/FullStackProject-E-Commerce/assets/96593822/d3da990c-5ed1-4608-b0c6-0e0559018ad6)
+
+### Tela de Finalização de Compra
+
+![image](https://github.com/kauanrfontana/FullStackProject-E-Commerce/assets/96593822/e7012d9c-c78a-48aa-b0f4-a69691448c83)
+
+OBS: Como uma regra de negócio fundamental, estabeleci que os usuários só podem comentar em produtos após terem efetuado a compra correspondente. Essa medida visa garantir a autenticidade e relevância dos comentários, promovendo uma experiência de interação mais genuína e confiável entre os usuários e os produtos.
 
 
 
