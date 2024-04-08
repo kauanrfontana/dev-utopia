@@ -8,6 +8,15 @@ Este projeto, embora simulado, foi concebido com o propósito de testar conhecim
 
 Ao explorar este documento, você encontrará uma descrição detalhada das principais características e funcionalidades do software, juntamente com informações sobre seu desenvolvimento, tecnologias utilizadas e perspectivas futuras. Espera-se que este software atenda às necessidades do seu público-alvo e proporcione uma experiência de compra online gratificante e confiável.
 
+## Autenticação
+Para autenticação de usuários, o sistema adota o token JWT (JSON Web Token), empregando dois cabeçalhos nas requisições: X-Auth-Token e X-Refresh-Token.
+
+X-Auth-Token: Este token ativo do usuário é validado no backend para verificar sua autenticidade e vigência. Caso tenha expirado, o usuário precisa fazer login novamente para obter um novo token.
+
+X-Refresh-Token: Utilizado em cada requisição, este token é responsável por renovar o X-Auth-Token, prolongando sua validade. A cada solicitação, o X-Refresh-Token é atualizado, o que aumenta o tempo de expiração do token do usuário. Para garantir a segurança, o sistema evita a reutilização de X-Refresh-Tokens antigos, desativando-os após o uso.
+
+Essa abordagem não apenas assegura a segurança das comunicações entre cliente e servidor, mas também mantém a validade dos tokens de autenticação, proporcionando uma experiência segura e contínua para os usuários.
+
 ## Banco de Dados
 O banco de dados foi construído com SQL Server, empregando uma estrutura que utiliza múltiplos relacionamentos entre as tabelas e deletes em cascata. Essas escolhas visam otimizar o desempenho do banco e garantir uma limpeza automatizada dos dados. Vale ressaltar que a concepção do banco não foi pré-definida, mas sim desenvolvida e refinada ao longo do processo de desenvolvimento. Embora possam existir áreas para melhorias na organização, foram aplicados esforços para garantir que o banco desempenhe suas funções de forma eficaz e eficiente.
 
@@ -15,6 +24,27 @@ Dentro dos arquivos do Backend, você encontrará a pasta "SQL", que contém o s
 
 ## Perfis
 O sistema possui três perfis de acesso distintos. O primeiro nível é o perfil "customer", que tem todas as permissões necessárias para navegar pelo sistema, visualizar produtos e realizar compras. O segundo nível é o perfil "seller", que inclui todas as funcionalidades do perfil "customer", mas também oferece uma aba adicional na lista de produtos, dedicada ao gerenciamento e criação de produtos próprios. Por fim, o último nível de acesso é o perfil "admin", que só pode ser atribuído diretamente no banco de dados. Este perfil possui todas as funcionalidades dos outros perfis, além de recursos adicionais, como visualizar a lista de usuários, remover usuários, e editar ou excluir qualquer produto. O perfil "admin" tem a responsabilidade de garantir que apenas produtos relevantes para o objetivo do software sejam inseridos no sistema.
+
+## Navbar
+
+![image](https://github.com/kauanrfontana/FullStackProject-E-Commerce/assets/96593822/69a0ab3a-25e0-4324-ab6d-7d0a18d6a428)
+
+1- Botão que torna o menu sempre a berto ou dinâmico(dinâmico ele é exibido apenas ao colocar o mouse na posição dele, mostrando apenas uma linha preta) 
+
+![image](https://github.com/kauanrfontana/FullStackProject-E-Commerce/assets/96593822/134f0f49-8061-4bef-8f3b-5d8ba54e189c)
+
+2- Botão que direciona o usuário para a tela de Perfil/Usuário.
+
+3- Botão que direciona o usuário para a tela de Home.
+
+4- Botão que direciona o usuário para a tela de Produtos.
+
+5- Botão de logout.
+
+6- Botão que exibe o carrinho de compras.
+
+
+
 
 ## Telas
 ## Login/Register
@@ -121,7 +151,7 @@ Exemplo da tela normal:
 ## Carrinho de Compras
 O carrinho de compras tem a função fundamental de armazenar os produtos selecionados pelo usuário durante a sessão de compras. Ele permite que os usuários visualizem e revisem os itens escolhidos antes de prosseguir para a tela de finalização da compra. Essa funcionalidade proporciona uma experiência de compra conveniente e organizada, permitindo que os usuários controlem e gerenciem seus pedidos de forma eficiente antes de concluir a compra.
 
-Ao clicar no ícone na top bar abre a exibição do carrinho:
+Ao clicar no ícone na navbar abre a exibição do carrinho:
 
 ![image](https://github.com/kauanrfontana/FullStackProject-E-Commerce/assets/96593822/d3da990c-5ed1-4608-b0c6-0e0559018ad6)
 
