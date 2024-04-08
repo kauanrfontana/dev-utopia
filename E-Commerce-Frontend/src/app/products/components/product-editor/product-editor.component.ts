@@ -61,13 +61,12 @@ export class ProductEditorComponent implements OnInit {
       [key: string]: string;
     } = {
       name: "Nome",
-      description: "Descrição",
       price: "Preço",
+      zipCode: "CEP",
       stateId: "Estado",
       cityId: "Cidade",
       address: "Endereço",
       houseNumber: "Número da casa",
-      zipCode: "CEP",
     };
     for (let key in mandatoryFields) {
       if (!this.product[key as keyof Product]) {

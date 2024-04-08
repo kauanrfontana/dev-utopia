@@ -14,7 +14,7 @@
         mask="00000-000"
         [formControl]="cepControl"
       />
-      <label>CEP</label>
+      <label requiredInput>CEP</label>
     </div>
   </div>
   <div class="col-6" *ngIf="isEditing">
@@ -43,7 +43,7 @@
       }}</span>
     </h5>
     <div class="form-group" *ngIf="isEditing">
-      <small>Estado</small>
+      <small requiredInput>Estado</small>
       <app-search-select
         value="id"
         [arrToFilter]="states"
@@ -61,7 +61,7 @@
       }}</span>
     </h5>
     <div class="form-group" *ngIf="isEditing">
-      <small>Cidade</small>
+      <small requiredInput>Cidade</small>
       <app-search-select
         value="id"
         [arrToFilter]="cities"
@@ -87,7 +87,7 @@
         (ngModelChange)="dataChanged.emit(data)"
         [disabled]="loadingCepSearch"
       />
-      <label>Endereço</label>
+      <label requiredInput>Endereço</label>
     </div>
   </div>
 </div>
@@ -123,7 +123,7 @@
         [(ngModel)]="data.houseNumber"
         (ngModelChange)="dataChanged.emit(data)"
       />
-      <label>Número</label>
+      <label requiredInput>Número</label>
     </div>
   </div>
 </div>

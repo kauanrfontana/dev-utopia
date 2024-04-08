@@ -135,9 +135,12 @@ export class ProfileComponent implements OnInit {
       showCancelButton: true,
       cancelButtonText: "Cancelar",
       showLoaderOnConfirm: true,
-      preConfirm: () => {},
     }).then((result) => {
       if (result.dismiss) {
+        return;
+      }
+      if(this.isNotStrongPasswordValidator(this.newPassword)){
+        Swal.fire("Erro ao atualizar senha!", "A senha deve ter no mínimo 6 caracteres, conter letras maiúsculas, minúsculas, números e caracteres especiais!", "error");
         return;
       }
 
@@ -212,6 +215,18 @@ export class ProfileComponent implements OnInit {
         });
       },
     });
+  }
+
+  isNotStrongPasswordValidator(value: string): boolean {
+    const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(value);
+    const hasUppercase = /[A-Z]/.test(value);
+    const hasLowercase = /[a-z]/.test(value);
+    const hasNumber = /\d/.test(value)
+
+    if(value.length < 6 || !specialCharacters || !hasUppercase || !hasLowercase || !hasNumber ){
+      return true;
+    };
+    return false;
   }
 
   pageChanged(event: any) {

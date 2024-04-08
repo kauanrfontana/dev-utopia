@@ -73,7 +73,7 @@ export class LoginComponent {
       email: new FormControl(null, [Validators.email, Validators.required]),
       password: new FormControl(null, [
         Validators.required,
-        Validators.minLength(6),
+        this.strongPasswordValidator.bind(this),
       ]),
       passwordConfirm: new FormControl(null, Validators.required),
     });
@@ -108,11 +108,8 @@ export class LoginComponent {
     }
 
     if (this.registerForm.get("password")?.invalid) {
-      let passwordErrorMsg: string = this.getPasswordMsgByForm(
-        this.registerForm
-      );
 
-      Swal.fire("Erro ao Cadastrar", passwordErrorMsg, "error");
+      Swal.fire("Erro ao Cadastrar", "A senha deve ter no mínimo 6 caracteres, conter letras maiúsculas, minúsculas, números e caracteres especiais!", "error");
       return;
     }
     if (
@@ -159,9 +156,7 @@ export class LoginComponent {
     }
 
     if (this.loginForm.get("password")?.invalid) {
-      let passwordErrorMsg: string = this.getPasswordMsgByForm(this.loginForm);
-
-      Swal.fire("Erro ao fazer Login", passwordErrorMsg, "error");
+      Swal.fire("Erro ao fazer Login", "A senha deve ter no mínimo 6 caracteres", "error");
       return;
     }
 
@@ -194,11 +189,16 @@ export class LoginComponent {
     return false;
   }
 
-  getPasswordMsgByForm(form: FormGroup): string {
-    let passwordErrorMsg: string = !!form.get("password")?.errors?.["minlength"]
-      ? "A senha deve ter no mínimo 6 caracteres"
-      : "Senha inválida, preencha o campo corretamente para efetuar o cadastro!";
-    return passwordErrorMsg;
+  strongPasswordValidator(control: FormControl): {[s: string]: boolean} | null {
+    const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(control.value);
+    const hasUppercase = /[A-Z]/.test(control.value);
+    const hasLowercase = /[a-z]/.test(control.value);
+    const hasNumber = /\d/.test(control.value)
+
+    if(String(control.value).length < 6 || !specialCharacters || !hasUppercase || !hasLowercase || !hasNumber ){
+      return {"strongPasswordValidator": true};
+    };
+    return null;
   }
 
   restart() {

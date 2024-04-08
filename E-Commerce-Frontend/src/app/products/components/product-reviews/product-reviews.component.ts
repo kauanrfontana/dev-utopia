@@ -73,7 +73,7 @@ export class ProductReviewsComponent implements OnInit {
     if (!this.ownReview.review) {
       Swal.fire(
         "Erro ao alterar avaliação!",
-        "o campo descreva a avaliação é obrigatório!",
+        "o campo escreva sua avaliação é obrigatório!",
         "error"
       );
       return;
@@ -81,7 +81,7 @@ export class ProductReviewsComponent implements OnInit {
     if (!this.ownReview.stars) {
       Swal.fire(
         "Erro ao alterar avaliação!",
-        "o campo estrelas é obrigatório!",
+        "o campo quantidade de estrelas é obrigatório!",
         "error"
       );
       return;
