@@ -120,7 +120,7 @@
               <span class="text-primary">{{
                 review.userId == selfId
                   ? "Você"
-                  : (review.userName | cutLabel : 10)
+                  : (review.userName ? (review.userName | cutLabel : 10) : "Não identificado")
               }}</span>
             </p>
             <ng-container *ngIf="review.updatedAt">

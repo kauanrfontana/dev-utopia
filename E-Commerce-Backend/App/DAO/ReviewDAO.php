@@ -27,9 +27,9 @@ class ReviewDAO extends Connection
                         pr.user_id AS userId, 
                         pr.created_at AS createdAt, 
                         pr.updated_at AS updatedAt, 
-                        u.name AS userName 
+                        COALESCE(u.name, '') AS userName 
                     FROM product_reviews pr
-                    INNER JOIN users u
+                    LEFT JOIN users u
                     ON pr.user_id = u.id
                     WHERE pr.product_id = :productId
                     ORDER BY

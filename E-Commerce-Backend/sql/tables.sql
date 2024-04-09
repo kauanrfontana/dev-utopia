@@ -85,7 +85,7 @@ CREATE TABLE [product_reviews](
 [created_at] datetime NOT NULL,
 [updated_at] datetime,
 FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
-FOREIGN KEY (user_id) REFERENCES users(id)
+FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
 -- Via sql server ao tentar criar uma tabela com duas colunas de DELETE CASCADE ele gera um erro, para resolver isso pode ser criado uma trigger,
