@@ -11,9 +11,9 @@ Ao explorar este documento, você encontrará uma descrição detalhada das prin
 ## Autenticação
 Para autenticação de usuários, o sistema adota o token JWT (JSON Web Token), empregando dois cabeçalhos nas requisições: X-Auth-Token e X-Refresh-Token.
 
-X-Auth-Token: Este token ativo do usuário é validado no backend para verificar sua autenticidade e vigência. Caso tenha expirado, o usuário precisa fazer login novamente para obter um novo token.
+**X-Auth-Token:** Este token ativo do usuário é validado no backend para verificar sua autenticidade e vigência. Caso tenha expirado, o usuário precisa fazer login novamente para obter um novo token.
 
-X-Refresh-Token: Utilizado em cada requisição, este token é responsável por renovar o X-Auth-Token, prolongando sua validade. A cada solicitação, o X-Refresh-Token é atualizado, o que aumenta o tempo de expiração do token do usuário. Para garantir a segurança, o sistema evita a reutilização de X-Refresh-Tokens antigos, desativando-os após o uso.
+**X-Refresh-Token:** Utilizado em cada requisição, este token é responsável por renovar o X-Auth-Token, prolongando sua validade. A cada solicitação, o X-Refresh-Token é atualizado, o que aumenta o tempo de expiração do token do usuário. Para garantir a segurança, o sistema evita a reutilização de X-Refresh-Tokens antigos, desativando-os após o uso.
 
 Essa abordagem não apenas assegura a segurança das comunicações entre cliente e servidor, mas também mantém a validade dos tokens de autenticação, proporcionando uma experiência segura e contínua para os usuários.
 
