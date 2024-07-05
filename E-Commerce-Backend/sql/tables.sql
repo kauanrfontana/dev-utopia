@@ -15,6 +15,8 @@ CREATE TABLE [users](
 [house_number] varchar(20),
 [complement] varchar(200),
 [zip_code] varchar(8)
+[role_id] int NOT NULL,
+FOREIGN KEY ([role_id]) REFERENCES [roles]([id]),
 );
 
 CREATE TABLE [roles](
@@ -23,14 +25,6 @@ CREATE TABLE [roles](
 [name] varchar(50) NOT NULL,
 [created_at] datetime NOT NULL
 );
-
-CREATE TABLE [user_roles](
-[user_id] int NOT NULL,
-[role_id] int NOT NULL,
-PRIMARY KEY([user_id], [role_id]),
-FOREIGN KEY([user_id]) REFERENCES [users]([id]) ON DELETE CASCADE,
-FOREIGN KEY([role_id]) REFERENCES [roles]([id])
-); 
 
 CREATE TABLE [products](
 [id] int IDENTITY(1,1) PRIMARY KEY,
@@ -52,9 +46,14 @@ FOREIGN KEY ([user_id]) REFERENCES [users]([id]) ON DELETE CASCADE
 CREATE TABLE [shopping_carts](
 [id] int IDENTITY(1,1) PRIMARY KEY,
 [user_id] int NOT NULL,
-[product_id] int NOT NULL,
-FOREIGN KEY ([product_id]) REFERENCES [products]([id]) ON DELETE CASCADE,
 FOREIGN KEY ([user_id]) REFERENCES [users]([id]) ON DELETE CASCADE
+);
+
+CREATE TABLE [shopping_cart_products](
+	shopping_cart_id int NOT NULL,
+	product_id int NOT NULL
+	FOREIGN KEY (shopping_cart_id) REFERENCES shopping_carts(id),
+	FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
 CREATE TABLE [tokens] (
@@ -74,7 +73,7 @@ CREATE TABLE [purchased_items](
 [purchase_date] datetime NOT NULL,
 FOREIGN KEY([user_id]) REFERENCES [users]([id]) ON DELETE CASCADE,
 FOREIGN KEY([product_id]) REFERENCES [products]([id]) ON DELETE CASCADE
-); 
+);
 
 CREATE TABLE [product_reviews](
 [id] int IDENTITY(1,1) PRIMARY KEY,
@@ -90,4 +89,4 @@ FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 
 -- Via sql server ao tentar criar uma tabela com duas colunas de DELETE CASCADE ele gera um erro, para resolver isso pode ser criado uma trigger,
 -- ou apenas criar a tabela sem uma dos DELETE CASCADE, e editar a tabela pela interface do SQL Server.
--- caminho: SQL Server Management Studio -> Databases -> Tables -> Keys -> Botão direito na Chave Estrangeira que está sem o CASCADE -> Modify -> Na janela aberta vá em Table Designer -> Expanda a linha INSERT And UPDATE Specification -> Em DELETE Rule selecione CASCADE -> Close -> Feche a janela e salve. 
+-- caminho: SQL Server Management Studio -> Databases -> Tables -> Keys -> Botão direito na Chave Estrangeira que está sem o CASCADE -> Modify -> Na janela aberta vá em Table Designer -> Expanda a linha INSERT And UPDATE Specification -> Em DELETE Rule selecione CASCADE -> Close -> Feche a janela e salve.
